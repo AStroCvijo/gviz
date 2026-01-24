@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Initialize conda (required for activate to work in scripts)
+# Initialize conda properly
 eval "$(conda shell.bash hook)"
 
 # Create and activate conda env
