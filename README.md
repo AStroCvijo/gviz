@@ -1,3 +1,4 @@
+```bash
 graph_explorer_project/               # Root direktorijum celog projekta
 ├── api/                              # Python biblioteka za zajedničke apstrakcije i interfejse (API)
 │   ├── __init__.py                   # Obeležava da je 'api' direktorijum Python paket
@@ -68,3 +69,4 @@ graph_explorer_project/               # Root direktorijum celog projekta
 ├── setup.py                          # Setup skripta za instalaciju paketa (omogućava da se projekat/komponente instaliraju preko pip-a)
 ├── install.sh                        # (Opcionalno) Skripta za inicijalnu instalaciju okruženja (npr. kreiranje virtualenv-a, instalacija zavisnosti)
 └── README.md                         # Osnovna dokumentacija projekta sa uputstvima za razvoj i korišćenje
+```
