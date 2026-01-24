@@ -1,5 +1,10 @@
+#!/bin/bash
+
+# Initialize conda (required for activate to work in scripts)
+eval "$(conda shell.bash hook)"
+
 # Create and activate conda env
-conda create --name gviz python=3.9
+conda create --name gviz python=3.9 -y
 conda activate gviz
 
 # Install dependencies
