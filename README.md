@@ -1,72 +1,117 @@
-```bash
-graph_explorer_project/               # Root direktorijum celog projekta
-├── api/                              # Python biblioteka za zajedničke apstrakcije i interfejse (API)
-│   ├── __init__.py                   # Obeležava da je 'api' direktorijum Python paket
-│   ├── interfaces.py                 # Definiše zajedničke interfejse/abstraktne klase za plug-inove (npr. BaseDataSource, BaseVisualizer)
-│   ├── models.py                     # (Opcionalno) Definicije struktura podataka, npr. klase za Graf, Čvor, Granu
-│   └── utils.py                      # Zajedničke pomoćne funkcije i klase koje koriste platforma i plug-inovi
-├── platform/                         # Biblioteka koja koristi `api` i upravlja komunikacijom sa plug-inovima
-│   ├── __init__.py                   # Inicijalizuje 'platform' paket
-│   ├── main.py                       # (Opcionalno) Ulazna skripta za pokretanje platforme van Django okruženja (npr. CLI test)
-│   ├── plugin_manager.py             # Logika za dinamičko učitavanje i registraciju plug-inova (korišćenjem API interfejsa)
-│   ├── graph_builder.py              # Koristi data_source plug-inove za kreiranje grafa i prosleđuje ga vizualizacionom plug-inu
-│   └── settings.py                   # Podešavanja platforme (npr. putanje do plug-in direktorijuma, konfiguracije plug-inova)
-├── data_source_json/                 # Plugin za parsiranje JSON fajlova i kreiranje strukture grafa
-│   ├── __init__.py                   # Inicijalizuje JSON data-source plug-in paket
-│   ├── parser.py                     # Funkcije za čitanje i parsiranje JSON fajla u čvorove i veze grafa
-│   └── plugin.py                     # Implementira `BaseDataSource` interfejs iz API-ja za JSON (npr. klasa JSONDataSource)
-├── data_source_xml/                  # Plugin za parsiranje XML fajlova i kreiranje strukture grafa
-│   ├── __init__.py                   # Inicijalizuje XML data-source plug-in paket
-│   ├── parser.py                     # Funkcije za čitanje i parsiranje XML fajla u strukturu grafa
-│   └── plugin.py                     # Implementira `BaseDataSource` interfejs za XML (npr. klasa XMLDataSource)
-├── simple_visualizer/                # Plugin koji vizualizuje čvorove grafa kao jednostavne krugove
-│   ├── __init__.py                   # Inicijalizuje simple_visualizer plug-in paket
-│   ├── visualizer.py                 # Implementira `BaseVisualizer` interfejs (npr. klasa SimpleVisualizer za prikaz čvorova kao krugova)
-│   └── assets/                       # (Opcionalno) Resursi za vizuelizaciju, npr. ikone ili template za krugove
-├── block_visualizer/                 # Plugin koji prikazuje čvorove kao pravougaonike sa atributima
-│   ├── __init__.py                   # Inicijalizuje block_visualizer plug-in paket
-│   ├── visualizer.py                 # Implementira `BaseVisualizer` interfejs (npr. klasa BlockVisualizer za prikaz čvorova kao blokova sa tekstom)
-│   └── templates/                    # (Opcionalno) Template fajlovi ili resursi specifični za blok vizualizaciju
-│       └── node_block.html           # (Primer) HTML/SVG template za prikaz čvora kao pravougaonika sa detaljima
-├── graph_explorer/                   # Django projektni direktorijum za web aplikaciju (korisnička interakcija)
-│   ├── manage.py                     # Django skripta za upravljanje projektom (pokretanje servera, migracija, itd.)
-│   ├── graph_explorer/               # Python paket sa Django podešavanjima za projekat
-│   │   ├── __init__.py
-│   │   ├── settings.py               # Django podešavanja (uključuje INSTALLED_APPS za 'explorer' app i podešava plug-in biblioteke)
-│   │   ├── urls.py                   # Glavne URL putanje projekta (uključuje URL-ove iz 'explorer' aplikacije)
-│   │   ├── wsgi.py                   # WSGI konfiguracija za deployment
-│   │   └── asgi.py                   # ASGI konfiguracija (ako je potreban async support)
-│   └── explorer/                     # Django aplikacija unutar projekta (glavni web interfejs za Graph Explorer)
-│       ├── __init__.py
-│       ├── admin.py                  # Registracija modela u Django admin (ukoliko postoje models.py)
-│       ├── apps.py                   # Konfiguracija Django aplikacije (npr. ime aplikacije, default auto field)
-│       ├── models.py                 # Django modeli za čuvanje podataka (npr. snimljeni grafovi ili korisničke postavke) – opcionalno
-│       ├── forms.py                  # Django forme za unos korisničkih podataka (npr. upload fajla, izbor vizualizatora)
-│       ├── views.py                  # Django views (logika kontrolera) za rukovanje zahtevima i korišćenje platforme + plug-inova
-│       ├── urls.py                   # URL konfiguracija specifična za ovu aplikaciju (ruta za upload, prikaz grafa itd.)
-│       ├── templates/                # HTML template-ovi za prikaz stranica u okviru aplikacije
-│       │   └── explorer/             # Direktorijum sa template-ovima ove aplikacije (imenovan po aplikaciji)
-│       │       ├── base.html         # Osnovni template (npr. zajednički layout sa uključenim statičkim fajlovima)
-│       │       ├── index.html        # Početna stranica sa formom za upload grafa i izbor vizualizacije
-│       │       └── graph_view.html   # Stranica koja prikazuje vizualizovani graf korisniku
-│       ├── static/                   # Statički fajlovi (CSS, JS, slike) za ovu aplikaciju
-│       │   └── explorer/             # Folder za statičke resurse aplikacije (imenovan po aplikaciji radi izolacije)
-│       │       ├── css/
-│       │       │   └── style.css     # Stilovi za stranice (npr. izgled grafa, layout stranice)
-│       │       ├── js/
-│       │       │   └── app.js        # JavaScript logika za interakciju na klijentskoj strani (npr. manipulacija prikaza grafa)
-│       │       └── images/
-│       │           └── logo.png      # (Primer) Slika ili ikonice korišćene u interfejsu
-│       └── tests.py                  # Testovi za Django aplikaciju (provere view funkcija, formi, URL-ova)
-├── tests/                            # (Alternativno) Direktorijum za sve testove ako ih odvajamo od koda
-│   ├── test_api.py                   # Jedinični testovi za 'api' modul
-│   ├── test_platform.py              # Testovi za platform modul (učitavanje plug-inova, grafa...)
-│   ├── test_data_source_json.py      # Testovi za JSON plug-in (parsiranje JSON, ispravna struktura grafa)
-│   ├── test_data_source_xml.py       # Testovi za XML plug-in
-│   ├── test_simple_visualizer.py     # Testovi za simple_visualizer (ispravan prikaz/metapodaci)
-│   └── test_block_visualizer.py      # Testovi za block_visualizer
-├── requirements.txt                  # Spisak zavisnosti projekta (npr. Django, lxml za XML parsiranje, itd.)
-├── setup.py                          # Setup skripta za instalaciju paketa (omogućava da se projekat/komponente instaliraju preko pip-a)
-├── install.sh                        # (Opcionalno) Skripta za inicijalnu instalaciju okruženja (npr. kreiranje virtualenv-a, instalacija zavisnosti)
-└── README.md                         # Osnovna dokumentacija projekta sa uputstvima za razvoj i korišćenje
-```
+# gviz — Raspodjela zadataka
+
+## Pregled tima
+
+| Student | Uloga |
+|---------|-------|
+| **Student 1** | API biblioteka + Platform core + JSON Data Source Plugin + UI dizajn |
+| **Student 2** | Simple Visualizer Plugin + Main View (D3.js) |
+| **Student 3** | XML Data Source Plugin + Tree View + Bird View |
+| **Student 4** | Block Visualizer Plugin + Django web app + Search/Filter/CLI backend |
+
+---
+
+## Student 1 — API biblioteka + Platform core + JSON Data Source Plugin + UI dizajn
+
+### Cilj
+
+Postaviti temelje cijelog projekta: definisati apstraktni API koji svi plugini
+moraju implementirati, izgraditi platformu koja upravlja pluginima, radnim
+prostorima i filtriranjem grafova, kreirati prvi data source plugin (JSON format)
+sa podrškom za ciklične strukture, te dizajnirati kompletan UI layout Django
+aplikacije koji ostali studenti popunjavaju funkcionalnostima.
+
+---
+
+### Student 1 Issues
+
+| Issue | Grana | Opis |
+|-------|-------|------|
+| `#S1-01` | `feature-api-library` | Kompletna API biblioteka: apstraktne klase Node/Edge/Graph, DataSourcePlugin/VisualizerPlugin, hijerarhija grešaka |
+| `#S1-02` | `feature-platform-graph-model` | ConcreteNode, ConcreteEdge, ConcreteGraph — podrška za usmerene/neusmerene i ciklične/aciklične grafove |
+| `#S1-03` | `feature-platform-services` | PluginManager (entry point discovery), WorkspaceManager, FilterEngine (search + filter → podgraf) |
+| `#S1-04` | `feature-json-data-source` | JSONDataSourcePlugin: dvoprolazni parser sa @id semantikom za cikluse, test podaci (210 + 216 čvorova) |
+| `#S1-05` | `feature-django-setup-and-ui` | Django AppConfig integracija platforme, URL routing, kompletan UI layout (Main/Tree/Bird View, toolbar, terminal) |
+
+---
+
+## Student 2 — Simple Visualizer Plugin + Main View
+
+### Cilj
+
+Napraviti plugin koji prima `Graph` objekat i vraća HTML string koji D3.js
+može renderovati kao interaktivni graf u browseru. Zatim taj HTML integrisati
+u Main View dio UI-ja koji je Student 1 dizajnirao.
+
+---
+
+### Student 2 Issues
+
+| Issue | Grana | Opis |
+|-------|-------|------|
+| `#S2-01` | `feature-simple-visualizer-plugin` | Kreirati SimpleVisualizerPlugin, render() metoda |
+| `#S2-02` | `feature-main-view-d3` | D3.js force layout, pan, zoom |
+| `#S2-03` | `feature-main-view-drag` | Drag & drop čvorova |
+| `#S2-04` | `feature-main-view-mouseover` | Mouseover → Node Details panel |
+| `#S2-05` | `feature-node-selection-coordination` | Koordinacija selekcije sa Tree/Bird View |
+
+---
+
+## Student 3 — XML Data Source Plugin + Tree View + Bird View
+
+### Cilj
+
+Napraviti drugi data source plugin (XML format), implementirati Tree View sa
+dinamičkim expand/collapse i Bird View sa minimap-om koji prati Main View.
+
+---
+
+### Student 3 Issues
+
+| Issue | Grana | Opis |
+|-------|-------|------|
+| `#S3-01` | `feature-xml-parser` | XMLParser — mapiranje elemenata na čvorove/grane, podrška za aciklične i ciklične strukture (XPath reference), generisanje test podataka (200+ čvorova) |
+| `#S3-02` | `feature-xml-plugin` | XMLDataSourcePlugin wrapper + registracija entry point-a |
+| `#S3-03` | `feature-tree-view` | Tree View — izgradnja stabla, expand/collapse, detekcija i prikaz ciklusa |
+| `#S3-04` | `feature-tree-view-selection` | Koordinacija selekcije čvora između Tree View i Main View |
+| `#S3-05` | `feature-bird-view` | Bird View — minimap sa skaliranjem + sinhronizacija viewport-a sa Main View-om |
+
+---
+
+## Student 4 — Block Visualizer Plugin + Django web app + Search/Filter/CLI
+
+### Cilj
+
+Napraviti Block Visualizer plugin, implementirati sve Django API endpoint-e
+koji zamjenjuju JavaScript mock stub-ove u `ui.js`, te implementirati CLI
+backend za manipulaciju grafom putem komandi.
+
+### Student 4 Issues
+
+| Issue | Grana | Opis |
+|-------|-------|------|
+| `#S4-01` | `feature-block-visualizer-plugin` | BlockVisualizerPlugin — render() metoda koja vraća HTML za blokovski prikaz grafa |
+| `#S4-02` | `feature-django-graph-api` | Django API: `load_graph`, `reset_workspace`, `list_workspaces`, `activate_workspace`, `delete_workspace` views + URL routing |
+| `#S4-03` | `feature-django-search-filter` | Django API: `search_graph` i `filter_graph` views sa prikazom grešaka (server-side FilterEngine pozivi) |
+| `#S4-04` | `feature-cli-backend` | `CLIHandler` klasa (Command pattern) + create/edit/delete operacije za čvorove i grane |
+| `#S4-05` | `feature-js-api-calls` | Zamjena svih mock stub-ova u `ui.js` pravim `fetch()` pozivima prema Django API endpointima |
+
+---
+
+### 4.7 Design patterns koje Student 4 treba primijeniti
+
+| Pattern | Gdje |
+|---------|------|
+| **Command pattern** | `CLIHandler` — svaka komanda je zaseban objekt sa `execute()` |
+| **Chain of Responsibility** | Sukcesivno primjenjivanje filter → search → filter operacija |
+| **Facade** | Django `views.py` — jednostavan interfejs prema kompleksnoj platformi |
+
+---
+
+## Zajednički zadaci
+
+### Dijagram klasa
+
+Potrebno je odraditi dijagram klasu
+
+---
