@@ -1,20 +1,87 @@
 #!/bin/bash
+# setup.sh — install all gviz components and start the Django dev server.
+#
+# Usage:
+#   chmod +x setup.sh
+#   ./setup.sh
+#
+# Prerequisites:
+#   - Python 3.9+ available as 'python' or 'python3'
+#   - pip available
 
-# Initialize conda properly
-eval "$(conda shell.bash hook)"
+set -e  # exit on first error
 
-# Create and activate conda env
-conda create --name gviz python=3.9 -y
-conda activate gviz
+# ---------------------------------------------------------------------------
+# Locate Python
+# ---------------------------------------------------------------------------
+if command -v python3 &>/dev/null; then
+    PYTHON=python3
+elif command -v python &>/dev/null; then
+    PYTHON=python
+else
+    echo "ERROR: Python not found. Install Python 3.9+ and re-run." >&2
+    exit 1
+fi
 
-# Install dependencies
-pip install -r requirements.txt
+echo "Using Python: $($PYTHON --version)"
 
-# Go to app
+# ---------------------------------------------------------------------------
+# Create / activate virtual environment
+# ---------------------------------------------------------------------------
+VENV_DIR=".venv"
+
+if [ ! -d "$VENV_DIR" ]; then
+    echo "Creating virtual environment in $VENV_DIR ..."
+    $PYTHON -m venv "$VENV_DIR"
+fi
+
+# Activate (works on Linux/macOS; on Windows use .venv\Scripts\activate)
+# shellcheck disable=SC1091
+source "$VENV_DIR/bin/activate"
+
+echo "Activated venv: $(which python)"
+
+# ---------------------------------------------------------------------------
+# Upgrade pip
+# ---------------------------------------------------------------------------
+pip install --upgrade pip --quiet
+
+# ---------------------------------------------------------------------------
+# Install Django and other third-party dependencies
+# ---------------------------------------------------------------------------
+echo "Installing third-party dependencies ..."
+pip install -r requirements.txt --quiet
+
+# ---------------------------------------------------------------------------
+# Install gviz components (order matters: api first, then platform, then plugins)
+# ---------------------------------------------------------------------------
+echo "Installing gviz-api ..."
+pip install -e api/ --quiet
+
+echo "Installing gviz-platform ..."
+pip install -e platform/ --quiet
+
+echo "Installing gviz-json-datasource ..."
+pip install -e json_data_source/ --quiet
+
+# ---------------------------------------------------------------------------
+# Generate test data (idempotent)
+# ---------------------------------------------------------------------------
+echo "Generating JSON test data ..."
+python json_data_source/generate_test_data.py
+
+# ---------------------------------------------------------------------------
+# Django setup
+# ---------------------------------------------------------------------------
+echo "Running Django migrations ..."
 cd gviz/
+python manage.py migrate --run-syncdb
 
-# Run migrations
-python manage.py migrate
-
-# Start the development server
+# ---------------------------------------------------------------------------
+# Start development server
+# ---------------------------------------------------------------------------
+echo ""
+echo "============================================"
+echo "  gviz is ready!  Open http://127.0.0.1:8000"
+echo "============================================"
 python manage.py runserver
