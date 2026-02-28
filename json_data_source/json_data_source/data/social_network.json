@@ -1,0 +1,3912 @@
+{
+  "description": "Synthetic social network with cyclic friendship edges",
+  "users": [
+    {
+      "@id": "user-001",
+      "name": "Oscar Davis",
+      "age": 19,
+      "city": "Madrid",
+      "join_date": "2015-06-30",
+      "company": "NetWorks",
+      "score": 2.26,
+      "interests": [
+        "cooking",
+        "swimming",
+        "dancing"
+      ],
+      "friends": [
+        "user-175",
+        "user-191"
+      ]
+    },
+    {
+      "@id": "user-002",
+      "name": "Carol Johnson",
+      "age": 23,
+      "city": "Toronto",
+      "join_date": "2015-03-21",
+      "company": "CyberLink",
+      "score": 6.42,
+      "interests": [
+        "dancing",
+        "sports",
+        "coding"
+      ],
+      "friends": [
+        "user-185",
+        "user-168",
+        "user-181"
+      ]
+    },
+    {
+      "@id": "user-003",
+      "name": "Laura Moore",
+      "age": 18,
+      "city": "Sydney",
+      "join_date": "2019-06-25",
+      "company": "AlgoLab",
+      "score": 3.5,
+      "interests": [
+        "cycling"
+      ],
+      "friends": [
+        "user-197",
+        "user-088",
+        "user-028"
+      ]
+    },
+    {
+      "@id": "user-004",
+      "name": "Grace Thompson",
+      "age": 40,
+      "city": "Mexico City",
+      "join_date": "2015-12-07",
+      "company": "TechCorp",
+      "score": 7.57,
+      "interests": [
+        "technology",
+        "yoga",
+        "travel"
+      ],
+      "friends": [
+        "user-098",
+        "user-022"
+      ]
+    },
+    {
+      "@id": "user-005",
+      "name": "Ursula Jones",
+      "age": 20,
+      "city": "Amsterdam",
+      "join_date": "2016-06-28",
+      "company": "DataSoft",
+      "score": 8.7,
+      "interests": [
+        "yoga",
+        "music"
+      ],
+      "friends": [
+        "user-099",
+        "user-073"
+      ]
+    },
+    {
+      "@id": "user-006",
+      "name": "Xander Thompson",
+      "age": 31,
+      "city": "Madrid",
+      "join_date": "2011-08-08",
+      "company": "OpenBridge",
+      "score": 6.71,
+      "interests": [
+        "chess",
+        "sports"
+      ],
+      "friends": [
+        "user-043",
+        "user-120",
+        "user-099"
+      ]
+    },
+    {
+      "@id": "user-007",
+      "name": "Sara Lee",
+      "age": 21,
+      "city": "Amsterdam",
+      "join_date": "2010-09-20",
+      "company": "AlgoLab",
+      "score": 4.61,
+      "interests": [
+        "cinema",
+        "travel",
+        "gardening"
+      ],
+      "friends": [
+        "user-056",
+        "user-147"
+      ]
+    },
+    {
+      "@id": "user-008",
+      "name": "Zoe Robinson",
+      "age": 27,
+      "city": "Madrid",
+      "join_date": "2013-02-17",
+      "company": "NetWorks",
+      "score": 7.7,
+      "interests": [
+        "sports",
+        "reading"
+      ],
+      "friends": [
+        "user-193",
+        "user-151",
+        "user-111",
+        "user-104"
+      ]
+    },
+    {
+      "@id": "user-009",
+      "name": "George Young",
+      "age": 23,
+      "city": "London",
+      "join_date": "2012-06-17",
+      "company": "CloudBase",
+      "score": 6.65,
+      "interests": [
+        "art",
+        "chess",
+        "photography"
+      ],
+      "friends": [
+        "user-154",
+        "user-018",
+        "user-100",
+        "user-099",
+        "user-121"
+      ]
+    },
+    {
+      "@id": "user-010",
+      "name": "Sara Davis",
+      "age": 61,
+      "city": "Mumbai",
+      "join_date": "2015-12-26",
+      "company": "AlgoLab",
+      "score": 2.0,
+      "interests": [
+        "music",
+        "writing",
+        "gaming"
+      ],
+      "friends": [
+        "user-042",
+        "user-118",
+        "user-001",
+        "user-186",
+        "user-069"
+      ]
+    },
+    {
+      "@id": "user-011",
+      "name": "Oscar Martin",
+      "age": 58,
+      "city": "Dubai",
+      "join_date": "2023-08-29",
+      "company": "NetWorks",
+      "score": 2.38,
+      "interests": [
+        "coffee"
+      ],
+      "friends": [
+        "user-140",
+        "user-201",
+        "user-137"
+      ]
+    },
+    {
+      "@id": "user-012",
+      "name": "Uma Young",
+      "age": 19,
+      "city": "Berlin",
+      "join_date": "2018-02-21",
+      "company": "PixelStudio",
+      "score": 3.16,
+      "interests": [
+        "gardening",
+        "cooking",
+        "chess"
+      ],
+      "friends": [
+        "user-147",
+        "user-022",
+        "user-023"
+      ]
+    },
+    {
+      "@id": "user-013",
+      "name": "Iris Rodriguez",
+      "age": 60,
+      "city": "Singapore",
+      "join_date": "2022-05-01",
+      "company": "CloudBase",
+      "score": 3.39,
+      "interests": [
+        "technology"
+      ],
+      "friends": [
+        "user-056",
+        "user-140",
+        "user-195",
+        "user-188",
+        "user-178"
+      ]
+    },
+    {
+      "@id": "user-014",
+      "name": "Zoe White",
+      "age": 46,
+      "city": "Dubai",
+      "join_date": "2020-02-16",
+      "company": "DataSoft",
+      "score": 3.23,
+      "interests": [
+        "chess",
+        "sports",
+        "swimming"
+      ],
+      "friends": [
+        "user-088",
+        "user-006"
+      ]
+    },
+    {
+      "@id": "user-015",
+      "name": "Alice Jones",
+      "age": 63,
+      "city": "London",
+      "join_date": "2015-02-19",
+      "company": "DataSoft",
+      "score": 9.15,
+      "interests": [
+        "gardening",
+        "travel",
+        "chess"
+      ],
+      "friends": [
+        "user-020",
+        "user-133",
+        "user-062",
+        "user-073"
+      ]
+    },
+    {
+      "@id": "user-016",
+      "name": "Iris Torres",
+      "age": 54,
+      "city": "Singapore",
+      "join_date": "2015-06-14",
+      "company": "InfoSystems",
+      "score": 8.27,
+      "interests": [
+        "dancing",
+        "coffee"
+      ],
+      "friends": [
+        "user-026",
+        "user-170",
+        "user-112"
+      ]
+    },
+    {
+      "@id": "user-017",
+      "name": "Diana Brown",
+      "age": 61,
+      "city": "Berlin",
+      "join_date": "2011-05-12",
+      "company": "ByteWave",
+      "score": 7.55,
+      "interests": [
+        "chess"
+      ],
+      "friends": [
+        "user-065",
+        "user-051"
+      ]
+    },
+    {
+      "@id": "user-018",
+      "name": "Chris Rodriguez",
+      "age": 45,
+      "city": "Sydney",
+      "join_date": "2016-03-31",
+      "company": "InfoSystems",
+      "score": 3.25,
+      "interests": [
+        "gaming",
+        "hiking",
+        "chess"
+      ],
+      "friends": [
+        "user-115",
+        "user-208"
+      ]
+    },
+    {
+      "@id": "user-019",
+      "name": "Alice Garcia",
+      "age": 33,
+      "city": "Sydney",
+      "join_date": "2019-02-12",
+      "company": "InfoSystems",
+      "score": 5.33,
+      "interests": [
+        "coding",
+        "technology"
+      ],
+      "friends": [
+        "user-016",
+        "user-044",
+        "user-099",
+        "user-001",
+        "user-101"
+      ]
+    },
+    {
+      "@id": "user-020",
+      "name": "Beth Scott",
+      "age": 60,
+      "city": "Singapore",
+      "join_date": "2013-06-22",
+      "company": "NetWorks",
+      "score": 3.67,
+      "interests": [
+        "hiking",
+        "cinema",
+        "coffee"
+      ],
+      "friends": [
+        "user-150",
+        "user-190"
+      ]
+    },
+    {
+      "@id": "user-021",
+      "name": "David Nguyen",
+      "age": 48,
+      "city": "Dubai",
+      "join_date": "2021-11-29",
+      "company": "CloudBase",
+      "score": 1.51,
+      "interests": [
+        "cooking",
+        "sports",
+        "cycling"
+      ],
+      "friends": [
+        "user-049",
+        "user-018"
+      ]
+    },
+    {
+      "@id": "user-022",
+      "name": "Henry Torres",
+      "age": 33,
+      "city": "São Paulo",
+      "join_date": "2023-05-03",
+      "company": "TechCorp",
+      "score": 6.57,
+      "interests": [
+        "travel",
+        "cinema"
+      ],
+      "friends": [
+        "user-170",
+        "user-151",
+        "user-146",
+        "user-135",
+        "user-082"
+      ]
+    },
+    {
+      "@id": "user-023",
+      "name": "Paul Taylor",
+      "age": 43,
+      "city": "Tokyo",
+      "join_date": "2016-09-23",
+      "company": "InfoSystems",
+      "score": 3.85,
+      "interests": [
+        "swimming",
+        "gaming",
+        "cooking"
+      ],
+      "friends": [
+        "user-003",
+        "user-119"
+      ]
+    },
+    {
+      "@id": "user-024",
+      "name": "Ivan Wilson",
+      "age": 50,
+      "city": "Madrid",
+      "join_date": "2012-12-21",
+      "company": "AlgoLab",
+      "score": 8.93,
+      "interests": [
+        "chess",
+        "technology"
+      ],
+      "friends": [
+        "user-096",
+        "user-074",
+        "user-042"
+      ]
+    },
+    {
+      "@id": "user-025",
+      "name": "Nina King",
+      "age": 18,
+      "city": "Mumbai",
+      "join_date": "2016-09-18",
+      "company": "DataSoft",
+      "score": 9.45,
+      "interests": [
+        "chess",
+        "reading",
+        "art"
+      ],
+      "friends": [
+        "user-069",
+        "user-031",
+        "user-029"
+      ]
+    },
+    {
+      "@id": "user-026",
+      "name": "Sam Hill",
+      "age": 31,
+      "city": "Vienna",
+      "join_date": "2014-07-26",
+      "company": "PixelStudio",
+      "score": 5.55,
+      "interests": [
+        "hiking",
+        "photography"
+      ],
+      "friends": [
+        "user-014",
+        "user-024",
+        "user-164",
+        "user-110"
+      ]
+    },
+    {
+      "@id": "user-027",
+      "name": "Victor Rodriguez",
+      "age": 58,
+      "city": "Madrid",
+      "join_date": "2013-08-16",
+      "company": "InfoSystems",
+      "score": 5.97,
+      "interests": [
+        "chess"
+      ],
+      "friends": [
+        "user-145",
+        "user-003",
+        "user-030",
+        "user-020",
+        "user-178"
+      ]
+    },
+    {
+      "@id": "user-028",
+      "name": "Carol White",
+      "age": 55,
+      "city": "Mumbai",
+      "join_date": "2013-04-28",
+      "company": "ByteWave",
+      "score": 2.15,
+      "interests": [
+        "sports"
+      ],
+      "friends": [
+        "user-095",
+        "user-205",
+        "user-011",
+        "user-093"
+      ]
+    },
+    {
+      "@id": "user-029",
+      "name": "Rafael Miller",
+      "age": 40,
+      "city": "Mumbai",
+      "join_date": "2019-02-12",
+      "company": "OpenBridge",
+      "score": 7.75,
+      "interests": [
+        "dancing"
+      ],
+      "friends": [
+        "user-043",
+        "user-206",
+        "user-209"
+      ]
+    },
+    {
+      "@id": "user-030",
+      "name": "Bob Lopez",
+      "age": 65,
+      "city": "Vienna",
+      "join_date": "2019-03-27",
+      "company": "NetWorks",
+      "score": 3.4,
+      "interests": [
+        "sports",
+        "travel"
+      ],
+      "friends": [
+        "user-099",
+        "user-010"
+      ]
+    },
+    {
+      "@id": "user-031",
+      "name": "Diana Thompson",
+      "age": 37,
+      "city": "Amsterdam",
+      "join_date": "2015-01-01",
+      "company": "TechCorp",
+      "score": 6.94,
+      "interests": [
+        "writing",
+        "cycling",
+        "chess"
+      ],
+      "friends": [
+        "user-086",
+        "user-073",
+        "user-018",
+        "user-199",
+        "user-091"
+      ]
+    },
+    {
+      "@id": "user-032",
+      "name": "Victor Johnson",
+      "age": 25,
+      "city": "Madrid",
+      "join_date": "2014-01-02",
+      "company": "OpenBridge",
+      "score": 9.66,
+      "interests": [
+        "cinema",
+        "dancing"
+      ],
+      "friends": [
+        "user-010",
+        "user-028",
+        "user-154",
+        "user-113"
+      ]
+    },
+    {
+      "@id": "user-033",
+      "name": "Mark Allen",
+      "age": 25,
+      "city": "Warsaw",
+      "join_date": "2022-12-07",
+      "company": "NetWorks",
+      "score": 3.29,
+      "interests": [
+        "travel",
+        "yoga",
+        "dancing"
+      ],
+      "friends": [
+        "user-001",
+        "user-135",
+        "user-208",
+        "user-139",
+        "user-177"
+      ]
+    },
+    {
+      "@id": "user-034",
+      "name": "Eva Perez",
+      "age": 57,
+      "city": "Vienna",
+      "join_date": "2012-10-17",
+      "company": "PixelStudio",
+      "score": 5.56,
+      "interests": [
+        "travel"
+      ],
+      "friends": [
+        "user-085",
+        "user-105",
+        "user-180",
+        "user-077",
+        "user-143"
+      ]
+    },
+    {
+      "@id": "user-035",
+      "name": "Aaron Harris",
+      "age": 61,
+      "city": "Sydney",
+      "join_date": "2023-10-22",
+      "company": "OpenBridge",
+      "score": 3.71,
+      "interests": [
+        "dancing"
+      ],
+      "friends": [
+        "user-079",
+        "user-075"
+      ]
+    },
+    {
+      "@id": "user-036",
+      "name": "Laura Hill",
+      "age": 59,
+      "city": "Vienna",
+      "join_date": "2020-06-06",
+      "company": "InfoSystems",
+      "score": 4.98,
+      "interests": [
+        "music",
+        "cooking",
+        "technology"
+      ],
+      "friends": [
+        "user-132",
+        "user-123",
+        "user-205"
+      ]
+    },
+    {
+      "@id": "user-037",
+      "name": "George Green",
+      "age": 57,
+      "city": "Vienna",
+      "join_date": "2012-02-05",
+      "company": "NetWorks",
+      "score": 7.06,
+      "interests": [
+        "hiking"
+      ],
+      "friends": [
+        "user-208",
+        "user-052",
+        "user-039"
+      ]
+    },
+    {
+      "@id": "user-038",
+      "name": "Paul Walker",
+      "age": 57,
+      "city": "Paris",
+      "join_date": "2020-03-19",
+      "company": "ByteWave",
+      "score": 8.98,
+      "interests": [
+        "cycling",
+        "sports"
+      ],
+      "friends": [
+        "user-185",
+        "user-180",
+        "user-100"
+      ]
+    },
+    {
+      "@id": "user-039",
+      "name": "Jack Smith",
+      "age": 24,
+      "city": "Budapest",
+      "join_date": "2014-11-28",
+      "company": "CloudBase",
+      "score": 8.24,
+      "interests": [
+        "coding"
+      ],
+      "friends": [
+        "user-013",
+        "user-144",
+        "user-065",
+        "user-032",
+        "user-118"
+      ]
+    },
+    {
+      "@id": "user-040",
+      "name": "Rafael King",
+      "age": 53,
+      "city": "Mexico City",
+      "join_date": "2017-02-12",
+      "company": "InfoSystems",
+      "score": 6.51,
+      "interests": [
+        "art",
+        "sports"
+      ],
+      "friends": [
+        "user-142",
+        "user-116",
+        "user-042",
+        "user-192",
+        "user-123"
+      ]
+    },
+    {
+      "@id": "user-041",
+      "name": "Oscar Moore",
+      "age": 51,
+      "city": "Singapore",
+      "join_date": "2015-05-14",
+      "company": "PixelStudio",
+      "score": 4.96,
+      "interests": [
+        "cooking",
+        "reading",
+        "swimming"
+      ],
+      "friends": [
+        "user-062",
+        "user-071",
+        "user-087",
+        "user-083"
+      ]
+    },
+    {
+      "@id": "user-042",
+      "name": "Olivia Harris",
+      "age": 62,
+      "city": "Tokyo",
+      "join_date": "2014-10-19",
+      "company": "DataSoft",
+      "score": 4.73,
+      "interests": [
+        "dancing"
+      ],
+      "friends": [
+        "user-140",
+        "user-121",
+        "user-108",
+        "user-016"
+      ]
+    },
+    {
+      "@id": "user-043",
+      "name": "Yara Nguyen",
+      "age": 62,
+      "city": "New York",
+      "join_date": "2022-11-30",
+      "company": "ByteWave",
+      "score": 5.29,
+      "interests": [
+        "chess",
+        "sports",
+        "gardening"
+      ],
+      "friends": [
+        "user-078",
+        "user-194",
+        "user-101",
+        "user-109"
+      ]
+    },
+    {
+      "@id": "user-044",
+      "name": "Olivia Moore",
+      "age": 45,
+      "city": "Singapore",
+      "join_date": "2010-08-26",
+      "company": "ByteWave",
+      "score": 4.03,
+      "interests": [
+        "photography",
+        "cycling",
+        "coffee"
+      ],
+      "friends": [
+        "user-187",
+        "user-043",
+        "user-121",
+        "user-033",
+        "user-161"
+      ]
+    },
+    {
+      "@id": "user-045",
+      "name": "Frank Ramirez",
+      "age": 26,
+      "city": "Seoul",
+      "join_date": "2014-01-28",
+      "company": "TechCorp",
+      "score": 3.34,
+      "interests": [
+        "art",
+        "dancing"
+      ],
+      "friends": [
+        "user-056",
+        "user-118",
+        "user-085",
+        "user-088"
+      ]
+    },
+    {
+      "@id": "user-046",
+      "name": "Quinn Garcia",
+      "age": 48,
+      "city": "New York",
+      "join_date": "2022-02-05",
+      "company": "TechCorp",
+      "score": 10.0,
+      "interests": [
+        "hiking",
+        "photography",
+        "sports"
+      ],
+      "friends": [
+        "user-059",
+        "user-168",
+        "user-018",
+        "user-201"
+      ]
+    },
+    {
+      "@id": "user-047",
+      "name": "Mia Johnson",
+      "age": 57,
+      "city": "Tokyo",
+      "join_date": "2015-05-09",
+      "company": "CloudBase",
+      "score": 5.26,
+      "interests": [
+        "art",
+        "yoga"
+      ],
+      "friends": [
+        "user-146",
+        "user-057"
+      ]
+    },
+    {
+      "@id": "user-048",
+      "name": "Karen Hill",
+      "age": 56,
+      "city": "Berlin",
+      "join_date": "2013-09-03",
+      "company": "PixelStudio",
+      "score": 1.97,
+      "interests": [
+        "cycling",
+        "coffee",
+        "travel"
+      ],
+      "friends": [
+        "user-081",
+        "user-149"
+      ]
+    },
+    {
+      "@id": "user-049",
+      "name": "Eva Nguyen",
+      "age": 62,
+      "city": "Amsterdam",
+      "join_date": "2012-04-14",
+      "company": "PixelStudio",
+      "score": 8.65,
+      "interests": [
+        "yoga"
+      ],
+      "friends": [
+        "user-205",
+        "user-146"
+      ]
+    },
+    {
+      "@id": "user-050",
+      "name": "Ivan Ramirez",
+      "age": 60,
+      "city": "Prague",
+      "join_date": "2011-07-19",
+      "company": "CyberLink",
+      "score": 6.83,
+      "interests": [
+        "dancing"
+      ],
+      "friends": [
+        "user-109",
+        "user-127"
+      ]
+    },
+    {
+      "@id": "user-051",
+      "name": "Xander Green",
+      "age": 47,
+      "city": "Tokyo",
+      "join_date": "2019-10-08",
+      "company": "CloudBase",
+      "score": 7.6,
+      "interests": [
+        "coding",
+        "dancing"
+      ],
+      "friends": [
+        "user-159",
+        "user-208",
+        "user-139",
+        "user-200"
+      ]
+    },
+    {
+      "@id": "user-052",
+      "name": "Vince Nguyen",
+      "age": 35,
+      "city": "Vienna",
+      "join_date": "2015-07-05",
+      "company": "DataSoft",
+      "score": 3.51,
+      "interests": [
+        "cycling",
+        "cinema",
+        "photography"
+      ],
+      "friends": [
+        "user-064",
+        "user-194",
+        "user-120",
+        "user-147",
+        "user-158"
+      ]
+    },
+    {
+      "@id": "user-053",
+      "name": "Fiona Lee",
+      "age": 29,
+      "city": "Singapore",
+      "join_date": "2014-10-04",
+      "company": "AlgoLab",
+      "score": 8.18,
+      "interests": [
+        "photography",
+        "writing",
+        "travel"
+      ],
+      "friends": [
+        "user-073",
+        "user-154",
+        "user-181",
+        "user-072"
+      ]
+    },
+    {
+      "@id": "user-054",
+      "name": "Frank Thomas",
+      "age": 64,
+      "city": "Budapest",
+      "join_date": "2020-12-16",
+      "company": "CyberLink",
+      "score": 7.82,
+      "interests": [
+        "cooking"
+      ],
+      "friends": [
+        "user-167",
+        "user-184",
+        "user-127",
+        "user-116",
+        "user-204"
+      ]
+    },
+    {
+      "@id": "user-055",
+      "name": "Sam Anderson",
+      "age": 43,
+      "city": "Amsterdam",
+      "join_date": "2016-11-13",
+      "company": "OpenBridge",
+      "score": 4.32,
+      "interests": [
+        "coding",
+        "art"
+      ],
+      "friends": [
+        "user-110",
+        "user-192",
+        "user-142",
+        "user-086"
+      ]
+    },
+    {
+      "@id": "user-056",
+      "name": "Tina Taylor",
+      "age": 32,
+      "city": "Berlin",
+      "join_date": "2014-04-27",
+      "company": "AlgoLab",
+      "score": 2.08,
+      "interests": [
+        "art",
+        "swimming"
+      ],
+      "friends": [
+        "user-050",
+        "user-057",
+        "user-191"
+      ]
+    },
+    {
+      "@id": "user-057",
+      "name": "Hannah Hill",
+      "age": 36,
+      "city": "Berlin",
+      "join_date": "2014-05-10",
+      "company": "PixelStudio",
+      "score": 3.05,
+      "interests": [
+        "reading",
+        "art",
+        "hiking"
+      ],
+      "friends": [
+        "user-079",
+        "user-004",
+        "user-183"
+      ]
+    },
+    {
+      "@id": "user-058",
+      "name": "David Scott",
+      "age": 36,
+      "city": "Tokyo",
+      "join_date": "2021-01-04",
+      "company": "DataSoft",
+      "score": 8.85,
+      "interests": [
+        "hiking"
+      ],
+      "friends": [
+        "user-122",
+        "user-124",
+        "user-114",
+        "user-089"
+      ]
+    },
+    {
+      "@id": "user-059",
+      "name": "Quinn Walker",
+      "age": 25,
+      "city": "Paris",
+      "join_date": "2018-12-27",
+      "company": "InfoSystems",
+      "score": 1.67,
+      "interests": [
+        "technology",
+        "cooking",
+        "sports"
+      ],
+      "friends": [
+        "user-039",
+        "user-209"
+      ]
+    },
+    {
+      "@id": "user-060",
+      "name": "Henry Scott",
+      "age": 44,
+      "city": "Mexico City",
+      "join_date": "2023-05-16",
+      "company": "OpenBridge",
+      "score": 3.03,
+      "interests": [
+        "swimming",
+        "hiking"
+      ],
+      "friends": [
+        "user-117",
+        "user-115",
+        "user-078",
+        "user-152",
+        "user-111"
+      ]
+    },
+    {
+      "@id": "user-061",
+      "name": "Nina Miller",
+      "age": 31,
+      "city": "Toronto",
+      "join_date": "2015-12-08",
+      "company": "DataSoft",
+      "score": 2.41,
+      "interests": [
+        "dancing"
+      ],
+      "friends": [
+        "user-143",
+        "user-020",
+        "user-041"
+      ]
+    },
+    {
+      "@id": "user-062",
+      "name": "Chris Hill",
+      "age": 48,
+      "city": "Rome",
+      "join_date": "2010-09-25",
+      "company": "NetWorks",
+      "score": 3.59,
+      "interests": [
+        "art"
+      ],
+      "friends": [
+        "user-181",
+        "user-118",
+        "user-019",
+        "user-177"
+      ]
+    },
+    {
+      "@id": "user-063",
+      "name": "Oscar Nguyen",
+      "age": 60,
+      "city": "Toronto",
+      "join_date": "2019-07-15",
+      "company": "DataSoft",
+      "score": 5.9,
+      "interests": [
+        "music"
+      ],
+      "friends": [
+        "user-070",
+        "user-037",
+        "user-019"
+      ]
+    },
+    {
+      "@id": "user-064",
+      "name": "Tina Hill",
+      "age": 65,
+      "city": "São Paulo",
+      "join_date": "2016-06-22",
+      "company": "InfoSystems",
+      "score": 2.12,
+      "interests": [
+        "gardening",
+        "coding",
+        "cooking"
+      ],
+      "friends": [
+        "user-181",
+        "user-105",
+        "user-071",
+        "user-130"
+      ]
+    },
+    {
+      "@id": "user-065",
+      "name": "Mark Williams",
+      "age": 45,
+      "city": "Vienna",
+      "join_date": "2023-07-17",
+      "company": "PixelStudio",
+      "score": 1.23,
+      "interests": [
+        "art"
+      ],
+      "friends": [
+        "user-174",
+        "user-149",
+        "user-152"
+      ]
+    },
+    {
+      "@id": "user-066",
+      "name": "Kevin Williams",
+      "age": 29,
+      "city": "Singapore",
+      "join_date": "2021-08-22",
+      "company": "InfoSystems",
+      "score": 9.24,
+      "interests": [
+        "cooking",
+        "gardening"
+      ],
+      "friends": [
+        "user-151",
+        "user-113",
+        "user-164"
+      ]
+    },
+    {
+      "@id": "user-067",
+      "name": "Wendy Clark",
+      "age": 39,
+      "city": "Vienna",
+      "join_date": "2012-05-06",
+      "company": "CloudBase",
+      "score": 3.97,
+      "interests": [
+        "hiking",
+        "coding",
+        "cooking"
+      ],
+      "friends": [
+        "user-075",
+        "user-171",
+        "user-104",
+        "user-210",
+        "user-196"
+      ]
+    },
+    {
+      "@id": "user-068",
+      "name": "Uma Taylor",
+      "age": 38,
+      "city": "Berlin",
+      "join_date": "2019-01-25",
+      "company": "CyberLink",
+      "score": 8.42,
+      "interests": [
+        "dancing",
+        "hiking"
+      ],
+      "friends": [
+        "user-170",
+        "user-140"
+      ]
+    },
+    {
+      "@id": "user-069",
+      "name": "Mia King",
+      "age": 41,
+      "city": "Mexico City",
+      "join_date": "2021-03-07",
+      "company": "InfoSystems",
+      "score": 7.84,
+      "interests": [
+        "coding",
+        "gardening"
+      ],
+      "friends": [
+        "user-070",
+        "user-142",
+        "user-034"
+      ]
+    },
+    {
+      "@id": "user-070",
+      "name": "Henry Johnson",
+      "age": 58,
+      "city": "Mexico City",
+      "join_date": "2015-05-15",
+      "company": "CloudBase",
+      "score": 3.8,
+      "interests": [
+        "sports"
+      ],
+      "friends": [
+        "user-143",
+        "user-106"
+      ]
+    },
+    {
+      "@id": "user-071",
+      "name": "Henry Robinson",
+      "age": 25,
+      "city": "Tokyo",
+      "join_date": "2021-03-06",
+      "company": "PixelStudio",
+      "score": 5.58,
+      "interests": [
+        "chess",
+        "reading"
+      ],
+      "friends": [
+        "user-108",
+        "user-125",
+        "user-122",
+        "user-063"
+      ]
+    },
+    {
+      "@id": "user-072",
+      "name": "Yara Gonzalez",
+      "age": 56,
+      "city": "Dubai",
+      "join_date": "2013-01-23",
+      "company": "DataSoft",
+      "score": 3.49,
+      "interests": [
+        "technology",
+        "swimming"
+      ],
+      "friends": [
+        "user-089",
+        "user-203",
+        "user-131",
+        "user-069",
+        "user-001"
+      ]
+    },
+    {
+      "@id": "user-073",
+      "name": "Laura Young",
+      "age": 27,
+      "city": "Seoul",
+      "join_date": "2022-01-30",
+      "company": "InfoSystems",
+      "score": 4.11,
+      "interests": [
+        "cycling",
+        "sports",
+        "dancing"
+      ],
+      "friends": [
+        "user-118",
+        "user-084",
+        "user-049",
+        "user-180",
+        "user-062"
+      ]
+    },
+    {
+      "@id": "user-074",
+      "name": "Carol Lee",
+      "age": 65,
+      "city": "Singapore",
+      "join_date": "2018-07-21",
+      "company": "ByteWave",
+      "score": 9.9,
+      "interests": [
+        "swimming",
+        "cinema",
+        "gaming"
+      ],
+      "friends": [
+        "user-128",
+        "user-010",
+        "user-033"
+      ]
+    },
+    {
+      "@id": "user-075",
+      "name": "Chris Miller",
+      "age": 51,
+      "city": "Seoul",
+      "join_date": "2010-05-06",
+      "company": "CloudBase",
+      "score": 4.69,
+      "interests": [
+        "cinema",
+        "cycling"
+      ],
+      "friends": [
+        "user-020",
+        "user-122",
+        "user-202"
+      ]
+    },
+    {
+      "@id": "user-076",
+      "name": "Petra Garcia",
+      "age": 39,
+      "city": "Mumbai",
+      "join_date": "2018-07-11",
+      "company": "AlgoLab",
+      "score": 6.64,
+      "interests": [
+        "technology",
+        "sports",
+        "cooking"
+      ],
+      "friends": [
+        "user-140",
+        "user-010",
+        "user-160",
+        "user-018",
+        "user-061"
+      ]
+    },
+    {
+      "@id": "user-077",
+      "name": "Beth Miller",
+      "age": 58,
+      "city": "Berlin",
+      "join_date": "2019-12-14",
+      "company": "CloudBase",
+      "score": 7.25,
+      "interests": [
+        "technology"
+      ],
+      "friends": [
+        "user-012",
+        "user-085"
+      ]
+    },
+    {
+      "@id": "user-078",
+      "name": "Wendy White",
+      "age": 45,
+      "city": "Tokyo",
+      "join_date": "2015-06-24",
+      "company": "CyberLink",
+      "score": 4.71,
+      "interests": [
+        "cycling",
+        "sports",
+        "gardening"
+      ],
+      "friends": [
+        "user-044",
+        "user-045",
+        "user-021"
+      ]
+    },
+    {
+      "@id": "user-079",
+      "name": "Laura Martinez",
+      "age": 32,
+      "city": "Seoul",
+      "join_date": "2015-09-12",
+      "company": "InfoSystems",
+      "score": 3.3,
+      "interests": [
+        "chess",
+        "music"
+      ],
+      "friends": [
+        "user-207",
+        "user-121"
+      ]
+    },
+    {
+      "@id": "user-080",
+      "name": "Eva Lewis",
+      "age": 40,
+      "city": "São Paulo",
+      "join_date": "2016-09-16",
+      "company": "ByteWave",
+      "score": 7.21,
+      "interests": [
+        "cycling"
+      ],
+      "friends": [
+        "user-078",
+        "user-051",
+        "user-100",
+        "user-125",
+        "user-028"
+      ]
+    },
+    {
+      "@id": "user-081",
+      "name": "Kevin Thompson",
+      "age": 54,
+      "city": "Rome",
+      "join_date": "2016-08-15",
+      "company": "TechCorp",
+      "score": 9.8,
+      "interests": [
+        "hiking",
+        "gardening",
+        "technology"
+      ],
+      "friends": [
+        "user-071",
+        "user-003",
+        "user-146",
+        "user-177",
+        "user-201"
+      ]
+    },
+    {
+      "@id": "user-082",
+      "name": "Olivia Hill",
+      "age": 40,
+      "city": "Amsterdam",
+      "join_date": "2014-04-07",
+      "company": "OpenBridge",
+      "score": 3.26,
+      "interests": [
+        "technology"
+      ],
+      "friends": [
+        "user-162",
+        "user-025",
+        "user-167"
+      ]
+    },
+    {
+      "@id": "user-083",
+      "name": "Chris Williams",
+      "age": 55,
+      "city": "Prague",
+      "join_date": "2012-12-12",
+      "company": "DataSoft",
+      "score": 9.19,
+      "interests": [
+        "chess"
+      ],
+      "friends": [
+        "user-193",
+        "user-108",
+        "user-045",
+        "user-052"
+      ]
+    },
+    {
+      "@id": "user-084",
+      "name": "Xander King",
+      "age": 50,
+      "city": "Madrid",
+      "join_date": "2013-09-09",
+      "company": "PixelStudio",
+      "score": 9.23,
+      "interests": [
+        "coding"
+      ],
+      "friends": [
+        "user-208",
+        "user-076",
+        "user-193",
+        "user-088",
+        "user-207"
+      ]
+    },
+    {
+      "@id": "user-085",
+      "name": "Eva Martinez",
+      "age": 32,
+      "city": "Warsaw",
+      "join_date": "2022-07-02",
+      "company": "AlgoLab",
+      "score": 1.81,
+      "interests": [
+        "art",
+        "swimming"
+      ],
+      "friends": [
+        "user-004",
+        "user-068",
+        "user-139",
+        "user-032",
+        "user-118"
+      ]
+    },
+    {
+      "@id": "user-086",
+      "name": "Yara Green",
+      "age": 41,
+      "city": "Berlin",
+      "join_date": "2015-03-31",
+      "company": "InfoSystems",
+      "score": 1.23,
+      "interests": [
+        "coding",
+        "technology",
+        "dancing"
+      ],
+      "friends": [
+        "user-158",
+        "user-057",
+        "user-167",
+        "user-017"
+      ]
+    },
+    {
+      "@id": "user-087",
+      "name": "Henry Rodriguez",
+      "age": 20,
+      "city": "London",
+      "join_date": "2016-10-29",
+      "company": "InfoSystems",
+      "score": 2.05,
+      "interests": [
+        "yoga",
+        "chess"
+      ],
+      "friends": [
+        "user-139",
+        "user-035",
+        "user-101"
+      ]
+    },
+    {
+      "@id": "user-088",
+      "name": "Aaron Nguyen",
+      "age": 65,
+      "city": "Tokyo",
+      "join_date": "2019-04-22",
+      "company": "DataSoft",
+      "score": 8.5,
+      "interests": [
+        "coding",
+        "sports"
+      ],
+      "friends": [
+        "user-072",
+        "user-009",
+        "user-178",
+        "user-096",
+        "user-056"
+      ]
+    },
+    {
+      "@id": "user-089",
+      "name": "Xander Miller",
+      "age": 61,
+      "city": "Prague",
+      "join_date": "2022-03-19",
+      "company": "AlgoLab",
+      "score": 1.54,
+      "interests": [
+        "travel",
+        "photography",
+        "hiking"
+      ],
+      "friends": [
+        "user-049",
+        "user-032",
+        "user-118",
+        "user-024"
+      ]
+    },
+    {
+      "@id": "user-090",
+      "name": "Victor Thomas",
+      "age": 26,
+      "city": "São Paulo",
+      "join_date": "2014-08-09",
+      "company": "DataSoft",
+      "score": 8.47,
+      "interests": [
+        "cinema"
+      ],
+      "friends": [
+        "user-152",
+        "user-056",
+        "user-210"
+      ]
+    },
+    {
+      "@id": "user-091",
+      "name": "Jack Hill",
+      "age": 18,
+      "city": "Madrid",
+      "join_date": "2013-03-31",
+      "company": "CloudBase",
+      "score": 5.86,
+      "interests": [
+        "photography"
+      ],
+      "friends": [
+        "user-029",
+        "user-171",
+        "user-007"
+      ]
+    },
+    {
+      "@id": "user-092",
+      "name": "Wendy Thomas",
+      "age": 55,
+      "city": "Vienna",
+      "join_date": "2010-05-10",
+      "company": "CloudBase",
+      "score": 3.39,
+      "interests": [
+        "cooking"
+      ],
+      "friends": [
+        "user-191",
+        "user-109",
+        "user-136"
+      ]
+    },
+    {
+      "@id": "user-093",
+      "name": "Ethan Lewis",
+      "age": 41,
+      "city": "Dubai",
+      "join_date": "2023-04-26",
+      "company": "DataSoft",
+      "score": 5.07,
+      "interests": [
+        "writing",
+        "technology",
+        "coding"
+      ],
+      "friends": [
+        "user-159",
+        "user-012",
+        "user-188"
+      ]
+    },
+    {
+      "@id": "user-094",
+      "name": "Petra Johnson",
+      "age": 21,
+      "city": "Singapore",
+      "join_date": "2019-01-04",
+      "company": "ByteWave",
+      "score": 7.17,
+      "interests": [
+        "reading",
+        "cooking",
+        "coffee"
+      ],
+      "friends": [
+        "user-184",
+        "user-115",
+        "user-019",
+        "user-021",
+        "user-083"
+      ]
+    },
+    {
+      "@id": "user-095",
+      "name": "Rose Flores",
+      "age": 58,
+      "city": "São Paulo",
+      "join_date": "2022-04-20",
+      "company": "AlgoLab",
+      "score": 4.43,
+      "interests": [
+        "gaming"
+      ],
+      "friends": [
+        "user-118",
+        "user-131",
+        "user-156",
+        "user-112"
+      ]
+    },
+    {
+      "@id": "user-096",
+      "name": "Petra Scott",
+      "age": 64,
+      "city": "Toronto",
+      "join_date": "2019-08-25",
+      "company": "InfoSystems",
+      "score": 8.99,
+      "interests": [
+        "cinema"
+      ],
+      "friends": [
+        "user-087",
+        "user-118",
+        "user-104",
+        "user-108",
+        "user-188"
+      ]
+    },
+    {
+      "@id": "user-097",
+      "name": "Beth Lee",
+      "age": 60,
+      "city": "Madrid",
+      "join_date": "2018-05-25",
+      "company": "CloudBase",
+      "score": 7.18,
+      "interests": [
+        "yoga",
+        "reading",
+        "chess"
+      ],
+      "friends": [
+        "user-018",
+        "user-024",
+        "user-022",
+        "user-112",
+        "user-025"
+      ]
+    },
+    {
+      "@id": "user-098",
+      "name": "David Nguyen",
+      "age": 53,
+      "city": "Mumbai",
+      "join_date": "2017-05-24",
+      "company": "DataSoft",
+      "score": 4.7,
+      "interests": [
+        "gaming",
+        "swimming"
+      ],
+      "friends": [
+        "user-186",
+        "user-014",
+        "user-074",
+        "user-155",
+        "user-080"
+      ]
+    },
+    {
+      "@id": "user-099",
+      "name": "George Wilson",
+      "age": 27,
+      "city": "Singapore",
+      "join_date": "2015-01-12",
+      "company": "DataSoft",
+      "score": 4.15,
+      "interests": [
+        "dancing"
+      ],
+      "friends": [
+        "user-030",
+        "user-197",
+        "user-072",
+        "user-148"
+      ]
+    },
+    {
+      "@id": "user-100",
+      "name": "Julia Flores",
+      "age": 57,
+      "city": "Mumbai",
+      "join_date": "2010-08-04",
+      "company": "OpenBridge",
+      "score": 9.36,
+      "interests": [
+        "cinema",
+        "yoga"
+      ],
+      "friends": [
+        "user-008",
+        "user-047",
+        "user-070",
+        "user-181"
+      ]
+    },
+    {
+      "@id": "user-101",
+      "name": "Alice Lopez",
+      "age": 27,
+      "city": "São Paulo",
+      "join_date": "2018-12-28",
+      "company": "DataSoft",
+      "score": 2.28,
+      "interests": [
+        "travel",
+        "cycling",
+        "dancing"
+      ],
+      "friends": [
+        "user-024",
+        "user-193"
+      ]
+    },
+    {
+      "@id": "user-102",
+      "name": "Diana Perez",
+      "age": 28,
+      "city": "Prague",
+      "join_date": "2016-12-27",
+      "company": "AlgoLab",
+      "score": 7.99,
+      "interests": [
+        "coffee"
+      ],
+      "friends": [
+        "user-014",
+        "user-040"
+      ]
+    },
+    {
+      "@id": "user-103",
+      "name": "David Garcia",
+      "age": 35,
+      "city": "Seoul",
+      "join_date": "2019-07-06",
+      "company": "InfoSystems",
+      "score": 6.46,
+      "interests": [
+        "dancing",
+        "gaming"
+      ],
+      "friends": [
+        "user-070",
+        "user-056",
+        "user-195",
+        "user-133",
+        "user-030"
+      ]
+    },
+    {
+      "@id": "user-104",
+      "name": "Sam Nguyen",
+      "age": 49,
+      "city": "Dubai",
+      "join_date": "2016-12-01",
+      "company": "TechCorp",
+      "score": 2.98,
+      "interests": [
+        "travel",
+        "reading"
+      ],
+      "friends": [
+        "user-002",
+        "user-053"
+      ]
+    },
+    {
+      "@id": "user-105",
+      "name": "Quinn Jackson",
+      "age": 38,
+      "city": "Berlin",
+      "join_date": "2010-03-05",
+      "company": "InfoSystems",
+      "score": 7.72,
+      "interests": [
+        "sports",
+        "writing",
+        "chess"
+      ],
+      "friends": [
+        "user-034",
+        "user-098",
+        "user-138"
+      ]
+    },
+    {
+      "@id": "user-106",
+      "name": "Rafael Thompson",
+      "age": 22,
+      "city": "Warsaw",
+      "join_date": "2010-12-13",
+      "company": "ByteWave",
+      "score": 1.17,
+      "interests": [
+        "swimming",
+        "cycling"
+      ],
+      "friends": [
+        "user-081",
+        "user-149"
+      ]
+    },
+    {
+      "@id": "user-107",
+      "name": "Ursula Green",
+      "age": 44,
+      "city": "Rome",
+      "join_date": "2012-08-01",
+      "company": "ByteWave",
+      "score": 1.19,
+      "interests": [
+        "yoga",
+        "cooking",
+        "dancing"
+      ],
+      "friends": [
+        "user-044",
+        "user-207",
+        "user-160",
+        "user-119"
+      ]
+    },
+    {
+      "@id": "user-108",
+      "name": "Grace Thomas",
+      "age": 45,
+      "city": "São Paulo",
+      "join_date": "2018-12-25",
+      "company": "CyberLink",
+      "score": 1.71,
+      "interests": [
+        "cooking"
+      ],
+      "friends": [
+        "user-192",
+        "user-087",
+        "user-057",
+        "user-086"
+      ]
+    },
+    {
+      "@id": "user-109",
+      "name": "George Green",
+      "age": 25,
+      "city": "Dubai",
+      "join_date": "2021-06-09",
+      "company": "NetWorks",
+      "score": 9.15,
+      "interests": [
+        "sports"
+      ],
+      "friends": [
+        "user-090",
+        "user-188",
+        "user-167",
+        "user-210"
+      ]
+    },
+    {
+      "@id": "user-110",
+      "name": "Grace Martinez",
+      "age": 34,
+      "city": "Toronto",
+      "join_date": "2013-11-22",
+      "company": "OpenBridge",
+      "score": 2.38,
+      "interests": [
+        "gardening",
+        "coding",
+        "swimming"
+      ],
+      "friends": [
+        "user-046",
+        "user-199"
+      ]
+    },
+    {
+      "@id": "user-111",
+      "name": "Sara Torres",
+      "age": 59,
+      "city": "Mexico City",
+      "join_date": "2017-04-01",
+      "company": "AlgoLab",
+      "score": 2.36,
+      "interests": [
+        "technology",
+        "art",
+        "hiking"
+      ],
+      "friends": [
+        "user-122",
+        "user-115"
+      ]
+    },
+    {
+      "@id": "user-112",
+      "name": "Wendy Allen",
+      "age": 22,
+      "city": "Rome",
+      "join_date": "2020-05-10",
+      "company": "InfoSystems",
+      "score": 1.34,
+      "interests": [
+        "coffee",
+        "writing",
+        "cycling"
+      ],
+      "friends": [
+        "user-074",
+        "user-020",
+        "user-167",
+        "user-024"
+      ]
+    },
+    {
+      "@id": "user-113",
+      "name": "Diana Nguyen",
+      "age": 53,
+      "city": "London",
+      "join_date": "2020-02-02",
+      "company": "OpenBridge",
+      "score": 6.87,
+      "interests": [
+        "coding"
+      ],
+      "friends": [
+        "user-156",
+        "user-123",
+        "user-130",
+        "user-039"
+      ]
+    },
+    {
+      "@id": "user-114",
+      "name": "Grace Perez",
+      "age": 63,
+      "city": "Paris",
+      "join_date": "2021-04-26",
+      "company": "CloudBase",
+      "score": 1.35,
+      "interests": [
+        "yoga",
+        "technology"
+      ],
+      "friends": [
+        "user-113",
+        "user-136",
+        "user-135",
+        "user-158",
+        "user-041"
+      ]
+    },
+    {
+      "@id": "user-115",
+      "name": "Yara Clark",
+      "age": 39,
+      "city": "Mexico City",
+      "join_date": "2011-03-05",
+      "company": "AlgoLab",
+      "score": 1.59,
+      "interests": [
+        "technology",
+        "art"
+      ],
+      "friends": [
+        "user-144",
+        "user-175"
+      ]
+    },
+    {
+      "@id": "user-116",
+      "name": "Vince Hill",
+      "age": 27,
+      "city": "Vienna",
+      "join_date": "2011-10-30",
+      "company": "OpenBridge",
+      "score": 6.97,
+      "interests": [
+        "reading",
+        "cooking"
+      ],
+      "friends": [
+        "user-080",
+        "user-169",
+        "user-180",
+        "user-171"
+      ]
+    },
+    {
+      "@id": "user-117",
+      "name": "Tina Scott",
+      "age": 42,
+      "city": "Vienna",
+      "join_date": "2012-11-12",
+      "company": "CyberLink",
+      "score": 1.84,
+      "interests": [
+        "cinema"
+      ],
+      "friends": [
+        "user-132",
+        "user-093",
+        "user-005",
+        "user-080",
+        "user-047"
+      ]
+    },
+    {
+      "@id": "user-118",
+      "name": "Fiona Gonzalez",
+      "age": 32,
+      "city": "Tokyo",
+      "join_date": "2013-06-23",
+      "company": "DataSoft",
+      "score": 3.66,
+      "interests": [
+        "writing",
+        "hiking",
+        "cinema"
+      ],
+      "friends": [
+        "user-131",
+        "user-199"
+      ]
+    },
+    {
+      "@id": "user-119",
+      "name": "Nina Rodriguez",
+      "age": 56,
+      "city": "Warsaw",
+      "join_date": "2013-06-17",
+      "company": "CloudBase",
+      "score": 2.63,
+      "interests": [
+        "yoga",
+        "sports"
+      ],
+      "friends": [
+        "user-186",
+        "user-113",
+        "user-012"
+      ]
+    },
+    {
+      "@id": "user-120",
+      "name": "Chris Flores",
+      "age": 36,
+      "city": "Seoul",
+      "join_date": "2015-04-01",
+      "company": "CyberLink",
+      "score": 3.15,
+      "interests": [
+        "technology",
+        "cycling"
+      ],
+      "friends": [
+        "user-050",
+        "user-095",
+        "user-175",
+        "user-148",
+        "user-113"
+      ]
+    },
+    {
+      "@id": "user-121",
+      "name": "George King",
+      "age": 44,
+      "city": "Sydney",
+      "join_date": "2014-06-24",
+      "company": "OpenBridge",
+      "score": 2.25,
+      "interests": [
+        "gaming",
+        "writing",
+        "coffee"
+      ],
+      "friends": [
+        "user-014",
+        "user-166",
+        "user-125",
+        "user-096"
+      ]
+    },
+    {
+      "@id": "user-122",
+      "name": "Sam Garcia",
+      "age": 28,
+      "city": "Madrid",
+      "join_date": "2020-01-29",
+      "company": "CyberLink",
+      "score": 2.33,
+      "interests": [
+        "hiking",
+        "cycling"
+      ],
+      "friends": [
+        "user-024",
+        "user-057",
+        "user-116",
+        "user-090",
+        "user-007"
+      ]
+    },
+    {
+      "@id": "user-123",
+      "name": "George White",
+      "age": 33,
+      "city": "Warsaw",
+      "join_date": "2011-10-31",
+      "company": "AlgoLab",
+      "score": 3.02,
+      "interests": [
+        "reading"
+      ],
+      "friends": [
+        "user-026",
+        "user-184",
+        "user-168",
+        "user-086"
+      ]
+    },
+    {
+      "@id": "user-124",
+      "name": "Carol Jackson",
+      "age": 48,
+      "city": "Tokyo",
+      "join_date": "2020-07-09",
+      "company": "InfoSystems",
+      "score": 6.54,
+      "interests": [
+        "reading"
+      ],
+      "friends": [
+        "user-005",
+        "user-066"
+      ]
+    },
+    {
+      "@id": "user-125",
+      "name": "Julia Hill",
+      "age": 51,
+      "city": "Budapest",
+      "join_date": "2012-06-29",
+      "company": "PixelStudio",
+      "score": 3.14,
+      "interests": [
+        "coffee",
+        "coding"
+      ],
+      "friends": [
+        "user-013",
+        "user-062"
+      ]
+    },
+    {
+      "@id": "user-126",
+      "name": "Eva Davis",
+      "age": 49,
+      "city": "Mexico City",
+      "join_date": "2022-01-09",
+      "company": "TechCorp",
+      "score": 6.69,
+      "interests": [
+        "photography",
+        "yoga"
+      ],
+      "friends": [
+        "user-185",
+        "user-037",
+        "user-075"
+      ]
+    },
+    {
+      "@id": "user-127",
+      "name": "Paul Torres",
+      "age": 44,
+      "city": "Sydney",
+      "join_date": "2011-12-03",
+      "company": "CyberLink",
+      "score": 9.77,
+      "interests": [
+        "writing",
+        "chess",
+        "photography"
+      ],
+      "friends": [
+        "user-136",
+        "user-141"
+      ]
+    },
+    {
+      "@id": "user-128",
+      "name": "Yara Walker",
+      "age": 20,
+      "city": "Warsaw",
+      "join_date": "2018-05-17",
+      "company": "PixelStudio",
+      "score": 7.73,
+      "interests": [
+        "gaming",
+        "swimming",
+        "cinema"
+      ],
+      "friends": [
+        "user-203",
+        "user-018",
+        "user-089",
+        "user-062"
+      ]
+    },
+    {
+      "@id": "user-129",
+      "name": "Iris Williams",
+      "age": 40,
+      "city": "Mumbai",
+      "join_date": "2017-08-05",
+      "company": "CloudBase",
+      "score": 8.47,
+      "interests": [
+        "cooking"
+      ],
+      "friends": [
+        "user-180",
+        "user-123",
+        "user-163",
+        "user-047",
+        "user-209"
+      ]
+    },
+    {
+      "@id": "user-130",
+      "name": "Ursula Robinson",
+      "age": 20,
+      "city": "Rome",
+      "join_date": "2014-07-10",
+      "company": "TechCorp",
+      "score": 8.12,
+      "interests": [
+        "cycling",
+        "chess",
+        "gardening"
+      ],
+      "friends": [
+        "user-081",
+        "user-080"
+      ]
+    },
+    {
+      "@id": "user-131",
+      "name": "Quinn Williams",
+      "age": 59,
+      "city": "Toronto",
+      "join_date": "2016-06-01",
+      "company": "AlgoLab",
+      "score": 8.76,
+      "interests": [
+        "gaming",
+        "yoga"
+      ],
+      "friends": [
+        "user-169",
+        "user-085"
+      ]
+    },
+    {
+      "@id": "user-132",
+      "name": "Beth Sanchez",
+      "age": 65,
+      "city": "Seoul",
+      "join_date": "2018-09-03",
+      "company": "AlgoLab",
+      "score": 9.76,
+      "interests": [
+        "cooking",
+        "dancing"
+      ],
+      "friends": [
+        "user-179",
+        "user-128",
+        "user-095",
+        "user-206",
+        "user-134"
+      ]
+    },
+    {
+      "@id": "user-133",
+      "name": "Frank Ramirez",
+      "age": 56,
+      "city": "Sydney",
+      "join_date": "2022-03-27",
+      "company": "PixelStudio",
+      "score": 3.89,
+      "interests": [
+        "technology",
+        "coding"
+      ],
+      "friends": [
+        "user-084",
+        "user-171"
+      ]
+    },
+    {
+      "@id": "user-134",
+      "name": "Mark Ramirez",
+      "age": 28,
+      "city": "Seoul",
+      "join_date": "2017-11-19",
+      "company": "InfoSystems",
+      "score": 1.38,
+      "interests": [
+        "cooking"
+      ],
+      "friends": [
+        "user-159",
+        "user-112",
+        "user-071",
+        "user-165"
+      ]
+    },
+    {
+      "@id": "user-135",
+      "name": "Rafael Green",
+      "age": 43,
+      "city": "Prague",
+      "join_date": "2021-07-05",
+      "company": "CloudBase",
+      "score": 9.58,
+      "interests": [
+        "hiking",
+        "reading"
+      ],
+      "friends": [
+        "user-157",
+        "user-175",
+        "user-202"
+      ]
+    },
+    {
+      "@id": "user-136",
+      "name": "Eva Thomas",
+      "age": 59,
+      "city": "Prague",
+      "join_date": "2018-02-14",
+      "company": "ByteWave",
+      "score": 9.55,
+      "interests": [
+        "coding",
+        "yoga",
+        "swimming"
+      ],
+      "friends": [
+        "user-156",
+        "user-040"
+      ]
+    },
+    {
+      "@id": "user-137",
+      "name": "Chris Jones",
+      "age": 54,
+      "city": "Tokyo",
+      "join_date": "2021-11-16",
+      "company": "AlgoLab",
+      "score": 4.58,
+      "interests": [
+        "gardening"
+      ],
+      "friends": [
+        "user-064",
+        "user-030",
+        "user-007",
+        "user-190"
+      ]
+    },
+    {
+      "@id": "user-138",
+      "name": "Hannah Harris",
+      "age": 53,
+      "city": "Berlin",
+      "join_date": "2015-11-15",
+      "company": "PixelStudio",
+      "score": 7.34,
+      "interests": [
+        "travel",
+        "gaming"
+      ],
+      "friends": [
+        "user-158",
+        "user-074",
+        "user-179"
+      ]
+    },
+    {
+      "@id": "user-139",
+      "name": "Iris Jones",
+      "age": 46,
+      "city": "Sydney",
+      "join_date": "2019-12-26",
+      "company": "DataSoft",
+      "score": 8.29,
+      "interests": [
+        "chess",
+        "technology",
+        "swimming"
+      ],
+      "friends": [
+        "user-172",
+        "user-089",
+        "user-183",
+        "user-017"
+      ]
+    },
+    {
+      "@id": "user-140",
+      "name": "Karen Green",
+      "age": 29,
+      "city": "Prague",
+      "join_date": "2021-05-30",
+      "company": "NetWorks",
+      "score": 2.09,
+      "interests": [
+        "photography",
+        "yoga"
+      ],
+      "friends": [
+        "user-204",
+        "user-036",
+        "user-061"
+      ]
+    },
+    {
+      "@id": "user-141",
+      "name": "Julia Torres",
+      "age": 41,
+      "city": "Seoul",
+      "join_date": "2022-05-17",
+      "company": "CloudBase",
+      "score": 6.51,
+      "interests": [
+        "gardening",
+        "writing"
+      ],
+      "friends": [
+        "user-017",
+        "user-080"
+      ]
+    },
+    {
+      "@id": "user-142",
+      "name": "Aaron Clark",
+      "age": 54,
+      "city": "Paris",
+      "join_date": "2012-10-23",
+      "company": "AlgoLab",
+      "score": 6.78,
+      "interests": [
+        "swimming",
+        "music",
+        "reading"
+      ],
+      "friends": [
+        "user-120",
+        "user-176",
+        "user-133",
+        "user-089",
+        "user-033"
+      ]
+    },
+    {
+      "@id": "user-143",
+      "name": "Beth Allen",
+      "age": 21,
+      "city": "Berlin",
+      "join_date": "2021-08-15",
+      "company": "CloudBase",
+      "score": 3.74,
+      "interests": [
+        "writing",
+        "technology"
+      ],
+      "friends": [
+        "user-083",
+        "user-183",
+        "user-058"
+      ]
+    },
+    {
+      "@id": "user-144",
+      "name": "Frank Taylor",
+      "age": 30,
+      "city": "Mumbai",
+      "join_date": "2016-02-27",
+      "company": "CloudBase",
+      "score": 6.63,
+      "interests": [
+        "swimming"
+      ],
+      "friends": [
+        "user-129",
+        "user-166"
+      ]
+    },
+    {
+      "@id": "user-145",
+      "name": "Laura Martinez",
+      "age": 28,
+      "city": "Mexico City",
+      "join_date": "2023-07-29",
+      "company": "AlgoLab",
+      "score": 8.58,
+      "interests": [
+        "swimming"
+      ],
+      "friends": [
+        "user-008",
+        "user-021"
+      ]
+    },
+    {
+      "@id": "user-146",
+      "name": "Quinn Wilson",
+      "age": 54,
+      "city": "Budapest",
+      "join_date": "2023-11-12",
+      "company": "TechCorp",
+      "score": 5.48,
+      "interests": [
+        "cycling",
+        "technology",
+        "coding"
+      ],
+      "friends": [
+        "user-166",
+        "user-078",
+        "user-124",
+        "user-063"
+      ]
+    },
+    {
+      "@id": "user-147",
+      "name": "Eva Brown",
+      "age": 28,
+      "city": "Seoul",
+      "join_date": "2019-04-28",
+      "company": "InfoSystems",
+      "score": 5.18,
+      "interests": [
+        "yoga",
+        "cycling"
+      ],
+      "friends": [
+        "user-157",
+        "user-037",
+        "user-081",
+        "user-185"
+      ]
+    },
+    {
+      "@id": "user-148",
+      "name": "Iris White",
+      "age": 50,
+      "city": "Mumbai",
+      "join_date": "2012-05-19",
+      "company": "AlgoLab",
+      "score": 3.18,
+      "interests": [
+        "reading"
+      ],
+      "friends": [
+        "user-069",
+        "user-116"
+      ]
+    },
+    {
+      "@id": "user-149",
+      "name": "Grace Brown",
+      "age": 36,
+      "city": "Warsaw",
+      "join_date": "2023-10-21",
+      "company": "ByteWave",
+      "score": 3.23,
+      "interests": [
+        "cinema",
+        "travel",
+        "music"
+      ],
+      "friends": [
+        "user-210",
+        "user-084",
+        "user-148"
+      ]
+    },
+    {
+      "@id": "user-150",
+      "name": "Fiona Allen",
+      "age": 47,
+      "city": "Singapore",
+      "join_date": "2016-12-02",
+      "company": "InfoSystems",
+      "score": 1.21,
+      "interests": [
+        "hiking",
+        "coffee"
+      ],
+      "friends": [
+        "user-130",
+        "user-118",
+        "user-062",
+        "user-056",
+        "user-151"
+      ]
+    },
+    {
+      "@id": "user-151",
+      "name": "Sam Young",
+      "age": 56,
+      "city": "Singapore",
+      "join_date": "2016-05-29",
+      "company": "CyberLink",
+      "score": 1.07,
+      "interests": [
+        "yoga",
+        "cycling"
+      ],
+      "friends": [
+        "user-111",
+        "user-035"
+      ]
+    },
+    {
+      "@id": "user-152",
+      "name": "Xander Williams",
+      "age": 43,
+      "city": "London",
+      "join_date": "2022-10-16",
+      "company": "CyberLink",
+      "score": 2.75,
+      "interests": [
+        "art",
+        "gaming",
+        "reading"
+      ],
+      "friends": [
+        "user-019",
+        "user-099",
+        "user-130",
+        "user-116"
+      ]
+    },
+    {
+      "@id": "user-153",
+      "name": "Grace Sanchez",
+      "age": 41,
+      "city": "Vienna",
+      "join_date": "2022-07-06",
+      "company": "AlgoLab",
+      "score": 7.79,
+      "interests": [
+        "hiking",
+        "coffee",
+        "swimming"
+      ],
+      "friends": [
+        "user-156",
+        "user-131",
+        "user-103"
+      ]
+    },
+    {
+      "@id": "user-154",
+      "name": "Iris Perez",
+      "age": 48,
+      "city": "Dubai",
+      "join_date": "2020-04-01",
+      "company": "CloudBase",
+      "score": 6.46,
+      "interests": [
+        "cycling"
+      ],
+      "friends": [
+        "user-084",
+        "user-158",
+        "user-082"
+      ]
+    },
+    {
+      "@id": "user-155",
+      "name": "Nina Martin",
+      "age": 55,
+      "city": "Vienna",
+      "join_date": "2021-05-18",
+      "company": "CyberLink",
+      "score": 5.79,
+      "interests": [
+        "gaming",
+        "dancing"
+      ],
+      "friends": [
+        "user-122",
+        "user-210",
+        "user-005",
+        "user-095"
+      ]
+    },
+    {
+      "@id": "user-156",
+      "name": "Laura Martin",
+      "age": 64,
+      "city": "New York",
+      "join_date": "2023-05-22",
+      "company": "InfoSystems",
+      "score": 3.39,
+      "interests": [
+        "music",
+        "writing"
+      ],
+      "friends": [
+        "user-186",
+        "user-014",
+        "user-150"
+      ]
+    },
+    {
+      "@id": "user-157",
+      "name": "Oscar Flores",
+      "age": 42,
+      "city": "Tokyo",
+      "join_date": "2015-06-08",
+      "company": "TechCorp",
+      "score": 6.15,
+      "interests": [
+        "cinema",
+        "dancing"
+      ],
+      "friends": [
+        "user-049",
+        "user-005"
+      ]
+    },
+    {
+      "@id": "user-158",
+      "name": "Jack Clark",
+      "age": 62,
+      "city": "Toronto",
+      "join_date": "2019-03-16",
+      "company": "CyberLink",
+      "score": 7.97,
+      "interests": [
+        "travel",
+        "chess",
+        "cinema"
+      ],
+      "friends": [
+        "user-190",
+        "user-188",
+        "user-016",
+        "user-182",
+        "user-036"
+      ]
+    },
+    {
+      "@id": "user-159",
+      "name": "Rafael Walker",
+      "age": 51,
+      "city": "Warsaw",
+      "join_date": "2017-01-14",
+      "company": "CloudBase",
+      "score": 5.14,
+      "interests": [
+        "art",
+        "gardening",
+        "travel"
+      ],
+      "friends": [
+        "user-140",
+        "user-091",
+        "user-175",
+        "user-199"
+      ]
+    },
+    {
+      "@id": "user-160",
+      "name": "Paul Moore",
+      "age": 53,
+      "city": "Rome",
+      "join_date": "2015-01-17",
+      "company": "PixelStudio",
+      "score": 7.94,
+      "interests": [
+        "gardening",
+        "yoga"
+      ],
+      "friends": [
+        "user-178",
+        "user-182",
+        "user-126"
+      ]
+    },
+    {
+      "@id": "user-161",
+      "name": "Julia Moore",
+      "age": 36,
+      "city": "Berlin",
+      "join_date": "2022-11-11",
+      "company": "CyberLink",
+      "score": 4.42,
+      "interests": [
+        "technology"
+      ],
+      "friends": [
+        "user-089",
+        "user-199",
+        "user-207",
+        "user-038",
+        "user-075"
+      ]
+    },
+    {
+      "@id": "user-162",
+      "name": "Ursula Garcia",
+      "age": 40,
+      "city": "Seoul",
+      "join_date": "2015-10-02",
+      "company": "InfoSystems",
+      "score": 2.93,
+      "interests": [
+        "coffee"
+      ],
+      "friends": [
+        "user-144",
+        "user-180",
+        "user-070",
+        "user-036"
+      ]
+    },
+    {
+      "@id": "user-163",
+      "name": "Wanda Nguyen",
+      "age": 33,
+      "city": "Amsterdam",
+      "join_date": "2011-02-20",
+      "company": "CyberLink",
+      "score": 3.03,
+      "interests": [
+        "gardening",
+        "gaming"
+      ],
+      "friends": [
+        "user-014",
+        "user-026",
+        "user-106"
+      ]
+    },
+    {
+      "@id": "user-164",
+      "name": "Sara Rodriguez",
+      "age": 18,
+      "city": "Mumbai",
+      "join_date": "2013-07-17",
+      "company": "ByteWave",
+      "score": 6.88,
+      "interests": [
+        "technology",
+        "hiking"
+      ],
+      "friends": [
+        "user-123",
+        "user-168",
+        "user-052",
+        "user-195",
+        "user-074"
+      ]
+    },
+    {
+      "@id": "user-165",
+      "name": "Frank Torres",
+      "age": 32,
+      "city": "Mumbai",
+      "join_date": "2010-11-02",
+      "company": "CloudBase",
+      "score": 4.76,
+      "interests": [
+        "music",
+        "technology"
+      ],
+      "friends": [
+        "user-010",
+        "user-102",
+        "user-203"
+      ]
+    },
+    {
+      "@id": "user-166",
+      "name": "Carol Smith",
+      "age": 37,
+      "city": "São Paulo",
+      "join_date": "2023-07-09",
+      "company": "DataSoft",
+      "score": 9.36,
+      "interests": [
+        "gardening",
+        "reading",
+        "writing"
+      ],
+      "friends": [
+        "user-073",
+        "user-117",
+        "user-165",
+        "user-140"
+      ]
+    },
+    {
+      "@id": "user-167",
+      "name": "Diana Moore",
+      "age": 30,
+      "city": "Berlin",
+      "join_date": "2017-06-01",
+      "company": "CloudBase",
+      "score": 7.58,
+      "interests": [
+        "technology",
+        "swimming"
+      ],
+      "friends": [
+        "user-185",
+        "user-048",
+        "user-004",
+        "user-190"
+      ]
+    },
+    {
+      "@id": "user-168",
+      "name": "Sara Gonzalez",
+      "age": 29,
+      "city": "Mexico City",
+      "join_date": "2019-02-04",
+      "company": "ByteWave",
+      "score": 5.64,
+      "interests": [
+        "music"
+      ],
+      "friends": [
+        "user-103",
+        "user-173"
+      ]
+    },
+    {
+      "@id": "user-169",
+      "name": "Iris Walker",
+      "age": 38,
+      "city": "Amsterdam",
+      "join_date": "2010-02-25",
+      "company": "PixelStudio",
+      "score": 4.45,
+      "interests": [
+        "swimming",
+        "photography",
+        "art"
+      ],
+      "friends": [
+        "user-194",
+        "user-069",
+        "user-085",
+        "user-078",
+        "user-150"
+      ]
+    },
+    {
+      "@id": "user-170",
+      "name": "Petra White",
+      "age": 62,
+      "city": "Amsterdam",
+      "join_date": "2011-05-24",
+      "company": "DataSoft",
+      "score": 5.19,
+      "interests": [
+        "technology",
+        "gaming",
+        "coffee"
+      ],
+      "friends": [
+        "user-104",
+        "user-177",
+        "user-129"
+      ]
+    },
+    {
+      "@id": "user-171",
+      "name": "Xander Flores",
+      "age": 32,
+      "city": "Amsterdam",
+      "join_date": "2012-12-30",
+      "company": "InfoSystems",
+      "score": 2.38,
+      "interests": [
+        "travel",
+        "sports",
+        "cooking"
+      ],
+      "friends": [
+        "user-107",
+        "user-181",
+        "user-141",
+        "user-121"
+      ]
+    },
+    {
+      "@id": "user-172",
+      "name": "Hannah Lewis",
+      "age": 51,
+      "city": "Prague",
+      "join_date": "2011-10-02",
+      "company": "OpenBridge",
+      "score": 2.01,
+      "interests": [
+        "cinema"
+      ],
+      "friends": [
+        "user-147",
+        "user-138",
+        "user-039"
+      ]
+    },
+    {
+      "@id": "user-173",
+      "name": "Hannah Lewis",
+      "age": 25,
+      "city": "Toronto",
+      "join_date": "2023-01-30",
+      "company": "InfoSystems",
+      "score": 1.82,
+      "interests": [
+        "coding",
+        "swimming"
+      ],
+      "friends": [
+        "user-209",
+        "user-015",
+        "user-117",
+        "user-034",
+        "user-132"
+      ]
+    },
+    {
+      "@id": "user-174",
+      "name": "David Scott",
+      "age": 47,
+      "city": "Rome",
+      "join_date": "2010-06-28",
+      "company": "ByteWave",
+      "score": 3.29,
+      "interests": [
+        "cooking",
+        "hiking",
+        "dancing"
+      ],
+      "friends": [
+        "user-192",
+        "user-056"
+      ]
+    },
+    {
+      "@id": "user-175",
+      "name": "Wendy Jones",
+      "age": 52,
+      "city": "London",
+      "join_date": "2011-07-20",
+      "company": "InfoSystems",
+      "score": 1.29,
+      "interests": [
+        "dancing",
+        "yoga",
+        "cycling"
+      ],
+      "friends": [
+        "user-047",
+        "user-198",
+        "user-035",
+        "user-165",
+        "user-188"
+      ]
+    },
+    {
+      "@id": "user-176",
+      "name": "Chris Harris",
+      "age": 42,
+      "city": "Paris",
+      "join_date": "2022-02-04",
+      "company": "CloudBase",
+      "score": 6.88,
+      "interests": [
+        "reading",
+        "sports",
+        "photography"
+      ],
+      "friends": [
+        "user-031",
+        "user-046",
+        "user-138",
+        "user-101"
+      ]
+    },
+    {
+      "@id": "user-177",
+      "name": "Bob Martin",
+      "age": 47,
+      "city": "Mumbai",
+      "join_date": "2019-07-07",
+      "company": "CyberLink",
+      "score": 4.41,
+      "interests": [
+        "art"
+      ],
+      "friends": [
+        "user-064",
+        "user-118",
+        "user-089"
+      ]
+    },
+    {
+      "@id": "user-178",
+      "name": "Mia Davis",
+      "age": 20,
+      "city": "Budapest",
+      "join_date": "2023-10-17",
+      "company": "TechCorp",
+      "score": 3.17,
+      "interests": [
+        "coding"
+      ],
+      "friends": [
+        "user-026",
+        "user-153"
+      ]
+    },
+    {
+      "@id": "user-179",
+      "name": "Mark Brown",
+      "age": 33,
+      "city": "London",
+      "join_date": "2019-01-09",
+      "company": "InfoSystems",
+      "score": 3.11,
+      "interests": [
+        "writing"
+      ],
+      "friends": [
+        "user-195",
+        "user-200",
+        "user-015"
+      ]
+    },
+    {
+      "@id": "user-180",
+      "name": "Sam Anderson",
+      "age": 64,
+      "city": "São Paulo",
+      "join_date": "2017-02-25",
+      "company": "OpenBridge",
+      "score": 6.38,
+      "interests": [
+        "sports",
+        "dancing",
+        "technology"
+      ],
+      "friends": [
+        "user-061",
+        "user-078",
+        "user-037",
+        "user-170"
+      ]
+    },
+    {
+      "@id": "user-181",
+      "name": "Rose Brown",
+      "age": 53,
+      "city": "São Paulo",
+      "join_date": "2013-12-05",
+      "company": "ByteWave",
+      "score": 6.0,
+      "interests": [
+        "cycling",
+        "writing",
+        "cinema"
+      ],
+      "friends": [
+        "user-089",
+        "user-165"
+      ]
+    },
+    {
+      "@id": "user-182",
+      "name": "Thomas Clark",
+      "age": 44,
+      "city": "Tokyo",
+      "join_date": "2016-09-22",
+      "company": "ByteWave",
+      "score": 2.65,
+      "interests": [
+        "hiking",
+        "chess"
+      ],
+      "friends": [
+        "user-062",
+        "user-058",
+        "user-077",
+        "user-183",
+        "user-037"
+      ]
+    },
+    {
+      "@id": "user-183",
+      "name": "Aaron Clark",
+      "age": 53,
+      "city": "Dubai",
+      "join_date": "2013-01-03",
+      "company": "ByteWave",
+      "score": 3.19,
+      "interests": [
+        "yoga",
+        "cooking"
+      ],
+      "friends": [
+        "user-085",
+        "user-166",
+        "user-021"
+      ]
+    },
+    {
+      "@id": "user-184",
+      "name": "Ivan Gonzalez",
+      "age": 21,
+      "city": "Madrid",
+      "join_date": "2018-06-17",
+      "company": "OpenBridge",
+      "score": 6.43,
+      "interests": [
+        "chess",
+        "travel",
+        "gardening"
+      ],
+      "friends": [
+        "user-049",
+        "user-207"
+      ]
+    },
+    {
+      "@id": "user-185",
+      "name": "Noah Perez",
+      "age": 37,
+      "city": "New York",
+      "join_date": "2014-10-02",
+      "company": "NetWorks",
+      "score": 9.66,
+      "interests": [
+        "sports",
+        "travel"
+      ],
+      "friends": [
+        "user-193",
+        "user-195"
+      ]
+    },
+    {
+      "@id": "user-186",
+      "name": "Zoe Thomas",
+      "age": 53,
+      "city": "Vienna",
+      "join_date": "2016-05-07",
+      "company": "ByteWave",
+      "score": 5.2,
+      "interests": [
+        "coding",
+        "gaming"
+      ],
+      "friends": [
+        "user-079",
+        "user-067",
+        "user-093",
+        "user-132"
+      ]
+    },
+    {
+      "@id": "user-187",
+      "name": "Vince Walker",
+      "age": 38,
+      "city": "Toronto",
+      "join_date": "2018-04-25",
+      "company": "AlgoLab",
+      "score": 4.73,
+      "interests": [
+        "chess",
+        "swimming"
+      ],
+      "friends": [
+        "user-191",
+        "user-038",
+        "user-005"
+      ]
+    },
+    {
+      "@id": "user-188",
+      "name": "Laura Clark",
+      "age": 36,
+      "city": "Tokyo",
+      "join_date": "2014-05-27",
+      "company": "AlgoLab",
+      "score": 3.07,
+      "interests": [
+        "cinema",
+        "art",
+        "gardening"
+      ],
+      "friends": [
+        "user-128",
+        "user-141",
+        "user-168"
+      ]
+    },
+    {
+      "@id": "user-189",
+      "name": "Vince Young",
+      "age": 47,
+      "city": "Sydney",
+      "join_date": "2017-11-25",
+      "company": "CloudBase",
+      "score": 2.26,
+      "interests": [
+        "cooking"
+      ],
+      "friends": [
+        "user-048",
+        "user-139",
+        "user-165",
+        "user-016",
+        "user-135"
+      ]
+    },
+    {
+      "@id": "user-190",
+      "name": "Rafael Brown",
+      "age": 18,
+      "city": "Budapest",
+      "join_date": "2013-01-31",
+      "company": "NetWorks",
+      "score": 1.61,
+      "interests": [
+        "yoga",
+        "hiking"
+      ],
+      "friends": [
+        "user-003",
+        "user-056",
+        "user-130"
+      ]
+    },
+    {
+      "@id": "user-191",
+      "name": "Nina Green",
+      "age": 60,
+      "city": "Mexico City",
+      "join_date": "2020-11-02",
+      "company": "InfoSystems",
+      "score": 1.14,
+      "interests": [
+        "technology",
+        "photography",
+        "writing"
+      ],
+      "friends": [
+        "user-004",
+        "user-005",
+        "user-136",
+        "user-185",
+        "user-071"
+      ]
+    },
+    {
+      "@id": "user-192",
+      "name": "Thomas Ramirez",
+      "age": 29,
+      "city": "Berlin",
+      "join_date": "2012-02-29",
+      "company": "CyberLink",
+      "score": 2.34,
+      "interests": [
+        "art",
+        "cycling"
+      ],
+      "friends": [
+        "user-159",
+        "user-135",
+        "user-065"
+      ]
+    },
+    {
+      "@id": "user-193",
+      "name": "Frank White",
+      "age": 43,
+      "city": "Seoul",
+      "join_date": "2022-09-03",
+      "company": "NetWorks",
+      "score": 9.91,
+      "interests": [
+        "hiking",
+        "cooking",
+        "cycling"
+      ],
+      "friends": [
+        "user-077",
+        "user-176",
+        "user-021"
+      ]
+    },
+    {
+      "@id": "user-194",
+      "name": "Yara Harris",
+      "age": 53,
+      "city": "Singapore",
+      "join_date": "2011-04-05",
+      "company": "TechCorp",
+      "score": 7.33,
+      "interests": [
+        "cinema",
+        "swimming",
+        "gaming"
+      ],
+      "friends": [
+        "user-128",
+        "user-112"
+      ]
+    },
+    {
+      "@id": "user-195",
+      "name": "Hannah Williams",
+      "age": 32,
+      "city": "Toronto",
+      "join_date": "2022-09-18",
+      "company": "InfoSystems",
+      "score": 3.44,
+      "interests": [
+        "swimming",
+        "hiking",
+        "music"
+      ],
+      "friends": [
+        "user-176",
+        "user-072"
+      ]
+    },
+    {
+      "@id": "user-196",
+      "name": "Uma Johnson",
+      "age": 31,
+      "city": "São Paulo",
+      "join_date": "2013-03-27",
+      "company": "ByteWave",
+      "score": 9.36,
+      "interests": [
+        "chess",
+        "cinema"
+      ],
+      "friends": [
+        "user-042",
+        "user-145",
+        "user-062",
+        "user-146"
+      ]
+    },
+    {
+      "@id": "user-197",
+      "name": "Yara Rodriguez",
+      "age": 62,
+      "city": "Paris",
+      "join_date": "2021-03-26",
+      "company": "AlgoLab",
+      "score": 1.48,
+      "interests": [
+        "coffee",
+        "cycling",
+        "cinema"
+      ],
+      "friends": [
+        "user-060",
+        "user-020",
+        "user-088",
+        "user-155",
+        "user-198"
+      ]
+    },
+    {
+      "@id": "user-198",
+      "name": "Bob Green",
+      "age": 35,
+      "city": "Seoul",
+      "join_date": "2021-01-02",
+      "company": "NetWorks",
+      "score": 4.2,
+      "interests": [
+        "cooking",
+        "technology"
+      ],
+      "friends": [
+        "user-111",
+        "user-048",
+        "user-175",
+        "user-150",
+        "user-170"
+      ]
+    },
+    {
+      "@id": "user-199",
+      "name": "Paul Jones",
+      "age": 23,
+      "city": "Madrid",
+      "join_date": "2013-06-17",
+      "company": "ByteWave",
+      "score": 7.41,
+      "interests": [
+        "gaming",
+        "cooking"
+      ],
+      "friends": [
+        "user-190",
+        "user-100",
+        "user-082"
+      ]
+    },
+    {
+      "@id": "user-200",
+      "name": "Alice Martin",
+      "age": 46,
+      "city": "Prague",
+      "join_date": "2016-01-19",
+      "company": "DataSoft",
+      "score": 2.19,
+      "interests": [
+        "writing",
+        "dancing",
+        "gaming"
+      ],
+      "friends": [
+        "user-111",
+        "user-115",
+        "user-143"
+      ]
+    },
+    {
+      "@id": "user-201",
+      "name": "Bob Garcia",
+      "age": 40,
+      "city": "Mumbai",
+      "join_date": "2012-02-02",
+      "company": "OpenBridge",
+      "score": 6.38,
+      "interests": [
+        "cooking",
+        "chess"
+      ],
+      "friends": [
+        "user-099",
+        "user-004",
+        "user-075",
+        "user-106"
+      ]
+    },
+    {
+      "@id": "user-202",
+      "name": "Paul Torres",
+      "age": 51,
+      "city": "Sydney",
+      "join_date": "2018-07-16",
+      "company": "CloudBase",
+      "score": 2.25,
+      "interests": [
+        "dancing"
+      ],
+      "friends": [
+        "user-069",
+        "user-127",
+        "user-038",
+        "user-017"
+      ]
+    },
+    {
+      "@id": "user-203",
+      "name": "Rose Clark",
+      "age": 37,
+      "city": "Singapore",
+      "join_date": "2011-09-23",
+      "company": "AlgoLab",
+      "score": 3.27,
+      "interests": [
+        "coffee",
+        "travel",
+        "coding"
+      ],
+      "friends": [
+        "user-185",
+        "user-161",
+        "user-127"
+      ]
+    },
+    {
+      "@id": "user-204",
+      "name": "Grace Rodriguez",
+      "age": 37,
+      "city": "New York",
+      "join_date": "2018-11-16",
+      "company": "AlgoLab",
+      "score": 8.57,
+      "interests": [
+        "coffee",
+        "reading",
+        "technology"
+      ],
+      "friends": [
+        "user-207",
+        "user-085",
+        "user-113",
+        "user-086",
+        "user-111"
+      ]
+    },
+    {
+      "@id": "user-205",
+      "name": "Uma Hill",
+      "age": 62,
+      "city": "Toronto",
+      "join_date": "2020-09-29",
+      "company": "AlgoLab",
+      "score": 2.6,
+      "interests": [
+        "swimming",
+        "sports"
+      ],
+      "friends": [
+        "user-082",
+        "user-075",
+        "user-189",
+        "user-178",
+        "user-163"
+      ]
+    },
+    {
+      "@id": "user-206",
+      "name": "Uma Harris",
+      "age": 35,
+      "city": "Warsaw",
+      "join_date": "2018-03-10",
+      "company": "DataSoft",
+      "score": 9.39,
+      "interests": [
+        "chess",
+        "photography",
+        "coding"
+      ],
+      "friends": [
+        "user-152",
+        "user-140",
+        "user-047"
+      ]
+    },
+    {
+      "@id": "user-207",
+      "name": "Ursula Wilson",
+      "age": 46,
+      "city": "Rome",
+      "join_date": "2011-07-21",
+      "company": "ByteWave",
+      "score": 7.06,
+      "interests": [
+        "reading",
+        "dancing"
+      ],
+      "friends": [
+        "user-163",
+        "user-078",
+        "user-062"
+      ]
+    },
+    {
+      "@id": "user-208",
+      "name": "Yara Jones",
+      "age": 46,
+      "city": "Mexico City",
+      "join_date": "2020-09-30",
+      "company": "OpenBridge",
+      "score": 4.61,
+      "interests": [
+        "coffee",
+        "cooking",
+        "gaming"
+      ],
+      "friends": [
+        "user-140",
+        "user-010",
+        "user-203",
+        "user-093",
+        "user-180"
+      ]
+    },
+    {
+      "@id": "user-209",
+      "name": "Paul Thompson",
+      "age": 28,
+      "city": "Mexico City",
+      "join_date": "2010-12-29",
+      "company": "OpenBridge",
+      "score": 9.85,
+      "interests": [
+        "gaming"
+      ],
+      "friends": [
+        "user-193",
+        "user-085",
+        "user-204",
+        "user-111",
+        "user-028"
+      ]
+    },
+    {
+      "@id": "user-210",
+      "name": "Quinn Anderson",
+      "age": 50,
+      "city": "Dubai",
+      "join_date": "2022-07-08",
+      "company": "OpenBridge",
+      "score": 7.19,
+      "interests": [
+        "swimming",
+        "writing"
+      ],
+      "friends": [
+        "user-115",
+        "user-096",
+        "user-101"
+      ]
+    }
+  ]
+}
