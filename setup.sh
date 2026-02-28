@@ -65,12 +65,6 @@ echo "Installing gviz-json-datasource ..."
 pip install -e json_data_source/ --quiet
 
 # ---------------------------------------------------------------------------
-# Generate test data (idempotent)
-# ---------------------------------------------------------------------------
-echo "Generating JSON test data ..."
-python json_data_source/generate_test_data.py
-
-# ---------------------------------------------------------------------------
 # Django setup
 # ---------------------------------------------------------------------------
 echo "Running Django migrations ..."
