@@ -864,7 +864,7 @@ input.form-input::placeholder { color: var(--text-muted); font-family: 'Inter', 
 [data-tooltip]::after {
   content: attr(data-tooltip);
   position: absolute;
-  bottom: calc(100% + 6px);
+  top: calc(100% + 6px);
   left: 50%;
   transform: translateX(-50%);
   background: var(--bg-active);
