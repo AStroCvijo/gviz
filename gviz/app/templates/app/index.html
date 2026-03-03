@@ -32,7 +32,7 @@
     <div class="workspace-tabs">
       <div class="ws-tab active">
         <span class="ws-dot"></span>
-        {{ workspace_name }}
+        <span id="workspace-name">{{ workspace_name }}</span>
         <span class="ws-close">✕</span>
       </div>
     </div>
@@ -72,40 +72,40 @@
       </div>
     </div>
 
-    <div class="toolbar-divider"></div>
+      <div class="toolbar-divider" data-plugin-only{% if not initial_graph_loaded %} hidden{% endif %}></div>
 
-    <!-- Visualizer mode -->
-    <div class="toolbar-group">
-      <span style="color:var(--text-muted);font-size:11px">View:</span>
-      <div class="viz-toggle">
-        <button class="viz-toggle-btn active" data-mode="simple">Simple</button>
+      <!-- Visualizer mode -->
+      <div class="toolbar-group" data-plugin-only{% if not initial_graph_loaded %} hidden{% endif %}>
+        <span style="color:var(--text-muted);font-size:11px">View:</span>
+        <div class="viz-toggle">
+          <button class="viz-toggle-btn active" data-mode="simple">Simple</button>
+        </div>
       </div>
-    </div>
 
-    <div class="toolbar-divider"></div>
+      <div class="toolbar-divider" data-plugin-only{% if not initial_graph_loaded %} hidden{% endif %}></div>
 
-    <!-- Search -->
-    <div class="toolbar-group">
-      <div class="search-wrap">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="search-input" class="search-input"
-               placeholder="Search nodes…">
+      <!-- Search -->
+      <div class="toolbar-group" data-plugin-only{% if not initial_graph_loaded %} hidden{% endif %}>
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" class="search-input"
+                 placeholder="Search nodes…">
+        </div>
+        <button class="btn btn-ghost" id="btn-search">Search</button>
       </div>
-      <button class="btn btn-ghost" id="btn-search">Search</button>
-    </div>
 
-    <div class="toolbar-divider"></div>
+      <div class="toolbar-divider" data-plugin-only{% if not initial_graph_loaded %} hidden{% endif %}></div>
 
-    <!-- Filter -->
-    <div class="toolbar-group">
-      <div class="filter-wrap">
-        <span class="filter-icon">⚡</span>
-        <input type="text" id="filter-input" class="filter-input"
-               placeholder="age > 25">
+      <!-- Filter -->
+      <div class="toolbar-group" data-plugin-only{% if not initial_graph_loaded %} hidden{% endif %}>
+        <div class="filter-wrap">
+          <span class="filter-icon">⚡</span>
+          <input type="text" id="filter-input" class="filter-input"
+                 placeholder="age > 25">
+        </div>
+        <button class="btn btn-ghost" id="btn-filter">Filter</button>
+        <button class="btn btn-ghost" id="btn-reset" data-tooltip="Reset to original graph">↺ Reset</button>
       </div>
-      <button class="btn btn-ghost" id="btn-filter">Filter</button>
-      <button class="btn btn-ghost" id="btn-reset" data-tooltip="Reset to original graph">↺ Reset</button>
-    </div>
 
   </div>
 
@@ -115,44 +115,44 @@
   <div class="main-content">
 
     <!-- ── Left: Tree View ─────────────────────────────────── -->
-    <div class="panel panel-tree" id="panel-tree">
-      <div class="panel-header">
-        <span class="panel-title">Tree View</span>
-        <div class="panel-actions">
-          <button class="btn btn-icon" id="btn-collapse-all" data-tooltip="Collapse all">
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 2.5a.5.5 0 0 1-1 0V6.707L5.354 8.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 6.707V10.5z"/>
-            </svg>
-          </button>
-          <button class="btn btn-icon" data-tooltip="Expand all">
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5-3.5a.5.5 0 0 1 1 0V9.293l1.646-1.647a.5.5 0 0 1 .708.708l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5a.5.5 0 1 1 .708-.708L7.5 9.293V4.5z"/>
-            </svg>
-          </button>
+    <div class="panel panel-tree" id="panel-tree" data-plugin-only{% if not initial_graph_loaded %} hidden{% endif %}>
+        <div class="panel-header">
+          <span class="panel-title">Tree View</span>
+          <div class="panel-actions">
+            <button class="btn btn-icon" id="btn-collapse-all" data-tooltip="Collapse all">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 2.5a.5.5 0 0 1-1 0V6.707L5.354 8.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 6.707V10.5z"/>
+              </svg>
+            </button>
+            <button class="btn btn-icon" data-tooltip="Expand all">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5-3.5a.5.5 0 0 1 1 0V9.293l1.646-1.647a.5.5 0 0 1 .708.708l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5a.5.5 0 1 1 .708-.708L7.5 9.293V4.5z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="panel-body" id="tree-body">
+          <!-- Populated by plugin runtime -->
         </div>
       </div>
-      <div class="panel-body" id="tree-body">
-        <!-- Populated by ui.js renderTree() -->
-      </div>
-    </div>
 
     <!-- ── Centre: Main View ───────────────────────────────── -->
     <div class="panel panel-main">
 
       <!-- Graph stats (top-left overlay) -->
-      <div class="graph-stats">
-        <div class="stat-badge">
-          <span class="stat-dot"></span>
-          <span id="stat-node-count">{{ node_count }}</span> nodes
+      <div class="graph-stats" data-plugin-only{% if not initial_graph_loaded %} hidden{% endif %}>
+          <div class="stat-badge">
+            <span class="stat-dot"></span>
+            <span id="stat-node-count">{{ node_count }}</span> nodes
+          </div>
+          <div class="stat-badge">
+            <span class="stat-dot edge-dot"></span>
+            <span id="stat-edge-count">{{ edge_count }}</span> edges
+          </div>
+          <div class="stat-badge" style="color:var(--accent-orange)" id="stat-graph-kind">
+            {{ graph_kind_label }}
+          </div>
         </div>
-        <div class="stat-badge">
-          <span class="stat-dot edge-dot"></span>
-          <span id="stat-edge-count">{{ edge_count }}</span> edges
-        </div>
-        <div class="stat-badge" style="color:var(--accent-orange)" id="stat-graph-kind">
-          {{ graph_kind_label }}
-        </div>
-      </div>
 
       <!-- D3 SVG canvas -->
       <svg id="graph-canvas"></svg>
@@ -170,130 +170,71 @@
       </div>
 
       <!-- Zoom controls (bottom-right) -->
-      <div class="zoom-controls">
-        <button class="zoom-btn" id="zoom-in"  title="Zoom in">+</button>
-        <button class="zoom-btn" id="zoom-fit" title="Fit to screen">⊡</button>
-        <button class="zoom-btn" id="zoom-out" title="Zoom out">−</button>
-      </div>
+      <div class="zoom-controls" data-plugin-only{% if not initial_graph_loaded %} hidden{% endif %}>
+          <button class="zoom-btn" id="zoom-in"  title="Zoom in">+</button>
+          <button class="zoom-btn" id="zoom-fit" title="Fit to screen">⊡</button>
+          <button class="zoom-btn" id="zoom-out" title="Zoom out">−</button>
+        </div>
 
     </div>
 
     <!-- ── Right: Bird View + Node Details ────────────────── -->
-    <div class="panel panel-right">
+    <div class="panel panel-right" data-plugin-only{% if not initial_graph_loaded %} hidden{% endif %}>
 
-      <!-- Bird view -->
-      <div class="bird-view-container">
-        <div class="panel-header">
-          <span class="panel-title">Bird View</span>
+        <!-- Bird view -->
+        <div class="bird-view-container">
+          <div class="panel-header">
+            <span class="panel-title">Bird View</span>
+          </div>
+          <canvas id="bird-view-canvas"></canvas>
         </div>
-        <canvas id="bird-view-canvas"></canvas>
-      </div>
 
-      <!-- Node details -->
-      <div class="node-details-container">
-        <div class="panel-header">
-          <span class="panel-title">Node Details</span>
-        </div>
-        <div class="node-details-body" id="node-details-body">
-          <div class="detail-empty">
-            <svg width="24" height="24" viewBox="0 0 16 16" fill="var(--text-muted)">
-              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-            </svg>
-            Hover or click a node
+        <!-- Node details -->
+        <div class="node-details-container">
+          <div class="panel-header">
+            <span class="panel-title">Node Details</span>
+          </div>
+          <div class="node-details-body" id="node-details-body">
+            <div class="detail-empty">
+              <svg width="24" height="24" viewBox="0 0 16 16" fill="var(--text-muted)">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+              </svg>
+              Hover or click a node
+            </div>
           </div>
         </div>
-      </div>
 
-    </div>
+      </div>
   </div>
 
   <!-- ═══════════════════════════════════════════════════════
        TERMINAL
        ═══════════════════════════════════════════════════════ -->
-  <div class="terminal-panel">
-    <div class="terminal-header">
-      <div class="terminal-title">
-        <span class="terminal-dot"></span>
-        Terminal
+    <div class="terminal-panel" data-plugin-only{% if not initial_graph_loaded %} hidden{% endif %}>
+      <div class="terminal-header">
+        <div class="terminal-title">
+          <span class="terminal-dot"></span>
+          Terminal
+        </div>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-icon" id="btn-term-clear" title="Clear terminal"
+                  onclick="document.getElementById('term-output').innerHTML=''">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M5.716 2.18a.5.5 0 0 1 .568 0l8 5.5a.5.5 0 0 1 0 .82l-8 5.5a.5.5 0 0 1-.784-.41V2.59a.5.5 0 0 1 .216-.41z"/>
+            </svg>
+          </button>
+        </div>
       </div>
-      <div style="display:flex;gap:4px">
-        <button class="btn btn-icon" id="btn-term-clear" title="Clear terminal"
-                onclick="document.getElementById('term-output').innerHTML=''">
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M5.716 2.18a.5.5 0 0 1 .568 0l8 5.5a.5.5 0 0 1 0 .82l-8 5.5a.5.5 0 0 1-.784-.41V2.59a.5.5 0 0 1 .216-.41z"/>
-          </svg>
-        </button>
+      <div class="terminal-output" id="term-output"></div>
+      <div class="terminal-input-row">
+        <span class="term-prompt-label">gviz&gt;</span>
+        <input type="text" id="term-input" class="term-input"
+               placeholder="type a command… (help for list)" autocomplete="off" spellcheck="false">
       </div>
     </div>
-    <div class="terminal-output" id="term-output"></div>
-    <div class="terminal-input-row">
-      <span class="term-prompt-label">gviz&gt;</span>
-      <input type="text" id="term-input" class="term-input"
-             placeholder="type a command… (help for list)" autocomplete="off" spellcheck="false">
-    </div>
-  </div>
 
 </div><!-- /.app-layout -->
-
-
-<!-- ═══════════════════════════════════════════════════════
-     MODAL — Load Data
-     ═══════════════════════════════════════════════════════ -->
-<div class="modal-backdrop" id="load-modal">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title">Load Graph Data</span>
-      <span class="modal-close" id="modal-close">✕</span>
-    </div>
-    <div class="modal-body">
-
-      <div class="form-group">
-        <label class="form-label">Data Source Plugin</label>
-        <div class="plugin-select-wrap" style="width:100%">
-          <span class="select-icon">⬡</span>
-          <select class="plugin-select" id="modal-plugin-select" style="width:100%;padding-left:26px">
-            <option value="json-data-source">JSON Data Source</option>
-            <option value="xml-data-source">XML Data Source</option>
-          </select>
-          <span class="select-arrow">▾</span>
-        </div>
-      </div>
-
-      <!-- Plugin-specific parameters (populated dynamically by ui.js) -->
-      <div class="plugin-params" id="modal-params">
-        <div class="form-group">
-          <label class="form-label">File Path</label>
-          <input id="param-file-path" type="text" class="form-input"
-            placeholder="e.g. json_data_source/json_data_source/data/social_network.json">
-          <span class="form-hint">Relative to project root, or absolute path to the <code>.json</code> file.</span>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Graph Type</label>
-          <select id="param-directed" class="form-input">
-            <option value="true">Directed</option>
-            <option value="false">Undirected</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Workspace Name</label>
-        <input type="text" class="form-input" id="param-ws-name"
-               placeholder="e.g. Social Network">
-        <span class="form-hint">Leave empty to auto-generate from filename.</span>
-      </div>
-
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" id="modal-cancel">Cancel</button>
-      <button class="btn btn-primary" id="modal-confirm">
-        Load Graph
-      </button>
-    </div>
-  </div>
-</div>
-
 
 <!-- ── Scripts ─────────────────────────────────────────────── -->
 <!-- D3.js v7 -->

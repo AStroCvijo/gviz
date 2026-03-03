@@ -9,6 +9,7 @@ const state = {
   selectedNodeId: null,
   graph: null,
   originalGraph: null,
+  activePlugin: '',
 };
 
 window.GVIZ_APP_STATE = state;
@@ -53,13 +54,37 @@ function setupPluginSelection() {
 
   if (!pluginSelect) return;
 
-  pluginSelect.addEventListener('change', () => {
+  pluginSelect.addEventListener('change', async () => {
     const plugin = pluginSelect.value;
     if (!plugin) {
-      window.location.href = '/';
+      unloadPlugin();
       return;
     }
-    window.location.href = `/?plugin=${encodeURIComponent(plugin)}`;
+
+    loadButton.disabled = true;
+    pluginSelect.disabled = true;
+
+    try {
+      const response = await fetch(`/load-plugin/?plugin=${encodeURIComponent(plugin)}`, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        throw new Error(data.load_error || 'Plugin could not be loaded.');
+      }
+      applyPluginResponse(data);
+      history.replaceState({}, '', '/');
+      termPrint(`info Loaded ${plugin}`, 'info');
+      showToast(`${plugin} loaded`, 'success');
+    } catch (error) {
+      unloadPlugin();
+      pluginSelect.value = '';
+      termPrint(`error ${error.message}`, 'error');
+      showToast(error.message, 'error');
+    } finally {
+      loadButton.disabled = false;
+      pluginSelect.disabled = false;
+    }
   });
 }
 
@@ -79,6 +104,7 @@ function bootGraph() {
   }
 
   state.originalGraph = cloneGraph(bootstrap.graph);
+  state.activePlugin = bootstrap.visualizerName || '';
   setGraph(cloneGraph(bootstrap.graph));
   termPrint(`info Loaded ${bootstrap.visualizerName}`, 'info');
 }
@@ -91,8 +117,12 @@ function setGraph(graph) {
   state.graph = graph;
   state.selectedNodeId = null;
   document.body.classList.remove('app-empty-state');
+  setPluginUiVisible(true);
   updateGraphStats(graph);
-  $('#canvas-overlay').classList.add('hidden');
+  const overlay = $('#canvas-overlay');
+  if (overlay) {
+    overlay.classList.add('hidden');
+  }
 
   if (window.GVIZ_ACTIVE_VISUALIZER && typeof window.GVIZ_ACTIVE_VISUALIZER.render === 'function') {
     window.GVIZ_ACTIVE_VISUALIZER.render(graph);
@@ -107,19 +137,90 @@ function showEmptyGraph() {
   state.graph = null;
   state.selectedNodeId = null;
   document.body.classList.add('app-empty-state');
+  setPluginUiVisible(false);
   updateGraphStats(null);
 
   if (window.GVIZ_ACTIVE_VISUALIZER && typeof window.GVIZ_ACTIVE_VISUALIZER.clear === 'function') {
     window.GVIZ_ACTIVE_VISUALIZER.clear();
   }
 
-  $('#canvas-overlay').classList.remove('hidden');
+  const overlay = $('#canvas-overlay');
+  if (overlay) {
+    overlay.classList.remove('hidden');
+  }
+}
+
+function setPluginUiVisible(visible) {
+  document.querySelectorAll('[data-plugin-only]').forEach((el) => {
+    el.hidden = !visible;
+  });
+}
+
+function unloadPlugin() {
+  state.originalGraph = null;
+  state.activePlugin = '';
+  const pluginSelect = $('#plugin-select');
+  if (pluginSelect) {
+    pluginSelect.value = '';
+  }
+  const workspaceName = $('#workspace-name');
+  if (workspaceName) {
+    workspaceName.textContent = 'No Workspace';
+  }
+  if (window.GVIZ_ACTIVE_VISUALIZER && typeof window.GVIZ_ACTIVE_VISUALIZER.clear === 'function') {
+    window.GVIZ_ACTIVE_VISUALIZER.clear();
+  }
+  window.GVIZ_PLUGIN_BOOTSTRAP = null;
+  window.GVIZ_ACTIVE_VISUALIZER = null;
+  showEmptyGraph();
+}
+
+function applyPluginResponse(data) {
+  const workspaceName = $('#workspace-name');
+  if (workspaceName) {
+    workspaceName.textContent = data.workspace_name || 'Workspace';
+  }
+
+  installVisualizerRuntime(data.visualizer_html || '');
+  const bootstrap = window.GVIZ_PLUGIN_BOOTSTRAP;
+  if (!bootstrap || !bootstrap.graph) {
+    throw new Error('Visualizer runtime did not provide graph bootstrap data.');
+  }
+
+  state.originalGraph = cloneGraph(bootstrap.graph);
+  state.activePlugin = data.plugin_name || bootstrap.visualizerName || '';
+  setGraph(cloneGraph(bootstrap.graph));
+}
+
+function installVisualizerRuntime(html) {
+  if (window.GVIZ_ACTIVE_VISUALIZER && typeof window.GVIZ_ACTIVE_VISUALIZER.clear === 'function') {
+    window.GVIZ_ACTIVE_VISUALIZER.clear();
+  }
+  window.GVIZ_PLUGIN_BOOTSTRAP = null;
+  window.GVIZ_ACTIVE_VISUALIZER = null;
+
+  const host = document.createElement('div');
+  host.innerHTML = html.trim();
+  const scriptNode = host.querySelector('script');
+  if (!scriptNode) {
+    throw new Error('Visualizer response did not include runtime script.');
+  }
+
+  const runtimeScript = document.createElement('script');
+  runtimeScript.textContent = scriptNode.textContent;
+  document.body.appendChild(runtimeScript);
+  runtimeScript.remove();
 }
 
 function updateGraphStats(graph) {
-  $('#stat-node-count').textContent = graph ? graph.nodes.length : '0';
-  $('#stat-edge-count').textContent = graph ? graph.edges.length : '0';
-  $('#stat-graph-kind').textContent = graph
+  const nodeCount = $('#stat-node-count');
+  const edgeCount = $('#stat-edge-count');
+  const graphKind = $('#stat-graph-kind');
+  if (!nodeCount || !edgeCount || !graphKind) return;
+
+  nodeCount.textContent = graph ? graph.nodes.length : '0';
+  edgeCount.textContent = graph ? graph.edges.length : '0';
+  graphKind.textContent = graph
     ? (graph.directed ? 'directed' : 'undirected')
     : 'no graph';
 }
@@ -151,6 +252,10 @@ function setupSearchFilter() {
   const searchBtn = $('#btn-search');
   const filterBtn = $('#btn-filter');
   const resetBtn = $('#btn-reset');
+
+  if (!searchInput || !filterInput || !searchBtn || !filterBtn || !resetBtn) {
+    return;
+  }
 
   searchBtn.addEventListener('click', () => doSearch(searchInput.value.trim()));
   searchInput.addEventListener('keydown', (e) => {
@@ -219,6 +324,8 @@ function doFilter(expr) {
 
 function setupTerminal() {
   const input = $('#term-input');
+  const terminalPanel = document.querySelector('.terminal-panel');
+  if (!input || !terminalPanel) return;
   const history = [];
   let histIdx = -1;
 
@@ -244,7 +351,7 @@ function setupTerminal() {
     }
   });
 
-  document.querySelector('.terminal-panel').addEventListener('click', () => input.focus());
+  terminalPanel.addEventListener('click', () => input.focus());
 }
 
 function handleTermCommand(cmd) {
@@ -291,6 +398,7 @@ function handleTermCommand(cmd) {
 
 function termPrint(text, cls = '') {
   const output = $('#term-output');
+  if (!output) return;
   const line = document.createElement('div');
   line.className = `term-line ${cls}`;
   line.textContent = text;

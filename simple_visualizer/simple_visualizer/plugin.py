@@ -98,6 +98,18 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     const H = el.clientHeight || 720;
 
     const defs = svg.append('defs');
+    const gridPattern = defs.append('pattern')
+      .attr('id', 'graph-grid')
+      .attr('width', 32)
+      .attr('height', 32)
+      .attr('patternUnits', 'userSpaceOnUse');
+
+    gridPattern.append('path')
+      .attr('d', 'M 32 0 L 0 0 0 32')
+      .attr('fill', 'none')
+      .attr('stroke', '#21262d')
+      .attr('stroke-width', 1);
+
     defs.append('marker')
       .attr('id', 'arrowhead')
       .attr('viewBox', '0 -4 8 8')
@@ -109,6 +121,12 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       .append('path')
       .attr('d', 'M0,-4L8,0L0,4')
       .attr('fill', '#444c56');
+
+    svg.append('rect')
+      .attr('class', 'graph-grid')
+      .attr('width', W)
+      .attr('height', H)
+      .attr('fill', 'url(#graph-grid)');
 
     const g = svg.append('g').attr('class', 'graph-container');
     const zoom = d3.zoom()
