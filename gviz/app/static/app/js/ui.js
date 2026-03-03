@@ -99,10 +99,16 @@ function setupLoadDataModal() {
       .map(option => option.value)
       .filter(value => value && value !== '__custom__')
   );
+  const syncFileInputMode = () => {
+    const isCustom = filePresetSelect.value === '__custom__';
+    fileInput.readOnly = !isCustom;
+    fileInput.setAttribute('aria-readonly', String(!isCustom));
+  };
 
   const syncPresetFromFile = () => {
     const fileValue = fileInput.value.trim();
     filePresetSelect.value = presetValues.has(fileValue) ? fileValue : '__custom__';
+    syncFileInputMode();
   };
 
   loadButton.addEventListener('click', () => {
@@ -125,13 +131,16 @@ function setupLoadDataModal() {
 
   filePresetSelect.addEventListener('change', () => {
     if (filePresetSelect.value === '__custom__') {
+      syncFileInputMode();
       fileInput.focus();
       return;
     }
     fileInput.value = filePresetSelect.value;
+    syncFileInputMode();
   });
 
   fileInput.addEventListener('input', syncPresetFromFile);
+  syncPresetFromFile();
 
   confirmBtn.addEventListener('click', async () => {
     const source = sourceSelect.value.trim();
