@@ -48,16 +48,12 @@ function setupPluginSelection() {
   const pluginSelect = $('#plugin-select');
   const loadButton = $('#btn-load-data');
 
-  if (loadButton && pluginSelect) {
-    loadButton.addEventListener('click', () => pluginSelect.focus());
-  }
+  if (!pluginSelect || !loadButton) return;
 
-  if (!pluginSelect) return;
-
-  pluginSelect.addEventListener('change', async () => {
-    const plugin = pluginSelect.value;
-    if (!plugin) {
-      unloadPlugin();
+  loadButton.addEventListener('click', async () => {
+    if (!state.activePlugin) {
+      pluginSelect.focus();
+      showToast('Select a plugin first', 'info');
       return;
     }
 
@@ -65,26 +61,47 @@ function setupPluginSelection() {
     pluginSelect.disabled = true;
 
     try {
-      const response = await fetch(`/load-plugin/?plugin=${encodeURIComponent(plugin)}`, {
+      const response = await fetch(`/load-plugin/?plugin=${encodeURIComponent(state.activePlugin)}`, {
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
       });
       const data = await response.json();
       if (!response.ok || !data.ok) {
-        throw new Error(data.load_error || 'Plugin could not be loaded.');
+        throw new Error(data.load_error || 'Graph data could not be loaded.');
       }
       applyPluginResponse(data);
       history.replaceState({}, '', '/');
-      termPrint(`info Loaded ${plugin}`, 'info');
-      showToast(`${plugin} loaded`, 'success');
+      termPrint(`info Loaded data for ${state.activePlugin}`, 'info');
+      showToast('Graph loaded', 'success');
     } catch (error) {
-      unloadPlugin();
-      pluginSelect.value = '';
       termPrint(`error ${error.message}`, 'error');
       showToast(error.message, 'error');
     } finally {
       loadButton.disabled = false;
       pluginSelect.disabled = false;
     }
+  });
+
+  pluginSelect.addEventListener('change', () => {
+    const plugin = pluginSelect.value;
+    if (!plugin) {
+      unloadPlugin();
+      return;
+    }
+
+    state.activePlugin = plugin;
+    const workspaceName = $('#workspace-name');
+    if (workspaceName) {
+      workspaceName.textContent = 'No Workspace';
+    }
+    if (window.GVIZ_ACTIVE_VISUALIZER && typeof window.GVIZ_ACTIVE_VISUALIZER.clear === 'function') {
+      window.GVIZ_ACTIVE_VISUALIZER.clear();
+    }
+    window.GVIZ_PLUGIN_BOOTSTRAP = null;
+    window.GVIZ_ACTIVE_VISUALIZER = null;
+    state.originalGraph = null;
+    showEmptyGraph();
+    termPrint(`info Selected ${plugin}. Click Load Data to continue.`, 'info');
+    showToast('Plugin selected', 'info');
   });
 }
 
@@ -179,6 +196,11 @@ function applyPluginResponse(data) {
   const workspaceName = $('#workspace-name');
   if (workspaceName) {
     workspaceName.textContent = data.workspace_name || 'Workspace';
+  }
+
+  const pluginSelect = $('#plugin-select');
+  if (pluginSelect) {
+    pluginSelect.value = data.plugin_name || state.activePlugin || '';
   }
 
   installVisualizerRuntime(data.visualizer_html || '');
