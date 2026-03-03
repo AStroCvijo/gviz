@@ -238,7 +238,8 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     }
   }
 
-  function selectNode(nodeId, graph) {
+  function selectNode(nodeId, graph, options = {}) {
+    const shouldScrollTree = options.scrollTree !== false;
     selectedNodeId = nodeId;
     if (window.GVIZ_APP_STATE) {
       window.GVIZ_APP_STATE.selectedNodeId = nodeId;
@@ -254,7 +255,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
 
     $$('.tree-node-row').forEach(row => {
       row.classList.toggle('selected', row.dataset.nodeId === nodeId);
-      if (row.dataset.nodeId === nodeId) {
+      if (shouldScrollTree && row.dataset.nodeId === nodeId) {
         row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }
     });
@@ -390,7 +391,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
           <span class="tree-icon" style="color:var(--accent-orange)">↩</span>
           <span class="tree-label" style="color:var(--text-muted);font-style:italic">${(node.attrs && node.attrs.name) || node.id} (ref)</span>
         `;
-        row.addEventListener('click', () => selectNode(node.id, graph));
+        row.addEventListener('click', () => selectNode(node.id, graph, { scrollTree: false }));
         return row;
       }
 
@@ -436,7 +437,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       if (hasChildren) {
         const toggle = row.querySelector('[data-toggle]');
         row.addEventListener('click', () => {
-          selectNode(node.id, graph);
+          selectNode(node.id, graph, { scrollTree: false });
           const open = childrenDiv.classList.toggle('open');
           if (open) {
             populateChildren();
@@ -445,7 +446,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
           toggle.classList.toggle('expanded', open);
         });
       } else {
-        row.addEventListener('click', () => selectNode(node.id, graph));
+        row.addEventListener('click', () => selectNode(node.id, graph, { scrollTree: false }));
       }
 
       wrap.appendChild(row);
