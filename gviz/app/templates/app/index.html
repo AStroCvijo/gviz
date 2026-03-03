@@ -7,7 +7,7 @@
   <title>gviz — Graph Visualizer</title>
   <link rel="stylesheet" href="{% static 'app/css/main.css' %}">
 </head>
-<body>
+<body{% if not initial_graph_loaded %} class="app-empty-state"{% endif %}>
 
 <div class="app-layout">
 
@@ -39,11 +39,11 @@
 
     <!-- Top-right actions -->
     <div class="topbar-actions">
-      <button class="btn btn-ghost" id="btn-load-data" data-tooltip="Load graph from file">
+      <button class="btn btn-ghost" id="btn-load-data" data-tooltip="Select a visualizer plugin">
         <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
           <path d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
         </svg>
-        Load Data
+        Select Plugin
       </button>
       <button class="btn btn-icon" data-tooltip="Settings">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
@@ -166,7 +166,7 @@
           </svg>
         </div>
         <div class="canvas-overlay-text">No graph loaded</div>
-        <div class="canvas-overlay-hint">Click <strong>Load Data</strong> to begin</div>
+        <div class="canvas-overlay-hint">Choose <strong>Simple Visualizer</strong> to begin</div>
       </div>
 
       <!-- Zoom controls (bottom-right) -->
