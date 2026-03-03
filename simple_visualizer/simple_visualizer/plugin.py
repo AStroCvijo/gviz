@@ -332,6 +332,7 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
           <div class="stat">{len(payload["edges"])} edges</div>
           <div class="stat">{graph_kind}</div>
           <div class="stat">D3 force layout</div>
+          <div class="stat">drag enabled</div>
         </div>
         <div class="canvas-wrap">
           <div class="canvas-toolbar">
@@ -344,7 +345,7 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
       </section>
       <aside class="panel sidebar">
         <h2>Node details</h2>
-        <p>Pan and zoom the main view. Click a node to inspect its attributes.</p>
+        <p>Pan, zoom and drag nodes in the main view. Click a node to inspect its attributes.</p>
         <div class="detail-card" id="details">
           <p class="detail-empty">No node selected.</p>
         </div>
@@ -429,6 +430,12 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
       .enter()
       .append("g")
       .style("cursor", "pointer")
+      .call(
+        d3.drag()
+          .on("start", dragStarted)
+          .on("drag", dragged)
+          .on("end", dragEnded)
+      )
       .on("click", (_, node) => {{
         activeNodeId = node.id;
         applySelection();
@@ -459,6 +466,27 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
       .force("charge", d3.forceManyBody().strength(-260))
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force("collision", d3.forceCollide(34));
+
+    function dragStarted(event, node) {{
+      if (!event.active) {{
+        simulation.alphaTarget(0.22).restart();
+      }}
+      node.fx = node.x;
+      node.fy = node.y;
+    }}
+
+    function dragged(event, node) {{
+      node.fx = event.x;
+      node.fy = event.y;
+    }}
+
+    function dragEnded(event, node) {{
+      if (!event.active) {{
+        simulation.alphaTarget(0);
+      }}
+      node.fx = null;
+      node.fy = null;
+    }}
 
     simulation.on("tick", () => {{
       linkSelection
