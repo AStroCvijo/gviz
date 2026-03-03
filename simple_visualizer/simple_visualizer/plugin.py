@@ -218,9 +218,32 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     $('#zoom-in').onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 1.4);
     $('#zoom-out').onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 0.7);
     $('#zoom-fit').onclick = () => {
+      const bounds = g.node().getBBox();
+      if (!bounds.width || !bounds.height) {
+        svg.transition().duration(400).call(
+          zoom.transform,
+          d3.zoomIdentity.translate(W / 2, H / 2).scale(1)
+        );
+        return;
+      }
+
+      const padding = 48;
+      const scale = Math.max(
+        0.2,
+        Math.min(
+          2.5,
+          Math.min(
+            (W - padding * 2) / bounds.width,
+            (H - padding * 2) / bounds.height
+          )
+        )
+      );
+      const translateX = W / 2 - scale * (bounds.x + bounds.width / 2);
+      const translateY = H / 2 - scale * (bounds.y + bounds.height / 2);
+
       svg.transition().duration(400).call(
         zoom.transform,
-        d3.zoomIdentity.translate(W / 2, H / 2).scale(0.9)
+        d3.zoomIdentity.translate(translateX, translateY).scale(scale)
       );
     };
 
