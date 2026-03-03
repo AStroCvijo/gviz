@@ -87,6 +87,10 @@ body.app-empty-state .toolbar {
   justify-content: flex-start;
 }
 
+body.app-empty-state .app-layout {
+  grid-template-rows: var(--topbar-h) var(--toolbar-h) 1fr;
+}
+
 body.app-empty-state .toolbar .toolbar-group:not(:first-child),
 body.app-empty-state .toolbar .toolbar-divider,
 body.app-empty-state .panel-tree,
@@ -263,6 +267,7 @@ select.plugin-select:focus { border-color: var(--accent); }
   pointer-events: none;
   font-size: 10px;
 }
+
 
 /* Buttons */
 .btn {
@@ -506,8 +511,10 @@ input.filter-input { padding-left: 26px; }
   align-items: center;
   justify-content: center;
   gap: 12px;
+  padding: 32px;
   background: var(--bg-app);
   pointer-events: none;
+  text-align: center;
 }
 .canvas-overlay.hidden { display: none; }
 .canvas-overlay-icon {
@@ -595,6 +602,7 @@ input.filter-input { padding-left: 26px; }
   height: 130px;
   display: block;
   background: var(--bg-app);
+  cursor: pointer;
 }
 
 /* Node details */
@@ -837,9 +845,8 @@ input.form-input::placeholder { color: var(--text-muted); font-family: 'Inter', 
 /* ── Notification toast ── */
 .toast {
   position: fixed;
-  bottom: var(--terminal-h);
+  bottom: 16px;
   right: 16px;
-  margin-bottom: 8px;
   background: var(--bg-panel);
   border: 1px solid var(--border-bright);
   border-radius: var(--radius);
@@ -863,7 +870,7 @@ input.form-input::placeholder { color: var(--text-muted); font-family: 'Inter', 
 [data-tooltip]::after {
   content: attr(data-tooltip);
   position: absolute;
-  bottom: calc(100% + 6px);
+  top: calc(100% + 6px);
   left: 50%;
   transform: translateX(-50%);
   background: var(--bg-active);
@@ -887,13 +894,20 @@ input.form-input::placeholder { color: var(--text-muted); font-family: 'Inter', 
 ::-webkit-scrollbar-thumb:hover { background: var(--border-bright); }
 
 /* ── D3 graph styles (applied to SVG elements by JS) ─────── */
-.d3-node circle {
+.d3-node .node-core {
   stroke-width: 2.5;
   cursor: grab;
   transition: filter 0.15s;
 }
-.d3-node circle:hover  { filter: brightness(1.3); }
-.d3-node circle.selected { stroke: var(--node-selected) !important; stroke-width: 3; }
+.d3-node .node-core:hover  { filter: brightness(1.3); }
+.d3-node .node-halo {
+  opacity: 0;
+  filter: blur(10px);
+  transition: opacity 0.18s ease;
+}
+.d3-node .node-halo.active {
+  opacity: 0.45;
+}
 .d3-node text {
   font-family: 'Inter', sans-serif;
   font-size: 11px;

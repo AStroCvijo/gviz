@@ -20,6 +20,8 @@ const $$ = (sel) => document.querySelectorAll(sel);
 document.addEventListener('DOMContentLoaded', () => {
   setupWorkspaceTabs();
   setupPluginSelection();
+  setupLoadDataModal();
+  setupPredefinedLoader();
   setupTreeToggle();
   setupTerminal();
   setupVizToggle();
@@ -48,43 +50,155 @@ function setupPluginSelection() {
   const pluginSelect = $('#plugin-select');
   const loadButton = $('#btn-load-data');
 
-  if (loadButton && pluginSelect) {
-    loadButton.addEventListener('click', () => pluginSelect.focus());
-  }
+  if (!pluginSelect || !loadButton) return;
 
-  if (!pluginSelect) return;
-
-  pluginSelect.addEventListener('change', async () => {
+  pluginSelect.addEventListener('change', () => {
     const plugin = pluginSelect.value;
     if (!plugin) {
       unloadPlugin();
       return;
     }
 
+    state.activePlugin = plugin;
+    const workspaceName = $('#workspace-name');
+    if (workspaceName) {
+      workspaceName.textContent = 'No Workspace';
+    }
+    if (window.GVIZ_ACTIVE_VISUALIZER && typeof window.GVIZ_ACTIVE_VISUALIZER.clear === 'function') {
+      window.GVIZ_ACTIVE_VISUALIZER.clear();
+    }
+    window.GVIZ_PLUGIN_BOOTSTRAP = null;
+    window.GVIZ_ACTIVE_VISUALIZER = null;
+    state.originalGraph = null;
+    showEmptyGraph();
+    termPrint(`info Selected ${plugin}. Click Load Data to continue.`, 'info');
+    showToast('Plugin selected', 'info');
+  });
+}
+
+function setupLoadDataModal() {
+  const loadButton = $('#btn-load-data');
+  const pluginSelect = $('#plugin-select');
+  const modal = $('#load-data-modal');
+  const closeBtn = $('#load-data-close');
+  const cancelBtn = $('#load-data-cancel');
+  const confirmBtn = $('#load-data-confirm');
+  const sourceSelect = $('#data-source-select');
+  const filePresetSelect = $('#data-file-preset');
+  const fileInput = $('#data-file-path');
+  const directedSelect = $('#data-directed');
+
+  if (!loadButton || !pluginSelect || !modal || !closeBtn || !cancelBtn || !confirmBtn || !sourceSelect || !filePresetSelect || !fileInput || !directedSelect) {
+    return;
+  }
+
+  const closeModal = () => modal.classList.remove('open');
+  const openModal = () => modal.classList.add('open');
+  const presetValues = new Set(
+    Array.from(filePresetSelect.options)
+      .map(option => option.value)
+      .filter(value => value && value !== '__custom__')
+  );
+  const syncFileInputMode = () => {
+    const isCustom = filePresetSelect.value === '__custom__';
+    fileInput.readOnly = !isCustom;
+    fileInput.setAttribute('aria-readonly', String(!isCustom));
+  };
+
+  const syncPresetFromFile = () => {
+    const fileValue = fileInput.value.trim();
+    filePresetSelect.value = presetValues.has(fileValue) ? fileValue : '__custom__';
+    syncFileInputMode();
+  };
+
+  loadButton.addEventListener('click', () => {
+    if (!state.activePlugin) {
+      pluginSelect.focus();
+      showToast('Select a plugin first', 'info');
+      return;
+    }
+    syncPresetFromFile();
+    openModal();
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+  cancelBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+
+  filePresetSelect.addEventListener('change', () => {
+    if (filePresetSelect.value === '__custom__') {
+      syncFileInputMode();
+      fileInput.focus();
+      return;
+    }
+    fileInput.value = filePresetSelect.value;
+    syncFileInputMode();
+  });
+
+  fileInput.addEventListener('input', syncPresetFromFile);
+  syncPresetFromFile();
+
+  confirmBtn.addEventListener('click', async () => {
+    const source = sourceSelect.value.trim();
+    const file = fileInput.value.trim();
+    const directed = directedSelect.value;
+
+    if (!file) {
+      showToast('Enter a file path', 'error');
+      return;
+    }
+
+    confirmBtn.disabled = true;
     loadButton.disabled = true;
     pluginSelect.disabled = true;
 
     try {
-      const response = await fetch(`/load-plugin/?plugin=${encodeURIComponent(plugin)}`, {
+      const params = new URLSearchParams({
+        plugin: state.activePlugin,
+        source,
+        file,
+        directed,
+      });
+      const response = await fetch(`/load-plugin/?${params.toString()}`, {
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
       });
       const data = await response.json();
       if (!response.ok || !data.ok) {
-        throw new Error(data.load_error || 'Plugin could not be loaded.');
+        throw new Error(data.load_error || 'Graph data could not be loaded.');
       }
       applyPluginResponse(data);
       history.replaceState({}, '', '/');
-      termPrint(`info Loaded ${plugin}`, 'info');
-      showToast(`${plugin} loaded`, 'success');
+      closeModal();
+      termPrint(`info Loaded data for ${state.activePlugin}`, 'info');
+      showToast('Graph loaded', 'success');
     } catch (error) {
-      unloadPlugin();
-      pluginSelect.value = '';
       termPrint(`error ${error.message}`, 'error');
       showToast(error.message, 'error');
     } finally {
+      confirmBtn.disabled = false;
       loadButton.disabled = false;
       pluginSelect.disabled = false;
     }
+  });
+}
+
+function setupPredefinedLoader() {
+  const predefinedBtn = $('#btn-load-predefined');
+
+  if (!predefinedBtn) return;
+
+  predefinedBtn.addEventListener('click', () => {
+    const params = new URLSearchParams({
+      plugin: 'simple-visualizer',
+      source: 'json-data-source',
+      file: 'json_data_source/json_data_source/data/demo_mixed_small.json',
+      directed: 'true',
+    });
+    window.location.href = `/?${params.toString()}`;
   });
 }
 
@@ -179,6 +293,11 @@ function applyPluginResponse(data) {
   const workspaceName = $('#workspace-name');
   if (workspaceName) {
     workspaceName.textContent = data.workspace_name || 'Workspace';
+  }
+
+  const pluginSelect = $('#plugin-select');
+  if (pluginSelect) {
+    pluginSelect.value = data.plugin_name || state.activePlugin || '';
   }
 
   installVisualizerRuntime(data.visualizer_html || '');

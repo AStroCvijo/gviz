@@ -22,7 +22,7 @@ def _load_visualizer_context(plugin_name: str, source_name: str, file_path: str,
     if plugin_name and not source_name:
         source_name = "json-data-source"
     if plugin_name and not file_path:
-        file_path = "json_data_source/json_data_source/data/social_network.json"
+        file_path = "json_data_source/json_data_source/data/demo_mixed_small.json"
 
     if not plugin_name:
         return context

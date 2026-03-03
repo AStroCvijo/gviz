@@ -39,11 +39,14 @@
 
     <!-- Top-right actions -->
     <div class="topbar-actions">
-      <button class="btn btn-ghost" id="btn-load-data" data-tooltip="Select a visualizer plugin">
+      <button class="btn btn-ghost" id="btn-load-predefined" data-tooltip="Load small mixed demo dataset">
+        Demo Dataset
+      </button>
+      <button class="btn btn-ghost" id="btn-load-data" data-tooltip="Load graph data for the selected plugin">
         <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
           <path d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
         </svg>
-        Select Plugin
+        Load Data
       </button>
       <button class="btn btn-icon" data-tooltip="Settings">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
@@ -166,7 +169,7 @@
           </svg>
         </div>
         <div class="canvas-overlay-text">No graph loaded</div>
-        <div class="canvas-overlay-hint">Choose <strong>Simple Visualizer</strong> to begin</div>
+        <div class="canvas-overlay-hint">Choose a plugin, then click <strong>Load Data</strong></div>
       </div>
 
       <!-- Zoom controls (bottom-right) -->
@@ -235,6 +238,49 @@
     </div>
 
 </div><!-- /.app-layout -->
+
+<div class="modal-backdrop" id="load-data-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Load Graph Data</span>
+      <span class="modal-close" id="load-data-close">✕</span>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Data Source Plugin</label>
+        <select class="form-input" id="data-source-select">
+          <option value="json-data-source">JSON Data Source</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Dataset Preset</label>
+        <select class="form-input" id="data-file-preset">
+          <option value="json_data_source/json_data_source/data/demo_mixed_small.json">Demo Mixed Small</option>
+          <option value="json_data_source/json_data_source/data/acyclic_org.json">Acyclic Org</option>
+          <option value="json_data_source/json_data_source/data/social_network.json">Social Network</option>
+          <option value="__custom__">Custom Path</option>
+        </select>
+        <span class="form-hint">Choose a preset dataset or switch to Custom Path.</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">File Path</label>
+        <input class="form-input" id="data-file-path" type="text" value="json_data_source/json_data_source/data/demo_mixed_small.json" readonly>
+        <span class="form-hint">File path is locked for presets and becomes editable only for Custom Path.</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Graph Type</label>
+        <select class="form-input" id="data-directed">
+          <option value="true">Directed</option>
+          <option value="false">Undirected</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="load-data-cancel" type="button">Cancel</button>
+      <button class="btn btn-primary" id="load-data-confirm" type="button">Load Graph</button>
+    </div>
+  </div>
+</div>
 
 <!-- ── Scripts ─────────────────────────────────────────────── -->
 <!-- D3.js v7 -->

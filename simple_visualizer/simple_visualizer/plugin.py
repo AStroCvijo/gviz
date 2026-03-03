@@ -36,8 +36,12 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
   let selectedNodeId = null;
   let currentGraph = null;
   let simulation = null;
-  let birdIntervalId = null;
-  let birdTimeoutId = null;
+  let birdFramePending = false;
+  let currentZoomTransform = d3.zoomIdentity;
+  let currentSvg = null;
+  let currentZoom = null;
+  let mainViewportSize = { width: 960, height: 720 };
+  let birdProjection = null;
 
   const $ = (sel) => document.querySelector(sel);
   const $$ = (sel) => document.querySelectorAll(sel);
@@ -45,6 +49,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
   function render(graph) {
     currentGraph = graph;
     selectedNodeId = null;
+    currentZoomTransform = d3.zoomIdentity;
 
     renderMainView(graph);
     renderBirdView(graph);
@@ -60,15 +65,12 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       simulation.stop();
       simulation = null;
     }
-    if (birdIntervalId) {
-      clearInterval(birdIntervalId);
-      birdIntervalId = null;
-    }
-    if (birdTimeoutId) {
-      clearTimeout(birdTimeoutId);
-      birdTimeoutId = null;
-    }
-
+    birdFramePending = false;
+    currentZoomTransform = d3.zoomIdentity;
+    currentSvg = null;
+    currentZoom = null;
+    mainViewportSize = { width: 960, height: 720 };
+    birdProjection = null;
     d3.select('#graph-canvas').selectAll('*').remove();
     const treeBody = $('#tree-body');
     if (treeBody) {
@@ -96,6 +98,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     const el = document.getElementById('graph-canvas');
     const W = el.clientWidth || 960;
     const H = el.clientHeight || 720;
+    mainViewportSize = { width: W, height: H };
 
     const defs = svg.append('defs');
     const gridPattern = defs.append('pattern')
@@ -113,7 +116,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     defs.append('marker')
       .attr('id', 'arrowhead')
       .attr('viewBox', '0 -4 8 8')
-      .attr('refX', 20)
+      .attr('refX', 28)
       .attr('refY', 0)
       .attr('markerWidth', 6)
       .attr('markerHeight', 6)
@@ -131,8 +134,14 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     const g = svg.append('g').attr('class', 'graph-container');
     const zoom = d3.zoom()
       .scaleExtent([0.2, 4])
-      .on('zoom', event => g.attr('transform', event.transform));
+      .on('zoom', event => {
+        currentZoomTransform = event.transform;
+        g.attr('transform', event.transform);
+        scheduleBirdViewRedraw(graph);
+      });
     svg.call(zoom);
+    currentSvg = svg;
+    currentZoom = zoom;
 
     const color = d => palette[graph.nodes.findIndex(n => n.id === d.id) % palette.length];
     const nodes = graph.nodes.map(n => ({ ...n }));
@@ -171,6 +180,15 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       );
 
     nodeSel.append('circle')
+      .attr('class', 'node-halo')
+      .attr('r', 28)
+      .style('fill', d => color(d))
+      .style('fill-opacity', 0.8)
+      .style('stroke', 'none')
+      .style('pointer-events', 'none');
+
+    nodeSel.append('circle')
+      .attr('class', 'node-core')
       .attr('r', 18)
       .style('fill', d => color(d))
       .style('fill-opacity', 0.2)
@@ -189,18 +207,22 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     nodeSel
       .on('mouseover', (event, d) => {
         showNodeDetails(d);
-        d3.select(event.currentTarget).select('circle')
-          .style('fill-opacity', 0.35)
-          .style('stroke-width', 3);
+        d3.select(event.currentTarget).select('.node-core')
+          .style('fill-opacity', d.id === selectedNodeId ? 0.2 : 0.35)
+          .style('stroke-width', d.id === selectedNodeId ? 4 : 3);
       })
       .on('mouseout', (event, d) => {
-        if (selectedNodeId !== d.id) {
-          d3.select(event.currentTarget).select('circle')
-            .style('fill-opacity', 0.2)
-            .style('stroke-width', 2.5);
-        }
+        d3.select(event.currentTarget).select('.node-core')
+          .style('fill-opacity', 0.2)
+          .style('stroke-width', d.id === selectedNodeId ? 4 : 2.5);
       })
-      .on('click', (_, d) => selectNode(d.id, graph));
+      .on('click', (_, d) => {
+        if (selectedNodeId === d.id) {
+          clearSelection(graph);
+          return;
+        }
+        selectNode(d.id, graph);
+      });
 
     simulation.on('tick', () => {
       edgeSel.select('line')
@@ -209,14 +231,38 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
         .attr('x2', d => d.target.x)
         .attr('y2', d => d.target.y);
       nodeSel.attr('transform', d => `translate(${d.x},${d.y})`);
+      scheduleBirdViewRedraw(graph);
     });
 
     $('#zoom-in').onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 1.4);
     $('#zoom-out').onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 0.7);
     $('#zoom-fit').onclick = () => {
+      const bounds = g.node().getBBox();
+      if (!bounds.width || !bounds.height) {
+        svg.transition().duration(400).call(
+          zoom.transform,
+          d3.zoomIdentity.translate(W / 2, H / 2).scale(1)
+        );
+        return;
+      }
+
+      const padding = 48;
+      const scale = Math.max(
+        0.2,
+        Math.min(
+          2.5,
+          Math.min(
+            (W - padding * 2) / bounds.width,
+            (H - padding * 2) / bounds.height
+          )
+        )
+      );
+      const translateX = W / 2 - scale * (bounds.x + bounds.width / 2);
+      const translateY = H / 2 - scale * (bounds.y + bounds.height / 2);
+
       svg.transition().duration(400).call(
         zoom.transform,
-        d3.zoomIdentity.translate(W / 2, H / 2).scale(0.9)
+        d3.zoomIdentity.translate(translateX, translateY).scale(scale)
       );
     };
 
@@ -238,59 +284,117 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     }
   }
 
-  function selectNode(nodeId, graph) {
+  function selectNode(nodeId, graph, options = {}) {
+    const shouldScrollTree = options.scrollTree !== false;
     selectedNodeId = nodeId;
     if (window.GVIZ_APP_STATE) {
       window.GVIZ_APP_STATE.selectedNodeId = nodeId;
     }
 
-    d3.selectAll('.d3-node circle')
-      .style('fill-opacity', d => d.id === nodeId ? 0.45 : 0.2)
-      .style('stroke-width', d => d.id === nodeId ? 3.5 : 2.5)
+    d3.selectAll('.d3-node .node-core')
+      .attr('r', 18)
+      .style('fill-opacity', 0.2)
+      .style('stroke-width', 2.5)
       .style('stroke', function (d) {
-        if (d.id === nodeId) return 'var(--node-selected)';
+        return palette[graph.nodes.findIndex(n => n.id === d.id) % palette.length];
+      });
+
+    d3.selectAll('.d3-node .node-halo')
+      .classed('active', d => d.id === nodeId)
+      .style('--selected-pulse-color', d => palette[graph.nodes.findIndex(n => n.id === d.id) % palette.length])
+      .style('fill', function (d) {
         return palette[graph.nodes.findIndex(n => n.id === d.id) % palette.length];
       });
 
     $$('.tree-node-row').forEach(row => {
       row.classList.toggle('selected', row.dataset.nodeId === nodeId);
-      if (row.dataset.nodeId === nodeId) {
+      if (shouldScrollTree && row.dataset.nodeId === nodeId) {
         row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }
     });
 
     const node = graph.nodes.find(n => n.id === nodeId);
     if (node) showNodeDetails(node);
+    redrawBirdView(graph);
 
     if (typeof termPrint === 'function') {
       termPrint(`$ select --node=${nodeId}`, 'cmd');
     }
   }
 
+  function clearSelection(graph) {
+    selectedNodeId = null;
+    if (window.GVIZ_APP_STATE) {
+      window.GVIZ_APP_STATE.selectedNodeId = null;
+    }
+
+    d3.selectAll('.d3-node .node-core')
+      .attr('r', 18)
+      .style('fill-opacity', 0.2)
+      .style('stroke-width', 2.5)
+      .style('stroke', function (d) {
+        return palette[graph.nodes.findIndex(n => n.id === d.id) % palette.length];
+      });
+
+    d3.selectAll('.d3-node .node-halo')
+      .classed('active', false);
+
+    $$('.tree-node-row').forEach(row => {
+      row.classList.remove('selected');
+    });
+
+    clearDetails();
+    redrawBirdView(graph);
+
+    if (typeof termPrint === 'function') {
+      termPrint('$ select --clear', 'cmd');
+    }
+  }
+
   function renderBirdView(graph) {
     const canvas = document.getElementById('bird-view-canvas');
+    if (canvas) {
+      canvas.onclick = event => focusMainViewFromBird(event);
+    }
+    redrawBirdView(graph);
+  }
+
+  function scheduleBirdViewRedraw(graph = currentGraph) {
+    if (birdFramePending) return;
+    birdFramePending = true;
+    requestAnimationFrame(() => {
+      birdFramePending = false;
+      redrawBirdView(graph);
+    });
+  }
+
+  function redrawBirdView(graph = currentGraph) {
+    if (!graph) return;
+    const canvas = document.getElementById('bird-view-canvas');
+    if (!canvas) return;
     const W = canvas.clientWidth || 240;
     const H = 130;
     const ctx = canvas.getContext('2d');
     canvas.width = W;
     canvas.height = H;
-
-    if (birdIntervalId) clearInterval(birdIntervalId);
-    if (birdTimeoutId) clearTimeout(birdTimeoutId);
-
-    birdTimeoutId = setTimeout(() => drawBirdViewSnapshot(graph, ctx, W, H), 1200);
-    birdIntervalId = setInterval(() => drawBirdViewSnapshot(graph, ctx, W, H), 2500);
+    drawBirdViewSnapshot(graph, ctx, W, H);
   }
 
   function drawBirdViewSnapshot(graph, ctx, W, H) {
     const nodes = d3.selectAll('.d3-node');
-    if (nodes.empty()) return;
+    if (nodes.empty()) {
+      birdProjection = null;
+      return;
+    }
 
     const positions = [];
     nodes.each(d => {
       if (d.x && d.y) positions.push({ id: d.id, x: d.x, y: d.y });
     });
-    if (!positions.length) return;
+    if (!positions.length) {
+      birdProjection = null;
+      return;
+    }
 
     const xs = positions.map(p => p.x);
     const ys = positions.map(p => p.y);
@@ -303,6 +407,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     const scale = Math.min(scaleX, scaleY) * 0.9;
     const offsetX = (W - (maxX - minX) * scale) / 2 - minX * scale;
     const offsetY = (H - (maxY - minY) * scale) / 2 - minY * scale;
+    birdProjection = { scale, offsetX, offsetY };
 
     ctx.clearRect(0, 0, W, H);
     ctx.fillStyle = '#0d1117';
@@ -348,8 +453,40 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     ctx.strokeStyle = '#58a6ff';
     ctx.lineWidth = 1;
     ctx.setLineDash([3, 3]);
-    ctx.strokeRect(W * 0.15, H * 0.2, W * 0.65, H * 0.6);
+
+    const viewport = {
+      x: (-currentZoomTransform.x) / currentZoomTransform.k,
+      y: (-currentZoomTransform.y) / currentZoomTransform.k,
+      width: mainViewportSize.width / currentZoomTransform.k,
+      height: mainViewportSize.height / currentZoomTransform.k,
+    };
+
+    const vx = viewport.x * scale + offsetX;
+    const vy = viewport.y * scale + offsetY;
+    const vw = viewport.width * scale;
+    const vh = viewport.height * scale;
+
+    ctx.strokeRect(vx, vy, vw, vh);
+    ctx.fillStyle = 'rgba(88, 166, 255, 0.08)';
+    ctx.fillRect(vx, vy, vw, vh);
     ctx.setLineDash([]);
+  }
+
+  function focusMainViewFromBird(event) {
+    if (!birdProjection || !currentSvg || !currentZoom) return;
+    const canvas = event.currentTarget;
+    const rect = canvas.getBoundingClientRect();
+    const clickX = ((event.clientX - rect.left) / rect.width) * canvas.width;
+    const clickY = ((event.clientY - rect.top) / rect.height) * canvas.height;
+    const graphX = (clickX - birdProjection.offsetX) / birdProjection.scale;
+    const graphY = (clickY - birdProjection.offsetY) / birdProjection.scale;
+    const nextTransform = d3.zoomIdentity
+      .translate(
+        mainViewportSize.width / 2 - graphX * currentZoomTransform.k,
+        mainViewportSize.height / 2 - graphY * currentZoomTransform.k
+      )
+      .scale(currentZoomTransform.k);
+    currentSvg.transition().duration(220).call(currentZoom.transform, nextTransform);
   }
 
   function renderTree(graph) {
@@ -361,27 +498,49 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       return;
     }
 
-    const root = graph.nodes[0];
     const edgesFrom = nodeId => graph.edges.filter(e => (e.source.id || e.source) === nodeId);
+    const inDegree = new Map(graph.nodes.map(node => [node.id, 0]));
+    const outDegree = new Map(graph.nodes.map(node => [node.id, 0]));
+    graph.edges.forEach(edge => {
+      const sourceId = edge.source.id || edge.source;
+      const targetId = edge.target.id || edge.target;
+      outDegree.set(sourceId, (outDegree.get(sourceId) || 0) + 1);
+      inDegree.set(targetId, (inDegree.get(targetId) || 0) + 1);
+    });
+
+    const rootCandidates = graph.nodes.filter(node => (inDegree.get(node.id) || 0) === 0);
+    const rootPool = rootCandidates.length ? rootCandidates : graph.nodes;
     const nodeById = new Map(graph.nodes.map(node => [node.id, node]));
+    const renderedNodes = new Set();
+
+    function buildReferenceRow(node, depth) {
+      const row = document.createElement('div');
+      row.className = 'tree-node-row';
+      row.dataset.nodeId = node.id;
+      row.style.paddingLeft = `${8 + depth * 16}px`;
+      row.innerHTML = `
+        <span class="tree-toggle leaf"></span>
+        <span class="tree-icon" style="color:var(--accent-orange)">↩</span>
+        <span class="tree-label" style="color:var(--text-muted);font-style:italic">${(node.attrs && node.attrs.name) || node.id} (ref)</span>
+      `;
+      row.addEventListener('click', () => {
+        if (selectedNodeId === node.id) {
+          clearSelection(graph);
+          return;
+        }
+        selectNode(node.id, graph, { scrollTree: false });
+      });
+      return row;
+    }
 
     function buildNodeEl(node, depth, visited) {
-      if (visited.has(node.id)) {
-        const row = document.createElement('div');
-        row.className = 'tree-node-row';
-        row.dataset.nodeId = node.id;
-        row.style.paddingLeft = `${8 + depth * 16}px`;
-        row.innerHTML = `
-          <span class="tree-toggle leaf"></span>
-          <span class="tree-icon" style="color:var(--accent-orange)">↩</span>
-          <span class="tree-label" style="color:var(--text-muted);font-style:italic">${(node.attrs && node.attrs.name) || node.id} (ref)</span>
-        `;
-        row.addEventListener('click', () => selectNode(node.id, graph));
-        return row;
+      if (visited.has(node.id) || renderedNodes.has(node.id)) {
+        return buildReferenceRow(node, depth);
       }
 
       const nextVisited = new Set(visited);
       nextVisited.add(node.id);
+      renderedNodes.add(node.id);
       const children = edgesFrom(node.id);
       const hasChildren = children.length > 0;
       const label = (node.attrs && node.attrs.name) || node.id;
@@ -422,7 +581,11 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       if (hasChildren) {
         const toggle = row.querySelector('[data-toggle]');
         row.addEventListener('click', () => {
-          selectNode(node.id, graph);
+          if (selectedNodeId === node.id) {
+            clearSelection(graph);
+          } else {
+            selectNode(node.id, graph, { scrollTree: false });
+          }
           const open = childrenDiv.classList.toggle('open');
           if (open) {
             populateChildren();
@@ -431,7 +594,13 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
           toggle.classList.toggle('expanded', open);
         });
       } else {
-        row.addEventListener('click', () => selectNode(node.id, graph));
+        row.addEventListener('click', () => {
+          if (selectedNodeId === node.id) {
+            clearSelection(graph);
+            return;
+          }
+          selectNode(node.id, graph, { scrollTree: false });
+        });
       }
 
       wrap.appendChild(row);
@@ -439,7 +608,20 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       return wrap;
     }
 
-    container.appendChild(buildNodeEl(root, 0, new Set()));
+    rootPool
+      .slice()
+      .sort((a, b) => ((outDegree.get(b.id) || 0) - (outDegree.get(a.id) || 0)))
+      .forEach(rootNode => {
+        if (!renderedNodes.has(rootNode.id)) {
+          container.appendChild(buildNodeEl(rootNode, 0, new Set()));
+        }
+      });
+
+    graph.nodes.forEach(node => {
+      if (!renderedNodes.has(node.id)) {
+        container.appendChild(buildNodeEl(node, 0, new Set()));
+      }
+    });
   }
 
   function showNodeDetails(node) {

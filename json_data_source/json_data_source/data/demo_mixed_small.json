@@ -1,0 +1,95 @@
+[
+  {
+    "@id": "team-alpha",
+    "type": "team",
+    "name": "Alpha Team",
+    "budget": 125000.5,
+    "founded": "2024-01-15",
+    "remote_friendly": true,
+    "tags": ["frontend", "priority", "mentor"],
+    "lead": {
+      "@id": "emp-mila",
+      "type": "employee",
+      "name": "Mila Petrovic",
+      "age": 29,
+      "role": "Design Lead",
+      "salary": 78000,
+      "hire_date": "2021-04-12",
+      "remote": true
+    },
+    "members": [
+      {
+        "@id": "emp-luka",
+        "type": "employee",
+        "name": "Luka Jovanovic",
+        "age": 26,
+        "role": "Frontend Engineer",
+        "salary": 64000,
+        "hire_date": "2023-02-03",
+        "remote": false
+      },
+      "emp-zoe"
+    ],
+    "partner": "team-beta"
+  },
+  {
+    "@id": "team-beta",
+    "type": "team",
+    "name": "Beta Team",
+    "budget": 98000,
+    "founded": "2023-07-01",
+    "active": true,
+    "tags": ["backend", "api"],
+    "lead": "emp-zoe",
+    "members": ["emp-mila"],
+    "partner": "team-alpha"
+  },
+  {
+    "@id": "emp-zoe",
+    "type": "employee",
+    "name": "Zoe Kim",
+    "age": 31,
+    "role": "Platform Engineer",
+    "salary": 93000,
+    "hire_date": "2022-09-01",
+    "remote": false
+  },
+  {
+    "@id": "ops-cell",
+    "type": "unit",
+    "name": "Ops Cell",
+    "severity": 2,
+    "response_sla_hours": 1.5,
+    "watching": ["team-alpha"],
+    "members": [
+      {
+        "@id": "emp-iva",
+        "type": "employee",
+        "name": "Iva Markovic",
+        "age": 34,
+        "role": "Operations Analyst",
+        "salary": 70500,
+        "hire_date": "2020-11-20",
+        "remote": true
+      }
+    ]
+  },
+  {
+    "@id": "archive-box",
+    "type": "asset",
+    "name": "Archive Box",
+    "status": "standby",
+    "notes": ["legacy", "self-check"],
+    "location": "Storage Room B",
+    "keeper": {
+      "@id": "emp-noa",
+      "type": "employee",
+      "name": "Noa Ilic",
+      "age": 41,
+      "role": "Archivist",
+      "salary": 58200,
+      "hire_date": "2019-06-10",
+      "remote": false
+    }
+  }
+]
