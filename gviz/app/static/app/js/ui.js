@@ -52,22 +52,121 @@ const $$ = (sel) => document.querySelectorAll(sel);
    ═══════════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   setupWorkspaceTabs();
-  setupModal();
+  setupPluginSelection();
   setupTreeToggle();
   setupTerminal();
   setupVizToggle();
-  renderMockGraph(MOCK_GRAPH);
-  renderBirdView(MOCK_GRAPH);
-  renderTree(MOCK_GRAPH);
   setupSearchFilter();
+  bootGraph();
 });
+
+function setupPluginSelection() {
+  const pluginSelect = $('#plugin-select');
+  const loadButton = $('#btn-load-data');
+
+  if (loadButton && pluginSelect) {
+    loadButton.addEventListener('click', () => pluginSelect.focus());
+  }
+
+  if (!pluginSelect) return;
+
+  pluginSelect.addEventListener('change', () => {
+    const plugin = pluginSelect.value;
+    if (!plugin) {
+      window.location.href = '/';
+      return;
+    }
+    window.location.href = `/?plugin=${encodeURIComponent(plugin)}`;
+  });
+}
+
+function bootGraph() {
+  if (window.GVIZ_LOAD_ERROR) {
+    showEmptyGraph();
+    termPrint(`error ${window.GVIZ_LOAD_ERROR}`, 'error');
+    showToast(window.GVIZ_LOAD_ERROR, 'error');
+    return;
+  }
+
+  const bootstrap = window.GVIZ_PLUGIN_BOOTSTRAP;
+  if (!bootstrap || !bootstrap.graph) {
+    showEmptyGraph();
+    termPrint('info No graph loaded. Use a plugin-backed load flow.', 'info');
+    return;
+  }
+
+  state.originalGraph = cloneGraph(bootstrap.graph);
+  setGraph(cloneGraph(bootstrap.graph));
+  termPrint(`info Loaded ${bootstrap.visualizerName}`, 'info');
+}
+
+function cloneGraph(graph) {
+  return JSON.parse(JSON.stringify(graph));
+}
+
+function setGraph(graph) {
+  state.graph = graph;
+  state.selectedNodeId = null;
+  updateGraphStats(graph);
+  $('#canvas-overlay').classList.add('hidden');
+  renderMockGraph(graph);
+  renderBirdView(graph);
+  renderTree(graph);
+}
+
+function showEmptyGraph() {
+  state.graph = null;
+  state.selectedNodeId = null;
+  updateGraphStats(null);
+
+  const svg = d3.select('#graph-canvas');
+  svg.selectAll('*').remove();
+
+  const treeBody = $('#tree-body');
+  if (treeBody) {
+    treeBody.innerHTML = '<div style="padding:12px;color:var(--text-muted);font-size:11px;text-align:center">No graph loaded</div>';
+  }
+
+  const nodeDetails = $('#node-details-body');
+  if (nodeDetails) {
+    nodeDetails.innerHTML = `
+      <div class="detail-empty">
+        <svg width="24" height="24" viewBox="0 0 16 16" fill="var(--text-muted)">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+          <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+        </svg>
+        Hover or click a node
+      </div>
+    `;
+  }
+
+  const canvas = document.getElementById('bird-view-canvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    const W = canvas.clientWidth || 240;
+    const H = 130;
+    canvas.width = W;
+    canvas.height = H;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#0d1117';
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  $('#canvas-overlay').classList.remove('hidden');
+}
+
+function updateGraphStats(graph) {
+  $('#stat-node-count').textContent = graph ? graph.nodes.length : '0';
+  $('#stat-edge-count').textContent = graph ? graph.edges.length : '0';
+  $('#stat-graph-kind').textContent = graph
+    ? (graph.directed ? 'directed' : 'undirected')
+    : 'no graph';
+}
 
 /* ═══════════════════════════════════════════════════════════
    WORKSPACE TABS
    ═══════════════════════════════════════════════════════════ */
 function setupWorkspaceTabs() {
-  let wsCounter = 2;
-
   $$('.ws-tab').forEach(tab => {
     tab.addEventListener('click', (e) => {
       if (e.target.closest('.ws-close')) return;
@@ -88,109 +187,6 @@ function setupWorkspaceTabs() {
       });
     }
   });
-
-  $('.ws-tab-add').addEventListener('click', () => {
-    wsCounter++;
-    const tab = document.createElement('div');
-    tab.className = 'ws-tab active';
-    tab.innerHTML = `
-      <span class="ws-dot" style="background:#bc8cff"></span>
-      Workspace ${wsCounter}
-      <span class="ws-close">✕</span>
-    `;
-    $$('.ws-tab').forEach(t => t.classList.remove('active'));
-    $('.ws-tab-add').before(tab);
-
-    // Re-attach listeners
-    tab.addEventListener('click', (e) => {
-      if (e.target.closest('.ws-close')) return;
-      $$('.ws-tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-    });
-    tab.querySelector('.ws-close').addEventListener('click', (e) => {
-      e.stopPropagation();
-      if ($$('.ws-tab').length > 1) {
-        tab.remove();
-        const remaining = $$('.ws-tab');
-        if (remaining.length && !$('.ws-tab.active')) {
-          remaining[remaining.length - 1].classList.add('active');
-        }
-      }
-    });
-    showToast(`Workspace ${wsCounter} created`, 'info');
-    termPrint(`info Workspace ${wsCounter} opened`, 'info');
-  });
-}
-
-/* ═══════════════════════════════════════════════════════════
-   MODAL (Load Data)
-   ═══════════════════════════════════════════════════════════ */
-function setupModal() {
-  const backdrop = $('#load-modal');
-  const openBtn  = $('#btn-load-data');
-  const closeBtn = $('#modal-close');
-  const cancelBtn = $('#modal-cancel');
-  const confirmBtn = $('#modal-confirm');
-  const pluginSel = $('#modal-plugin-select');
-
-  openBtn.addEventListener('click', () => backdrop.classList.add('open'));
-  closeBtn.addEventListener('click', () => backdrop.classList.remove('open'));
-  cancelBtn.addEventListener('click', () => backdrop.classList.remove('open'));
-  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) backdrop.classList.remove('open'); });
-
-  pluginSel.addEventListener('change', () => {
-    // TODO: fetch plugin parameters from backend GET /api/plugin-params/?name=...
-    // and dynamically render form fields
-    const name = pluginSel.value;
-    updateModalParams(name);
-  });
-
-  confirmBtn.addEventListener('click', () => {
-    const plugin = pluginSel.value;
-    const filePath = $('#param-file-path').value.trim();
-    if (!filePath) { showToast('File path is required', 'error'); return; }
-
-    // TODO: POST /api/load-graph/ { plugin, file_path: filePath, directed: true }
-    backdrop.classList.remove('open');
-    termPrint(`$ load --plugin=${plugin} --file="${filePath}"`, 'cmd');
-    termPrint(`  Loading graph from "${filePath}" using [${plugin}]...`, 'info');
-    // Simulate success
-    setTimeout(() => {
-      termPrint(`  ✓ Graph loaded: ${MOCK_GRAPH.nodes.length} nodes, ${MOCK_GRAPH.edges.length} edges`, 'info');
-      showToast(`Graph loaded (${MOCK_GRAPH.nodes.length} nodes, ${MOCK_GRAPH.edges.length} edges)`, 'success');
-    }, 600);
-  });
-}
-
-function updateModalParams(pluginName) {
-  // TODO: replace with actual backend-driven params
-  const wrap = $('#modal-params');
-  if (pluginName === 'json-data-source') {
-    wrap.innerHTML = `
-      <div class="form-group">
-        <label class="form-label">File Path</label>
-        <input id="param-file-path" type="text" class="form-input"
-          placeholder="e.g. data/social_network.json">
-        <span class="form-hint">Absolute or relative path to the <code>.json</code> file</span>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Graph Type</label>
-        <select id="param-directed" class="form-input">
-          <option value="true">Directed</option>
-          <option value="false">Undirected</option>
-        </select>
-      </div>
-    `;
-  } else if (pluginName === 'xml-data-source') {
-    wrap.innerHTML = `
-      <div class="form-group">
-        <label class="form-label">File Path</label>
-        <input id="param-file-path" type="text" class="form-input"
-          placeholder="e.g. data/network.xml">
-        <span class="form-hint">Absolute or relative path to the <code>.xml</code> file</span>
-      </div>
-    `;
-  }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -591,21 +587,25 @@ function setupSearchFilter() {
   resetBtn.addEventListener('click', () => {
     searchInput.value = '';
     filterInput.value = '';
-    // TODO: POST /api/workspace/reset/
+    if (!state.originalGraph) {
+      showToast('No graph loaded', 'error');
+      return;
+    }
     termPrint('$ reset', 'cmd');
     termPrint('  ✓ Workspace reset to original graph', 'info');
     showToast('Graph reset', 'info');
-    renderMockGraph(MOCK_GRAPH);
-    renderTree(MOCK_GRAPH);
+    setGraph(cloneGraph(state.originalGraph));
   });
 }
 
 function doSearch(query) {
   if (!query) return;
+  if (!state.graph) {
+    showToast('No graph loaded', 'error');
+    return;
+  }
   termPrint(`$ search '${query}'`, 'cmd');
-  // TODO: POST /api/search/ { query }  → returns subgraph JSON
-  // For now: client-side mock (spec says server-side, TODO to replace)
-  const matching = MOCK_GRAPH.nodes.filter(n =>
+  const matching = state.graph.nodes.filter(n =>
     Object.entries(n.attrs).some(([k, v]) =>
       k.toLowerCase().includes(query.toLowerCase()) ||
       String(v).toLowerCase().includes(query.toLowerCase())
@@ -617,6 +617,10 @@ function doSearch(query) {
 
 function doFilter(expr) {
   if (!expr) return;
+  if (!state.graph) {
+    showToast('No graph loaded', 'error');
+    return;
+  }
   termPrint(`$ filter '${expr}'`, 'cmd');
   // TODO: POST /api/filter/ { expression: expr }  → returns subgraph JSON
   showToast(`Filter applied: ${expr}`, 'success');

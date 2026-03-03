@@ -32,15 +32,9 @@
     <div class="workspace-tabs">
       <div class="ws-tab active">
         <span class="ws-dot"></span>
-        Social Network
+        {{ workspace_name }}
         <span class="ws-close">✕</span>
       </div>
-      <div class="ws-tab">
-        <span class="ws-dot" style="background:var(--accent-green)"></span>
-        Org Chart
-        <span class="ws-close">✕</span>
-      </div>
-      <div class="ws-tab-add" title="New workspace">+</div>
     </div>
 
     <!-- Top-right actions -->
@@ -71,8 +65,8 @@
       <div class="plugin-select-wrap">
         <span class="select-icon">⬡</span>
         <select class="plugin-select" id="plugin-select">
-          <option value="json-data-source">JSON Data Source</option>
-          <option value="xml-data-source">XML Data Source</option>
+          <option value="">Select Plugin</option>
+          <option value="simple-visualizer"{% if initial_graph_loaded %} selected{% endif %}>Simple Visualizer</option>
         </select>
         <span class="select-arrow">▾</span>
       </div>
@@ -85,7 +79,6 @@
       <span style="color:var(--text-muted);font-size:11px">View:</span>
       <div class="viz-toggle">
         <button class="viz-toggle-btn active" data-mode="simple">Simple</button>
-        <button class="viz-toggle-btn" data-mode="block">Block</button>
       </div>
     </div>
 
@@ -150,14 +143,14 @@
       <div class="graph-stats">
         <div class="stat-badge">
           <span class="stat-dot"></span>
-          10 nodes
+          <span id="stat-node-count">{{ node_count }}</span> nodes
         </div>
         <div class="stat-badge">
           <span class="stat-dot edge-dot"></span>
-          12 edges
+          <span id="stat-edge-count">{{ edge_count }}</span> edges
         </div>
-        <div class="stat-badge" style="color:var(--accent-orange)">
-          directed · cyclic
+        <div class="stat-badge" style="color:var(--accent-orange)" id="stat-graph-kind">
+          {{ graph_kind_label }}
         </div>
       </div>
 
@@ -165,7 +158,7 @@
       <svg id="graph-canvas"></svg>
 
       <!-- Empty-state overlay (hidden when graph is loaded) -->
-      <div class="canvas-overlay hidden" id="canvas-overlay">
+      <div class="canvas-overlay{% if initial_graph_loaded %} hidden{% endif %}" id="canvas-overlay">
         <div class="canvas-overlay-icon">
           <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
             <circle cx="5" cy="12" r="3"/><circle cx="19" cy="5" r="3"/><circle cx="19" cy="19" r="3"/>
@@ -305,6 +298,10 @@
 <!-- ── Scripts ─────────────────────────────────────────────── -->
 <!-- D3.js v7 -->
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+{{ visualizer_html|safe }}
+{% if load_error %}
+<script>window.GVIZ_LOAD_ERROR = "{{ load_error|escapejs }}";</script>
+{% endif %}
 <!-- gviz UI -->
 <script src="{% static 'app/js/ui.js' %}"></script>
 
