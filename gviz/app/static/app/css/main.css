@@ -87,6 +87,10 @@ body.app-empty-state .toolbar {
   justify-content: flex-start;
 }
 
+body.app-empty-state .app-layout {
+  grid-template-rows: var(--topbar-h) var(--toolbar-h) 1fr;
+}
+
 body.app-empty-state .toolbar .toolbar-group:not(:first-child),
 body.app-empty-state .toolbar .toolbar-divider,
 body.app-empty-state .panel-tree,
@@ -507,8 +511,10 @@ input.filter-input { padding-left: 26px; }
   align-items: center;
   justify-content: center;
   gap: 12px;
+  padding: 32px;
   background: var(--bg-app);
   pointer-events: none;
+  text-align: center;
 }
 .canvas-overlay.hidden { display: none; }
 .canvas-overlay-icon {
@@ -839,9 +845,8 @@ input.form-input::placeholder { color: var(--text-muted); font-family: 'Inter', 
 /* ── Notification toast ── */
 .toast {
   position: fixed;
-  bottom: var(--terminal-h);
+  bottom: 16px;
   right: 16px;
-  margin-bottom: 8px;
   background: var(--bg-panel);
   border: 1px solid var(--border-bright);
   border-radius: var(--radius);
