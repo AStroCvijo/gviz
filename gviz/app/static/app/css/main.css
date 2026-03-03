@@ -83,6 +83,28 @@ html, body {
   width: 100vw;
 }
 
+body.app-empty-state .toolbar {
+  justify-content: flex-start;
+}
+
+body.app-empty-state .toolbar .toolbar-group:not(:first-child),
+body.app-empty-state .toolbar .toolbar-divider,
+body.app-empty-state .panel-tree,
+body.app-empty-state .panel-right,
+body.app-empty-state .terminal-panel,
+body.app-empty-state .graph-stats,
+body.app-empty-state .zoom-controls {
+  display: none;
+}
+
+body.app-empty-state .main-content {
+  grid-template-columns: 1fr;
+}
+
+body.app-empty-state .panel-main {
+  border-right: none;
+}
+
 /* ═══════════════════════════════════════════════════════════
    TOP BAR
    ═══════════════════════════════════════════════════════════ */
