@@ -78,7 +78,7 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
 
     .frame {{
       display: grid;
-      grid-template-columns: minmax(0, 1.9fr) minmax(280px, 0.85fr);
+      grid-template-columns: 280px minmax(0, 1.7fr) 320px;
       gap: 18px;
       max-width: 1460px;
       margin: 0 auto;
@@ -90,6 +90,23 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
       border-radius: 18px;
       box-shadow: var(--shadow);
       overflow: hidden;
+    }}
+
+    .panel-header {{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(13, 17, 23, 0.35);
+    }}
+
+    .panel-title {{
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
     }}
 
     .hero,
@@ -144,6 +161,77 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
       padding: 0 18px 18px;
     }}
 
+    .tree-body {{
+      max-height: min(78vh, 860px);
+      overflow: auto;
+      padding: 14px 10px 16px;
+    }}
+
+    .tree-node-row {{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      user-select: none;
+    }}
+
+    .tree-node-row:hover {{
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }}
+
+    .tree-node-row.selected {{
+      background: var(--accent-dim);
+      color: var(--text-primary);
+      outline: 1px solid rgba(88, 166, 255, 0.35);
+    }}
+
+    .tree-toggle {{
+      width: 12px;
+      color: var(--text-muted);
+      flex: 0 0 12px;
+      text-align: center;
+    }}
+
+    .tree-toggle.leaf {{
+      opacity: 0;
+    }}
+
+    .tree-icon {{
+      color: var(--accent);
+      font-size: 11px;
+    }}
+
+    .tree-label {{
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 13px;
+    }}
+
+    .tree-badge {{
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: var(--bg-panel-alt);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 11px;
+    }}
+
+    .tree-children {{
+      display: none;
+    }}
+
+    .tree-children.open {{
+      display: block;
+    }}
+
     svg {{
       display: block;
       width: 100%;
@@ -185,6 +273,27 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
     .sidebar h2 {{
       margin: 0 0 12px;
       font-size: 22px;
+    }}
+
+    .right-stack {{
+      display: grid;
+      grid-template-rows: 190px auto;
+      gap: 18px;
+      min-height: 0;
+    }}
+
+    .bird-wrap {{
+      padding: 16px;
+    }}
+
+    .bird-canvas {{
+      display: block;
+      width: 100%;
+      height: 130px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: linear-gradient(180deg, #121820 0%, #0d1117 100%);
+      cursor: pointer;
     }}
 
     .sidebar p {{
@@ -308,6 +417,10 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
         grid-template-columns: 1fr;
       }}
 
+      .tree-body {{
+        max-height: 280px;
+      }}
+
       svg {{
         height: 60vh;
       }}
@@ -315,12 +428,22 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
       .canvas-toolbar {{
         right: 28px;
       }}
+
+      .right-stack {{
+        grid-template-rows: auto;
+      }}
     }}
   </style>
 </head>
 <body>
   <div class="page">
     <div class="frame">
+      <aside class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Tree View</span>
+        </div>
+        <div class="tree-body" id="tree-body"></div>
+      </aside>
       <section class="panel">
         <div class="hero">
           <p class="eyebrow">gviz plugin</p>
@@ -334,6 +457,7 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
           <div class="stat">D3 force layout</div>
           <div class="stat">drag enabled</div>
           <div class="stat">hover details</div>
+          <div class="stat">selection sync</div>
         </div>
         <div class="canvas-wrap">
           <div class="canvas-toolbar">
@@ -344,23 +468,35 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
           <svg id="graph" viewBox="0 0 960 720" preserveAspectRatio="xMidYMid meet"></svg>
         </div>
       </section>
-      <aside class="panel sidebar">
-        <h2>Node details</h2>
-        <p>Pan, zoom and drag nodes in the main view. Hover for quick details, click to keep a node selected.</p>
-        <div class="detail-card" id="details">
-          <p class="detail-empty">No node selected.</p>
-        </div>
-        <div class="legend">
-          <div class="legend-row"><span class="legend-swatch" style="background: rgba(88, 166, 255, 0.18); border-color: #58a6ff;"></span> default node</div>
-          <div class="legend-row"><span class="legend-swatch" style="background: rgba(240, 136, 62, 0.18); border-color: #f0883e;"></span> selected node</div>
-        </div>
-      </aside>
+      <div class="right-stack">
+        <aside class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Bird View</span>
+          </div>
+          <div class="bird-wrap">
+            <canvas class="bird-canvas" id="bird-canvas"></canvas>
+          </div>
+        </aside>
+        <aside class="panel sidebar">
+          <h2>Node details</h2>
+          <p>Pan, zoom and drag nodes in the main view. Hover for quick details, click in any view to keep a node selected.</p>
+          <div class="detail-card" id="details">
+            <p class="detail-empty">No node selected.</p>
+          </div>
+          <div class="legend">
+            <div class="legend-row"><span class="legend-swatch" style="background: rgba(88, 166, 255, 0.18); border-color: #58a6ff;"></span> default node</div>
+            <div class="legend-row"><span class="legend-swatch" style="background: rgba(240, 136, 62, 0.18); border-color: #f0883e;"></span> selected node</div>
+          </div>
+        </aside>
+      </div>
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
   <script>
     const graph = {payload_json};
     const svg = document.getElementById("graph");
+    const treeBody = document.getElementById("tree-body");
+    const birdCanvas = document.getElementById("bird-canvas");
     const details = document.getElementById("details");
     const svgSelection = d3.select(svg);
     const width = 960;
@@ -376,6 +512,7 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
     const nodesLayer = root.append("g").attr("class", "nodes");
     let activeNodeId = null;
     let hoveredNodeId = null;
+    let birdPositions = [];
 
     function renderDetails(node) {{
       const attrs = Object.entries(node.attributes || {{}});
@@ -409,6 +546,16 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
         .classed("is-selected", node => node.id === activeNodeId)
         .select("circle")
         .classed("is-active", node => node.id === activeNodeId || node.id === hoveredNodeId);
+
+      treeBody.querySelectorAll(".tree-node-row").forEach(row => {{
+        const selected = row.dataset.nodeId === activeNodeId;
+        row.classList.toggle("selected", selected);
+        if (selected) {{
+          row.scrollIntoView({{ block: "nearest" }});
+        }}
+      }});
+
+      drawBirdView();
     }}
 
     function syncDetailsPanel() {{
@@ -424,10 +571,17 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
       details.innerHTML = '<p class="detail-empty">No node selected.</p>';
     }}
 
+    function selectNode(nodeId) {{
+      activeNodeId = nodeId;
+      applySelection();
+      syncDetailsPanel();
+    }}
+
     const zoom = d3.zoom()
       .scaleExtent([0.25, 4])
       .on("zoom", event => {{
         root.attr("transform", event.transform);
+        drawBirdView();
       }});
 
     svgSelection.call(zoom);
@@ -464,9 +618,7 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
         syncDetailsPanel();
       }})
       .on("click", (_, node) => {{
-        activeNodeId = node.id;
-        applySelection();
-        syncDetailsPanel();
+        selectNode(node.id);
       }});
 
     nodeSelection
@@ -523,6 +675,168 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
         .attr("y2", link => link.target.y);
 
       nodeSelection.attr("transform", node => `translate(${{node.x}}, ${{node.y}})`);
+      drawBirdView();
+    }});
+
+    function renderTree() {{
+      if (!nodes.length) {{
+        treeBody.innerHTML = '<p class="detail-empty">No graph loaded.</p>';
+        return;
+      }}
+
+      const rootNode = nodes[0];
+      const nodeMap = new Map(nodes.map(node => [node.id, node]));
+      const childrenById = new Map();
+
+      links.forEach(link => {{
+        const sourceId = link.source.id || link.source;
+        const targetId = link.target.id || link.target;
+        if (!childrenById.has(sourceId)) {{
+          childrenById.set(sourceId, []);
+        }}
+        childrenById.get(sourceId).push(targetId);
+      }});
+
+      function buildNode(node, depth, path) {{
+        const childIds = childrenById.get(node.id) || [];
+        const hasChildren = childIds.length > 0;
+
+        const wrap = document.createElement("div");
+        const row = document.createElement("div");
+        row.className = "tree-node-row";
+        row.dataset.nodeId = node.id;
+        row.style.paddingLeft = `${{8 + depth * 16}}px`;
+        row.innerHTML = `
+          <span class="tree-toggle ${{hasChildren ? "" : "leaf"}}" data-toggle>${{hasChildren ? "▶" : ""}}</span>
+          <span class="tree-icon">●</span>
+          <span class="tree-label">${{escapeHtml(node.label)}}</span>
+          ${{hasChildren ? `<span class="tree-badge">${{childIds.length}}</span>` : ""}}
+        `;
+
+        const childrenDiv = document.createElement("div");
+        childrenDiv.className = "tree-children";
+        let populated = false;
+
+        function populateChildren() {{
+          if (populated || !hasChildren) return;
+          populated = true;
+
+          childIds.forEach(childId => {{
+            const child = nodeMap.get(childId);
+            if (!child) return;
+
+            if (path.has(childId)) {{
+              const cycleRow = document.createElement("div");
+              cycleRow.className = "tree-node-row";
+              cycleRow.dataset.nodeId = childId;
+              cycleRow.style.paddingLeft = `${{24 + (depth + 1) * 16}}px`;
+              cycleRow.innerHTML = `
+                <span class="tree-toggle leaf"></span>
+                <span class="tree-icon" style="color: var(--accent-orange)">↩</span>
+                <span class="tree-label">${{escapeHtml(child.label)}} (ref)</span>
+              `;
+              cycleRow.addEventListener("click", () => selectNode(childId));
+              childrenDiv.appendChild(cycleRow);
+              return;
+            }}
+
+            const nextPath = new Set(path);
+            nextPath.add(childId);
+            childrenDiv.appendChild(buildNode(child, depth + 1, nextPath));
+          }});
+        }}
+
+        row.addEventListener("click", event => {{
+          selectNode(node.id);
+
+          if (!hasChildren) return;
+          if (event.target.closest(".tree-badge") && !event.target.closest("[data-toggle]")) return;
+
+          populateChildren();
+          const open = childrenDiv.classList.toggle("open");
+          const toggle = row.querySelector("[data-toggle]");
+          if (toggle) {{
+            toggle.textContent = open ? "▼" : "▶";
+          }}
+        }});
+
+        wrap.appendChild(row);
+        wrap.appendChild(childrenDiv);
+        return wrap;
+      }}
+
+      treeBody.innerHTML = "";
+      treeBody.appendChild(buildNode(rootNode, 0, new Set([rootNode.id])));
+    }}
+
+    function drawBirdView() {{
+      const ctx = birdCanvas.getContext("2d");
+      const widthPx = birdCanvas.clientWidth || 320;
+      const heightPx = birdCanvas.clientHeight || 130;
+      birdCanvas.width = widthPx;
+      birdCanvas.height = heightPx;
+
+      const positioned = nodes.filter(node => Number.isFinite(node.x) && Number.isFinite(node.y));
+      ctx.clearRect(0, 0, widthPx, heightPx);
+      ctx.fillStyle = "#0d1117";
+      ctx.fillRect(0, 0, widthPx, heightPx);
+
+      if (!positioned.length) {{
+        birdPositions = [];
+        return;
+      }}
+
+      const xs = positioned.map(node => node.x);
+      const ys = positioned.map(node => node.y);
+      const minX = Math.min(...xs) - 30;
+      const maxX = Math.max(...xs) + 30;
+      const minY = Math.min(...ys) - 30;
+      const maxY = Math.max(...ys) + 30;
+      const scale = Math.min(widthPx / Math.max(maxX - minX, 1), heightPx / Math.max(maxY - minY, 1)) * 0.88;
+      const offsetX = (widthPx - (maxX - minX) * scale) / 2 - minX * scale;
+      const offsetY = (heightPx - (maxY - minY) * scale) / 2 - minY * scale;
+
+      birdPositions = positioned.map(node => ({{
+        id: node.id,
+        x: node.x * scale + offsetX,
+        y: node.y * scale + offsetY,
+        color: node.color,
+      }}));
+      const posMap = new Map(birdPositions.map(item => [item.id, item]));
+
+      links.forEach(link => {{
+        const sourceId = link.source.id || link.source;
+        const targetId = link.target.id || link.target;
+        const source = posMap.get(sourceId);
+        const target = posMap.get(targetId);
+        if (!source || !target) return;
+        ctx.beginPath();
+        ctx.moveTo(source.x, source.y);
+        ctx.lineTo(target.x, target.y);
+        ctx.strokeStyle = "#30363d";
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
+      }});
+
+      birdPositions.forEach(node => {{
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.id === activeNodeId ? 5.8 : 4.1, 0, Math.PI * 2);
+        ctx.fillStyle = node.id === activeNodeId ? "rgba(240, 136, 62, 0.28)" : `${{node.color}}55`;
+        ctx.fill();
+        ctx.strokeStyle = node.id === activeNodeId ? "#f0883e" : node.color;
+        ctx.lineWidth = node.id === activeNodeId ? 1.6 : 1.1;
+        ctx.stroke();
+      }});
+    }}
+
+    birdCanvas.addEventListener("click", event => {{
+      const rect = birdCanvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const match = birdPositions.find(node => Math.hypot(node.x - x, node.y - y) <= 8);
+      if (match) {{
+        selectNode(match.id);
+      }}
     }});
 
     function fitGraph() {{
@@ -560,6 +874,7 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
       fitGraph();
     }});
 
+    renderTree();
     setTimeout(fitGraph, 260);
   </script>
 </body>
