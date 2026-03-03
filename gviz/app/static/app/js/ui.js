@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupWorkspaceTabs();
   setupPluginSelection();
   setupLoadDataModal();
+  setupPredefinedLoader();
   setupTreeToggle();
   setupTerminal();
   setupVizToggle();
@@ -151,6 +152,22 @@ function setupLoadDataModal() {
       loadButton.disabled = false;
       pluginSelect.disabled = false;
     }
+  });
+}
+
+function setupPredefinedLoader() {
+  const predefinedBtn = $('#btn-load-predefined');
+
+  if (!predefinedBtn) return;
+
+  predefinedBtn.addEventListener('click', () => {
+    const params = new URLSearchParams({
+      plugin: 'simple-visualizer',
+      source: 'json-data-source',
+      file: 'json_data_source/json_data_source/data/acyclic_org.json',
+      directed: 'true',
+    });
+    window.location.href = `/?${params.toString()}`;
   });
 }
 

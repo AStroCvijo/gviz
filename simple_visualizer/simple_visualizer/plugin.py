@@ -112,7 +112,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     defs.append('marker')
       .attr('id', 'arrowhead')
       .attr('viewBox', '0 -4 8 8')
-      .attr('refX', 20)
+      .attr('refX', 28)
       .attr('refY', 0)
       .attr('markerWidth', 6)
       .attr('markerHeight', 6)
