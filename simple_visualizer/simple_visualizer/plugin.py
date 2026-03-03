@@ -333,6 +333,7 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
           <div class="stat">{graph_kind}</div>
           <div class="stat">D3 force layout</div>
           <div class="stat">drag enabled</div>
+          <div class="stat">hover details</div>
         </div>
         <div class="canvas-wrap">
           <div class="canvas-toolbar">
@@ -345,7 +346,7 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
       </section>
       <aside class="panel sidebar">
         <h2>Node details</h2>
-        <p>Pan, zoom and drag nodes in the main view. Click a node to inspect its attributes.</p>
+        <p>Pan, zoom and drag nodes in the main view. Hover for quick details, click to keep a node selected.</p>
         <div class="detail-card" id="details">
           <p class="detail-empty">No node selected.</p>
         </div>
@@ -374,6 +375,7 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
     const edgesLayer = root.append("g").attr("class", "edges");
     const nodesLayer = root.append("g").attr("class", "nodes");
     let activeNodeId = null;
+    let hoveredNodeId = null;
 
     function renderDetails(node) {{
       const attrs = Object.entries(node.attributes || {{}});
@@ -406,7 +408,20 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
       nodeSelection
         .classed("is-selected", node => node.id === activeNodeId)
         .select("circle")
-        .classed("is-active", node => node.id === activeNodeId);
+        .classed("is-active", node => node.id === activeNodeId || node.id === hoveredNodeId);
+    }}
+
+    function syncDetailsPanel() {{
+      const node =
+        nodes.find(candidate => candidate.id === hoveredNodeId) ||
+        nodes.find(candidate => candidate.id === activeNodeId);
+
+      if (node) {{
+        renderDetails(node);
+        return;
+      }}
+
+      details.innerHTML = '<p class="detail-empty">No node selected.</p>';
     }}
 
     const zoom = d3.zoom()
@@ -436,10 +451,22 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
           .on("drag", dragged)
           .on("end", dragEnded)
       )
+      .on("mouseover", (_, node) => {{
+        hoveredNodeId = node.id;
+        applySelection();
+        syncDetailsPanel();
+      }})
+      .on("mouseout", (_, node) => {{
+        if (hoveredNodeId === node.id) {{
+          hoveredNodeId = null;
+        }}
+        applySelection();
+        syncDetailsPanel();
+      }})
       .on("click", (_, node) => {{
         activeNodeId = node.id;
         applySelection();
-        renderDetails(node);
+        syncDetailsPanel();
       }});
 
     nodeSelection
