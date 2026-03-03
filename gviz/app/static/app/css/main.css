@@ -264,6 +264,7 @@ select.plugin-select:focus { border-color: var(--accent); }
   font-size: 10px;
 }
 
+
 /* Buttons */
 .btn {
   display: inline-flex;

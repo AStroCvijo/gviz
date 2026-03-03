@@ -20,6 +20,7 @@ const $$ = (sel) => document.querySelectorAll(sel);
 document.addEventListener('DOMContentLoaded', () => {
   setupWorkspaceTabs();
   setupPluginSelection();
+  setupLoadDataModal();
   setupTreeToggle();
   setupTerminal();
   setupVizToggle();
@@ -50,37 +51,6 @@ function setupPluginSelection() {
 
   if (!pluginSelect || !loadButton) return;
 
-  loadButton.addEventListener('click', async () => {
-    if (!state.activePlugin) {
-      pluginSelect.focus();
-      showToast('Select a plugin first', 'info');
-      return;
-    }
-
-    loadButton.disabled = true;
-    pluginSelect.disabled = true;
-
-    try {
-      const response = await fetch(`/load-plugin/?plugin=${encodeURIComponent(state.activePlugin)}`, {
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
-      });
-      const data = await response.json();
-      if (!response.ok || !data.ok) {
-        throw new Error(data.load_error || 'Graph data could not be loaded.');
-      }
-      applyPluginResponse(data);
-      history.replaceState({}, '', '/');
-      termPrint(`info Loaded data for ${state.activePlugin}`, 'info');
-      showToast('Graph loaded', 'success');
-    } catch (error) {
-      termPrint(`error ${error.message}`, 'error');
-      showToast(error.message, 'error');
-    } finally {
-      loadButton.disabled = false;
-      pluginSelect.disabled = false;
-    }
-  });
-
   pluginSelect.addEventListener('change', () => {
     const plugin = pluginSelect.value;
     if (!plugin) {
@@ -102,6 +72,85 @@ function setupPluginSelection() {
     showEmptyGraph();
     termPrint(`info Selected ${plugin}. Click Load Data to continue.`, 'info');
     showToast('Plugin selected', 'info');
+  });
+}
+
+function setupLoadDataModal() {
+  const loadButton = $('#btn-load-data');
+  const pluginSelect = $('#plugin-select');
+  const modal = $('#load-data-modal');
+  const closeBtn = $('#load-data-close');
+  const cancelBtn = $('#load-data-cancel');
+  const confirmBtn = $('#load-data-confirm');
+  const sourceSelect = $('#data-source-select');
+  const fileInput = $('#data-file-path');
+  const directedSelect = $('#data-directed');
+
+  if (!loadButton || !pluginSelect || !modal || !closeBtn || !cancelBtn || !confirmBtn || !sourceSelect || !fileInput || !directedSelect) {
+    return;
+  }
+
+  const closeModal = () => modal.classList.remove('open');
+  const openModal = () => modal.classList.add('open');
+
+  loadButton.addEventListener('click', () => {
+    if (!state.activePlugin) {
+      pluginSelect.focus();
+      showToast('Select a plugin first', 'info');
+      return;
+    }
+    openModal();
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+  cancelBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+
+  confirmBtn.addEventListener('click', async () => {
+    const source = sourceSelect.value.trim();
+    const file = fileInput.value.trim();
+    const directed = directedSelect.value;
+
+    if (!file) {
+      showToast('Enter a file path', 'error');
+      return;
+    }
+
+    confirmBtn.disabled = true;
+    loadButton.disabled = true;
+    pluginSelect.disabled = true;
+
+    try {
+      const params = new URLSearchParams({
+        plugin: state.activePlugin,
+        source,
+        file,
+        directed,
+      });
+      const response = await fetch(`/load-plugin/?${params.toString()}`, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        throw new Error(data.load_error || 'Graph data could not be loaded.');
+      }
+      applyPluginResponse(data);
+      history.replaceState({}, '', '/');
+      closeModal();
+      termPrint(`info Loaded data for ${state.activePlugin}`, 'info');
+      showToast('Graph loaded', 'success');
+    } catch (error) {
+      termPrint(`error ${error.message}`, 'error');
+      showToast(error.message, 'error');
+    } finally {
+      confirmBtn.disabled = false;
+      loadButton.disabled = false;
+      pluginSelect.disabled = false;
+    }
   });
 }
 

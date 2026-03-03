@@ -236,6 +236,39 @@
 
 </div><!-- /.app-layout -->
 
+<div class="modal-backdrop" id="load-data-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Load Graph Data</span>
+      <span class="modal-close" id="load-data-close">✕</span>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Data Source Plugin</label>
+        <select class="form-input" id="data-source-select">
+          <option value="json-data-source">JSON Data Source</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">File Path</label>
+        <input class="form-input" id="data-file-path" type="text" value="json_data_source/json_data_source/data/social_network.json">
+        <span class="form-hint">Unesi putanju do fajla koji želiš da učitaš.</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Graph Type</label>
+        <select class="form-input" id="data-directed">
+          <option value="true">Directed</option>
+          <option value="false">Undirected</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="load-data-cancel" type="button">Cancel</button>
+      <button class="btn btn-primary" id="load-data-confirm" type="button">Load Graph</button>
+    </div>
+  </div>
+</div>
+
 <!-- ── Scripts ─────────────────────────────────────────────── -->
 <!-- D3.js v7 -->
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
