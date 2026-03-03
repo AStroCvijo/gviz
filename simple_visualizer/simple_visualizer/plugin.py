@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-import html
 import json
 from datetime import date
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from api.models import Edge, Graph, Node
 from api.plugins import VisualizerPlugin
@@ -24,71 +23,85 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
     def render(self, graph: Graph) -> str:
         payload = self._graph_to_payload(graph)
         payload_json = json.dumps(payload, separators=(",", ":")).replace("</", "<\\/")
-        title = html.escape(
-            f"Simple Visualizer ({len(payload['nodes'])} nodes, "
-            f"{len(payload['edges'])} edges)"
-        )
+        graph_kind = "directed" if payload["directed"] else "undirected"
 
         return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{title}</title>
+  <title>gviz Simple Visualizer</title>
   <style>
     :root {{
-      color-scheme: light;
-      --bg: #f4efe6;
-      --panel: #fffaf2;
-      --ink: #1e2430;
-      --muted: #6a7280;
-      --line: #d9cfbf;
-      --accent: #156f6a;
-      --accent-soft: #d7efe9;
-      --node: #d97706;
-      --node-soft: rgba(217, 119, 6, 0.18);
-      --shadow: 0 18px 50px rgba(30, 36, 48, 0.08);
+      --bg-app: #0d1117;
+      --bg-panel: #161b22;
+      --bg-panel-alt: #1c2128;
+      --bg-hover: #21262d;
+      --border: #30363d;
+      --border-bright: #444c56;
+      --accent: #58a6ff;
+      --accent-dim: rgba(88, 166, 255, 0.15);
+      --accent-green: #3fb950;
+      --accent-orange: #d29922;
+      --text-primary: #e6edf3;
+      --text-secondary: #8b949e;
+      --text-muted: #484f58;
+      --node-blue: #58a6ff;
+      --node-purple: #bc8cff;
+      --node-green: #3fb950;
+      --node-orange: #e3b341;
+      --node-cyan: #79c0ff;
+      --node-selected: #f0883e;
+      --edge-color: #444c56;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
     }}
 
-    * {{ box-sizing: border-box; }}
+    * {{
+      box-sizing: border-box;
+    }}
 
     body {{
       margin: 0;
-      font-family: Georgia, "Times New Roman", serif;
-      color: var(--ink);
+      min-height: 100vh;
+      font-family: Inter, system-ui, sans-serif;
+      color: var(--text-primary);
       background:
-        radial-gradient(circle at top left, #fff8eb 0%, var(--bg) 45%),
-        linear-gradient(135deg, #efe7da 0%, #f7f3eb 100%);
+        radial-gradient(circle at top left, rgba(88, 166, 255, 0.12), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(188, 140, 255, 0.08), transparent 24%),
+        var(--bg-app);
     }}
 
     .page {{
       min-height: 100vh;
-      padding: 24px;
+      padding: 24px 20px;
     }}
 
     .frame {{
       display: grid;
-      grid-template-columns: minmax(0, 2.3fr) minmax(260px, 0.9fr);
-      gap: 20px;
-      max-width: 1400px;
+      grid-template-columns: minmax(0, 1.9fr) minmax(280px, 0.85fr);
+      gap: 18px;
+      max-width: 1460px;
       margin: 0 auto;
     }}
 
     .panel {{
-      background: rgba(255, 250, 242, 0.9);
-      border: 1px solid rgba(217, 207, 191, 0.85);
-      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(28, 33, 40, 0.98), rgba(22, 27, 34, 0.98));
+      border: 1px solid var(--border);
+      border-radius: 18px;
       box-shadow: var(--shadow);
-      backdrop-filter: blur(6px);
+      overflow: hidden;
     }}
 
-    .hero {{
-      padding: 22px 24px 0;
+    .hero,
+    .sidebar {{
+      padding: 22px 24px;
     }}
 
     .eyebrow {{
       margin: 0 0 8px;
-      font: 700 11px/1.2 Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.2;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--accent);
@@ -96,51 +109,77 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
 
     h1 {{
       margin: 0;
-      font-size: 32px;
+      font-size: 30px;
       line-height: 1.05;
+      letter-spacing: -0.03em;
     }}
 
     .sub {{
       margin: 10px 0 0;
-      color: var(--muted);
-      font: 400 14px/1.5 Arial, sans-serif;
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.5;
     }}
 
     .stats {{
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      padding: 18px 24px 0;
+      padding: 0 24px 18px;
     }}
 
     .stat {{
-      padding: 10px 14px;
+      padding: 9px 13px;
       border-radius: 999px;
-      border: 1px solid var(--line);
-      background: #fffdf9;
-      font: 600 12px/1 Arial, sans-serif;
-      color: var(--muted);
+      border: 1px solid var(--border-bright);
+      background: var(--bg-hover);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1;
     }}
 
     .canvas-wrap {{
-      padding: 18px 18px 18px;
+      position: relative;
+      padding: 0 18px 18px;
     }}
 
     svg {{
       display: block;
       width: 100%;
-      height: min(72vh, 760px);
+      height: min(76vh, 820px);
       background:
-        linear-gradient(rgba(217, 207, 191, 0.28) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(217, 207, 191, 0.28) 1px, transparent 1px),
-        linear-gradient(180deg, #fffdf8 0%, #fbf6ee 100%);
-      background-size: 28px 28px, 28px 28px, auto;
-      border-radius: 18px;
-      border: 1px solid var(--line);
+        linear-gradient(rgba(68, 76, 86, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(68, 76, 86, 0.2) 1px, transparent 1px),
+        linear-gradient(180deg, #121820 0%, #0d1117 100%);
+      background-size: 26px 26px, 26px 26px, auto;
+      border-radius: 16px;
+      border: 1px solid var(--border);
     }}
 
-    .sidebar {{
-      padding: 24px;
+    .canvas-toolbar {{
+      position: absolute;
+      top: 16px;
+      right: 34px;
+      display: flex;
+      gap: 8px;
+    }}
+
+    .zoom-btn {{
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--border-bright);
+      border-radius: 10px;
+      background: rgba(22, 27, 34, 0.88);
+      color: var(--text-primary);
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+    }}
+
+    .zoom-btn:hover {{
+      background: var(--bg-hover);
+      border-color: var(--accent);
     }}
 
     .sidebar h2 {{
@@ -150,27 +189,31 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
 
     .sidebar p {{
       margin: 0 0 18px;
-      color: var(--muted);
-      font: 400 14px/1.5 Arial, sans-serif;
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.5;
     }}
 
     .detail-card {{
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: #fffdf9;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--bg-panel-alt);
       padding: 16px;
       min-height: 200px;
     }}
 
     .detail-id {{
       margin: 0 0 8px;
-      font: 700 16px/1.3 Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.3;
     }}
 
     .detail-empty {{
       margin: 0;
-      color: var(--muted);
-      font: 400 14px/1.5 Arial, sans-serif;
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.5;
     }}
 
     .attrs {{
@@ -183,52 +226,81 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
       display: grid;
       gap: 4px;
       padding-top: 10px;
-      border-top: 1px solid #eee4d6;
+      border-top: 1px solid var(--border);
     }}
 
     .attr-key {{
-      font: 700 11px/1.2 Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.2;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--text-secondary);
     }}
 
     .attr-value {{
-      font: 400 15px/1.4 Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.4;
       word-break: break-word;
     }}
 
     .edge {{
-      stroke: rgba(30, 36, 48, 0.32);
-      stroke-width: 1.6;
+      stroke: var(--edge-color);
+      stroke-width: 1.5;
+      stroke-opacity: 0.74;
     }}
 
     .node {{
-      fill: var(--node-soft);
-      stroke: var(--node);
-      stroke-width: 2.6;
+      fill-opacity: 0.18;
+      stroke-width: 2.5;
       cursor: pointer;
-      transition: transform 120ms ease;
+      transition: fill-opacity 120ms ease, stroke-width 120ms ease;
     }}
 
     .node.is-active {{
-      fill: rgba(21, 111, 106, 0.18);
-      stroke: var(--accent);
+      fill: rgba(240, 136, 62, 0.18);
+      fill-opacity: 1;
+      stroke: var(--node-selected);
       stroke-width: 3.6;
     }}
 
     .label {{
-      font: 600 12px/1 Arial, sans-serif;
-      fill: var(--ink);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1;
+      fill: var(--text-primary);
       text-anchor: middle;
       pointer-events: none;
     }}
 
     .caption {{
-      font: 500 11px/1 Arial, sans-serif;
-      fill: var(--muted);
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1;
+      fill: var(--text-secondary);
       text-anchor: middle;
       pointer-events: none;
+    }}
+
+    .legend {{
+      margin-top: 18px;
+      display: grid;
+      gap: 10px;
+    }}
+
+    .legend-row {{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }}
+
+    .legend-swatch {{
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      border: 2px solid transparent;
     }}
 
     @media (max-width: 980px) {{
@@ -238,6 +310,10 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
 
       svg {{
         height: 60vh;
+      }}
+
+      .canvas-toolbar {{
+        right: 28px;
       }}
     }}
   </style>
@@ -254,57 +330,49 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
         <div class="stats">
           <div class="stat">{len(payload["nodes"])} nodes</div>
           <div class="stat">{len(payload["edges"])} edges</div>
-          <div class="stat">{'directed' if payload["directed"] else 'undirected'}</div>
+          <div class="stat">{graph_kind}</div>
+          <div class="stat">D3 force layout</div>
         </div>
         <div class="canvas-wrap">
+          <div class="canvas-toolbar">
+            <button class="zoom-btn" id="zoom-in" type="button">+</button>
+            <button class="zoom-btn" id="zoom-fit" type="button">⊡</button>
+            <button class="zoom-btn" id="zoom-out" type="button">−</button>
+          </div>
           <svg id="graph" viewBox="0 0 960 720" preserveAspectRatio="xMidYMid meet"></svg>
         </div>
       </section>
       <aside class="panel sidebar">
         <h2>Node details</h2>
-        <p>Click a node to inspect its attributes.</p>
+        <p>Pan and zoom the main view. Click a node to inspect its attributes.</p>
         <div class="detail-card" id="details">
           <p class="detail-empty">No node selected.</p>
+        </div>
+        <div class="legend">
+          <div class="legend-row"><span class="legend-swatch" style="background: rgba(88, 166, 255, 0.18); border-color: #58a6ff;"></span> default node</div>
+          <div class="legend-row"><span class="legend-swatch" style="background: rgba(240, 136, 62, 0.18); border-color: #f0883e;"></span> selected node</div>
         </div>
       </aside>
     </div>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
   <script>
     const graph = {payload_json};
     const svg = document.getElementById("graph");
     const details = document.getElementById("details");
+    const svgSelection = d3.select(svg);
     const width = 960;
     const height = 720;
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const radius = Math.min(width, height) * 0.34;
-
-    const nodes = graph.nodes.map((node, index) => {{
-      const angle = (Math.PI * 2 * index) / Math.max(graph.nodes.length, 1);
-      return {{
-        ...node,
-        x: centerX + radius * Math.cos(angle),
-        y: centerY + radius * Math.sin(angle),
-      }};
-    }});
-
-    const nodeById = new Map(nodes.map(node => [node.id, node]));
-
-    graph.edges.forEach(edge => {{
-      const source = nodeById.get(edge.source);
-      const target = nodeById.get(edge.target);
-      if (!source || !target) return;
-
-      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-      line.setAttribute("x1", source.x);
-      line.setAttribute("y1", source.y);
-      line.setAttribute("x2", target.x);
-      line.setAttribute("y2", target.y);
-      line.setAttribute("class", "edge");
-      svg.appendChild(line);
-    }});
-
-    let activeGroup = null;
+    const palette = ["#58a6ff", "#bc8cff", "#3fb950", "#e3b341", "#79c0ff"];
+    const nodes = graph.nodes.map((node, index) => ({{
+      ...node,
+      color: palette[index % palette.length],
+    }}));
+    const links = graph.edges.map(edge => ({{ ...edge }}));
+    const root = svgSelection.append("g").attr("class", "viewport");
+    const edgesLayer = root.append("g").attr("class", "edges");
+    const nodesLayer = root.append("g").attr("class", "nodes");
+    let activeNodeId = null;
 
     function renderDetails(node) {{
       const attrs = Object.entries(node.attributes || {{}});
@@ -333,40 +401,111 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
         .replaceAll("'", "&#39;");
     }}
 
-    nodes.forEach(node => {{
-      const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-      group.setAttribute("transform", `translate(${{node.x}}, ${{node.y}})`);
-      group.style.transformOrigin = `${{node.x}}px ${{node.y}}px`;
+    function applySelection() {{
+      nodeSelection
+        .classed("is-selected", node => node.id === activeNodeId)
+        .select("circle")
+        .classed("is-active", node => node.id === activeNodeId);
+    }}
 
-      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      circle.setAttribute("r", "22");
-      circle.setAttribute("class", "node");
+    const zoom = d3.zoom()
+      .scaleExtent([0.25, 4])
+      .on("zoom", event => {{
+        root.attr("transform", event.transform);
+      }});
 
-      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      label.setAttribute("class", "label");
-      label.setAttribute("y", "4");
-      label.textContent = (node.label || node.id).slice(0, 14);
+    svgSelection.call(zoom);
 
-      const caption = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      caption.setAttribute("class", "caption");
-      caption.setAttribute("y", "40");
-      caption.textContent = node.id;
+    const linkSelection = edgesLayer
+      .selectAll("line")
+      .data(links)
+      .enter()
+      .append("line")
+      .attr("class", "edge");
 
-      group.appendChild(circle);
-      group.appendChild(label);
-      group.appendChild(caption);
-
-      group.addEventListener("click", () => {{
-        if (activeGroup) {{
-          activeGroup.querySelector("circle").classList.remove("is-active");
-        }}
-        activeGroup = group;
-        circle.classList.add("is-active");
+    const nodeSelection = nodesLayer
+      .selectAll("g")
+      .data(nodes)
+      .enter()
+      .append("g")
+      .style("cursor", "pointer")
+      .on("click", (_, node) => {{
+        activeNodeId = node.id;
+        applySelection();
         renderDetails(node);
       }});
 
-      svg.appendChild(group);
+    nodeSelection
+      .append("circle")
+      .attr("class", "node")
+      .attr("r", 18)
+      .attr("fill", node => node.color)
+      .attr("stroke", node => node.color);
+
+    nodeSelection
+      .append("text")
+      .attr("class", "label")
+      .attr("y", 4)
+      .text(node => (node.label || node.id).slice(0, 14));
+
+    nodeSelection
+      .append("text")
+      .attr("class", "caption")
+      .attr("y", 30)
+      .text(node => node.id);
+
+    const simulation = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(node => node.id).distance(84).strength(0.45))
+      .force("charge", d3.forceManyBody().strength(-260))
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("collision", d3.forceCollide(34));
+
+    simulation.on("tick", () => {{
+      linkSelection
+        .attr("x1", link => link.source.x)
+        .attr("y1", link => link.source.y)
+        .attr("x2", link => link.target.x)
+        .attr("y2", link => link.target.y);
+
+      nodeSelection.attr("transform", node => `translate(${{node.x}}, ${{node.y}})`);
     }});
+
+    function fitGraph() {{
+      const bounds = root.node().getBBox();
+      if (!bounds.width || !bounds.height) {{
+        svgSelection.call(
+          zoom.transform,
+          d3.zoomIdentity.translate(width / 2, height / 2).scale(1)
+        );
+        return;
+      }}
+
+      const scale = Math.max(
+        0.25,
+        Math.min(2.2, 0.88 / Math.max(bounds.width / width, bounds.height / height))
+      );
+      const translateX = width / 2 - scale * (bounds.x + bounds.width / 2);
+      const translateY = height / 2 - scale * (bounds.y + bounds.height / 2);
+
+      svgSelection
+        .transition()
+        .duration(350)
+        .call(zoom.transform, d3.zoomIdentity.translate(translateX, translateY).scale(scale));
+    }}
+
+    document.getElementById("zoom-in").addEventListener("click", () => {{
+      svgSelection.transition().duration(180).call(zoom.scaleBy, 1.25);
+    }});
+
+    document.getElementById("zoom-out").addEventListener("click", () => {{
+      svgSelection.transition().duration(180).call(zoom.scaleBy, 0.8);
+    }});
+
+    document.getElementById("zoom-fit").addEventListener("click", () => {{
+      fitGraph();
+    }});
+
+    setTimeout(fitGraph, 260);
   </script>
 </body>
 </html>"""
