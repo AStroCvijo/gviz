@@ -361,8 +361,22 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       return;
     }
 
-    const root = graph.nodes[0];
     const edgesFrom = nodeId => graph.edges.filter(e => (e.source.id || e.source) === nodeId);
+    const inDegree = new Map(graph.nodes.map(node => [node.id, 0]));
+    const outDegree = new Map(graph.nodes.map(node => [node.id, 0]));
+    graph.edges.forEach(edge => {
+      const sourceId = edge.source.id || edge.source;
+      const targetId = edge.target.id || edge.target;
+      outDegree.set(sourceId, (outDegree.get(sourceId) || 0) + 1);
+      inDegree.set(targetId, (inDegree.get(targetId) || 0) + 1);
+    });
+
+    const rootCandidates = graph.nodes.filter(node => (inDegree.get(node.id) || 0) === 0);
+    const rootPool = rootCandidates.length ? rootCandidates : graph.nodes;
+    const root = rootPool.reduce((best, node) => {
+      if (!best) return node;
+      return (outDegree.get(node.id) || 0) > (outDegree.get(best.id) || 0) ? node : best;
+    }, null) || graph.nodes[0];
     const nodeById = new Map(graph.nodes.map(node => [node.id, node]));
 
     function buildNodeEl(node, depth, visited) {
