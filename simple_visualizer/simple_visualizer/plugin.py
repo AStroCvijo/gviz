@@ -68,7 +68,6 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       clearTimeout(birdTimeoutId);
       birdTimeoutId = null;
     }
-
     d3.select('#graph-canvas').selectAll('*').remove();
     const treeBody = $('#tree-body');
     if (treeBody) {
@@ -171,6 +170,15 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       );
 
     nodeSel.append('circle')
+      .attr('class', 'node-halo')
+      .attr('r', 28)
+      .style('fill', d => color(d))
+      .style('fill-opacity', 0.8)
+      .style('stroke', 'none')
+      .style('pointer-events', 'none');
+
+    nodeSel.append('circle')
+      .attr('class', 'node-core')
       .attr('r', 18)
       .style('fill', d => color(d))
       .style('fill-opacity', 0.2)
@@ -189,14 +197,14 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     nodeSel
       .on('mouseover', (event, d) => {
         showNodeDetails(d);
-        d3.select(event.currentTarget).select('circle')
+        d3.select(event.currentTarget).select('.node-core')
           .style('fill-opacity', d.id === selectedNodeId ? 0.2 : 0.35)
-          .style('stroke-width', 3);
+          .style('stroke-width', d.id === selectedNodeId ? 4 : 3);
       })
       .on('mouseout', (event, d) => {
-        d3.select(event.currentTarget).select('circle')
+        d3.select(event.currentTarget).select('.node-core')
           .style('fill-opacity', 0.2)
-          .style('stroke-width', d.id === selectedNodeId ? 5 : 2.5);
+          .style('stroke-width', d.id === selectedNodeId ? 4 : 2.5);
       })
       .on('click', (_, d) => {
         if (selectedNodeId === d.id) {
@@ -272,12 +280,18 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       window.GVIZ_APP_STATE.selectedNodeId = nodeId;
     }
 
-    d3.selectAll('.d3-node circle')
-      .classed('selected-pulse', d => d.id === nodeId)
-      .style('--selected-pulse-color', d => palette[graph.nodes.findIndex(n => n.id === d.id) % palette.length])
+    d3.selectAll('.d3-node .node-core')
+      .attr('r', 18)
       .style('fill-opacity', 0.2)
-      .style('stroke-width', d => d.id === nodeId ? 5 : 2.5)
+      .style('stroke-width', 2.5)
       .style('stroke', function (d) {
+        return palette[graph.nodes.findIndex(n => n.id === d.id) % palette.length];
+      });
+
+    d3.selectAll('.d3-node .node-halo')
+      .classed('active', d => d.id === nodeId)
+      .style('--selected-pulse-color', d => palette[graph.nodes.findIndex(n => n.id === d.id) % palette.length])
+      .style('fill', function (d) {
         return palette[graph.nodes.findIndex(n => n.id === d.id) % palette.length];
       });
 
@@ -302,13 +316,16 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       window.GVIZ_APP_STATE.selectedNodeId = null;
     }
 
-    d3.selectAll('.d3-node circle')
-      .classed('selected-pulse', false)
+    d3.selectAll('.d3-node .node-core')
+      .attr('r', 18)
       .style('fill-opacity', 0.2)
       .style('stroke-width', 2.5)
       .style('stroke', function (d) {
         return palette[graph.nodes.findIndex(n => n.id === d.id) % palette.length];
       });
+
+    d3.selectAll('.d3-node .node-halo')
+      .classed('active', false);
 
     $$('.tree-node-row').forEach(row => {
       row.classList.remove('selected');

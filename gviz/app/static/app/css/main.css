@@ -888,17 +888,19 @@ input.form-input::placeholder { color: var(--text-muted); font-family: 'Inter', 
 ::-webkit-scrollbar-thumb:hover { background: var(--border-bright); }
 
 /* ── D3 graph styles (applied to SVG elements by JS) ─────── */
-.d3-node circle {
+.d3-node .node-core {
   stroke-width: 2.5;
   cursor: grab;
   transition: filter 0.15s;
 }
-.d3-node circle:hover  { filter: brightness(1.3); }
-.d3-node circle.selected { stroke: var(--node-selected) !important; stroke-width: 3; }
-.d3-node circle.selected-pulse {
-  animation: selectedNodePulse 1.15s ease-in-out infinite;
-  transform-origin: center;
-  transform-box: fill-box;
+.d3-node .node-core:hover  { filter: brightness(1.3); }
+.d3-node .node-halo {
+  opacity: 0;
+  filter: blur(10px);
+  transition: opacity 0.18s ease;
+}
+.d3-node .node-halo.active {
+  opacity: 0.45;
 }
 .d3-node text {
   font-family: 'Inter', sans-serif;
@@ -913,14 +915,3 @@ input.form-input::placeholder { color: var(--text-muted); font-family: 'Inter', 
   stroke-width: 1.5;
 }
 .d3-edge line.directed { marker-end: url(#arrowhead); }
-
-@keyframes selectedNodePulse {
-  0%, 100% {
-    filter: drop-shadow(0 0 2px color-mix(in srgb, var(--selected-pulse-color) 45%, transparent));
-    transform: scale(1);
-  }
-  50% {
-    filter: drop-shadow(0 0 16px color-mix(in srgb, var(--selected-pulse-color) 95%, transparent));
-    transform: scale(1.18);
-  }
-}
