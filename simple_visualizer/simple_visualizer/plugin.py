@@ -190,17 +190,21 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       .on('mouseover', (event, d) => {
         showNodeDetails(d);
         d3.select(event.currentTarget).select('circle')
-          .style('fill-opacity', 0.35)
+          .style('fill-opacity', d.id === selectedNodeId ? 0.2 : 0.35)
           .style('stroke-width', 3);
       })
       .on('mouseout', (event, d) => {
-        if (selectedNodeId !== d.id) {
-          d3.select(event.currentTarget).select('circle')
-            .style('fill-opacity', 0.2)
-            .style('stroke-width', 2.5);
-        }
+        d3.select(event.currentTarget).select('circle')
+          .style('fill-opacity', 0.2)
+          .style('stroke-width', d.id === selectedNodeId ? 5 : 2.5);
       })
-      .on('click', (_, d) => selectNode(d.id, graph));
+      .on('click', (_, d) => {
+        if (selectedNodeId === d.id) {
+          clearSelection(graph);
+          return;
+        }
+        selectNode(d.id, graph);
+      });
 
     simulation.on('tick', () => {
       edgeSel.select('line')
@@ -246,10 +250,11 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     }
 
     d3.selectAll('.d3-node circle')
-      .style('fill-opacity', d => d.id === nodeId ? 0.45 : 0.2)
-      .style('stroke-width', d => d.id === nodeId ? 3.5 : 2.5)
+      .classed('selected-pulse', d => d.id === nodeId)
+      .style('--selected-pulse-color', d => palette[graph.nodes.findIndex(n => n.id === d.id) % palette.length])
+      .style('fill-opacity', 0.2)
+      .style('stroke-width', d => d.id === nodeId ? 5 : 2.5)
       .style('stroke', function (d) {
-        if (d.id === nodeId) return 'var(--node-selected)';
         return palette[graph.nodes.findIndex(n => n.id === d.id) % palette.length];
       });
 
@@ -265,6 +270,31 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
 
     if (typeof termPrint === 'function') {
       termPrint(`$ select --node=${nodeId}`, 'cmd');
+    }
+  }
+
+  function clearSelection(graph) {
+    selectedNodeId = null;
+    if (window.GVIZ_APP_STATE) {
+      window.GVIZ_APP_STATE.selectedNodeId = null;
+    }
+
+    d3.selectAll('.d3-node circle')
+      .classed('selected-pulse', false)
+      .style('fill-opacity', 0.2)
+      .style('stroke-width', 2.5)
+      .style('stroke', function (d) {
+        return palette[graph.nodes.findIndex(n => n.id === d.id) % palette.length];
+      });
+
+    $$('.tree-node-row').forEach(row => {
+      row.classList.remove('selected');
+    });
+
+    clearDetails();
+
+    if (typeof termPrint === 'function') {
+      termPrint('$ select --clear', 'cmd');
     }
   }
 
@@ -391,7 +421,13 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
           <span class="tree-icon" style="color:var(--accent-orange)">↩</span>
           <span class="tree-label" style="color:var(--text-muted);font-style:italic">${(node.attrs && node.attrs.name) || node.id} (ref)</span>
         `;
-        row.addEventListener('click', () => selectNode(node.id, graph, { scrollTree: false }));
+        row.addEventListener('click', () => {
+          if (selectedNodeId === node.id) {
+            clearSelection(graph);
+            return;
+          }
+          selectNode(node.id, graph, { scrollTree: false });
+        });
         return row;
       }
 
@@ -437,7 +473,11 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       if (hasChildren) {
         const toggle = row.querySelector('[data-toggle]');
         row.addEventListener('click', () => {
-          selectNode(node.id, graph, { scrollTree: false });
+          if (selectedNodeId === node.id) {
+            clearSelection(graph);
+          } else {
+            selectNode(node.id, graph, { scrollTree: false });
+          }
           const open = childrenDiv.classList.toggle('open');
           if (open) {
             populateChildren();
@@ -446,7 +486,13 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
           toggle.classList.toggle('expanded', open);
         });
       } else {
-        row.addEventListener('click', () => selectNode(node.id, graph, { scrollTree: false }));
+        row.addEventListener('click', () => {
+          if (selectedNodeId === node.id) {
+            clearSelection(graph);
+            return;
+          }
+          selectNode(node.id, graph, { scrollTree: false });
+        });
       }
 
       wrap.appendChild(row);
