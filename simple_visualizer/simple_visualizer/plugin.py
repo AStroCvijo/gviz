@@ -31,473 +31,143 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>gviz Simple Visualizer</title>
-  <style>
-    :root {{
-      --bg-app: #0d1117;
-      --bg-panel: #161b22;
-      --bg-panel-alt: #1c2128;
-      --bg-hover: #21262d;
-      --border: #30363d;
-      --border-bright: #444c56;
-      --accent: #58a6ff;
-      --accent-dim: rgba(88, 166, 255, 0.15);
-      --accent-green: #3fb950;
-      --accent-orange: #d29922;
-      --text-primary: #e6edf3;
-      --text-secondary: #8b949e;
-      --text-muted: #484f58;
-      --node-blue: #58a6ff;
-      --node-purple: #bc8cff;
-      --node-green: #3fb950;
-      --node-orange: #e3b341;
-      --node-cyan: #79c0ff;
-      --node-selected: #f0883e;
-      --edge-color: #444c56;
-      --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
-    }}
-
-    * {{
-      box-sizing: border-box;
-    }}
-
-    body {{
-      margin: 0;
-      min-height: 100vh;
-      font-family: Inter, system-ui, sans-serif;
-      color: var(--text-primary);
-      background:
-        radial-gradient(circle at top left, rgba(88, 166, 255, 0.12), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(188, 140, 255, 0.08), transparent 24%),
-        var(--bg-app);
-    }}
-
-    .page {{
-      min-height: 100vh;
-      padding: 24px 20px;
-    }}
-
-    .frame {{
-      display: grid;
-      grid-template-columns: 280px minmax(0, 1.7fr) 320px;
-      gap: 18px;
-      max-width: 1460px;
-      margin: 0 auto;
-    }}
-
-    .panel {{
-      background: linear-gradient(180deg, rgba(28, 33, 40, 0.98), rgba(22, 27, 34, 0.98));
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }}
-
-    .panel-header {{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(13, 17, 23, 0.35);
-    }}
-
-    .panel-title {{
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-    }}
-
-    .hero,
-    .sidebar {{
-      padding: 22px 24px;
-    }}
-
-    .eyebrow {{
-      margin: 0 0 8px;
-      font-size: 11px;
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
-    }}
-
-    h1 {{
-      margin: 0;
-      font-size: 30px;
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-    }}
-
-    .sub {{
-      margin: 10px 0 0;
-      color: var(--text-secondary);
-      font-size: 14px;
-      line-height: 1.5;
-    }}
-
-    .stats {{
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      padding: 0 24px 18px;
-    }}
-
-    .stat {{
-      padding: 9px 13px;
-      border-radius: 999px;
-      border: 1px solid var(--border-bright);
-      background: var(--bg-hover);
-      color: var(--text-secondary);
-      font-size: 12px;
-      font-weight: 600;
-      line-height: 1;
-    }}
-
-    .canvas-wrap {{
-      position: relative;
-      padding: 0 18px 18px;
-    }}
-
-    .tree-body {{
-      max-height: min(78vh, 860px);
-      overflow: auto;
-      padding: 14px 10px 16px;
-    }}
-
-    .tree-node-row {{
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 34px;
-      padding: 6px 10px;
-      border-radius: 10px;
-      color: var(--text-secondary);
-      cursor: pointer;
-      user-select: none;
-    }}
-
-    .tree-node-row:hover {{
-      background: var(--bg-hover);
-      color: var(--text-primary);
-    }}
-
-    .tree-node-row.selected {{
-      background: var(--accent-dim);
-      color: var(--text-primary);
-      outline: 1px solid rgba(88, 166, 255, 0.35);
-    }}
-
-    .tree-toggle {{
-      width: 12px;
-      color: var(--text-muted);
-      flex: 0 0 12px;
-      text-align: center;
-    }}
-
-    .tree-toggle.leaf {{
-      opacity: 0;
-    }}
-
-    .tree-icon {{
-      color: var(--accent);
-      font-size: 11px;
-    }}
-
-    .tree-label {{
-      flex: 1;
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 13px;
-    }}
-
-    .tree-badge {{
-      padding: 2px 6px;
-      border-radius: 999px;
-      background: var(--bg-panel-alt);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      font-size: 11px;
-    }}
-
-    .tree-children {{
-      display: none;
-    }}
-
-    .tree-children.open {{
-      display: block;
-    }}
-
-    svg {{
-      display: block;
-      width: 100%;
-      height: min(76vh, 820px);
-      background:
-        linear-gradient(rgba(68, 76, 86, 0.2) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(68, 76, 86, 0.2) 1px, transparent 1px),
-        linear-gradient(180deg, #121820 0%, #0d1117 100%);
-      background-size: 26px 26px, 26px 26px, auto;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-    }}
-
-    .canvas-toolbar {{
-      position: absolute;
-      top: 16px;
-      right: 34px;
-      display: flex;
-      gap: 8px;
-    }}
-
-    .zoom-btn {{
-      width: 34px;
-      height: 34px;
-      border: 1px solid var(--border-bright);
-      border-radius: 10px;
-      background: rgba(22, 27, 34, 0.88);
-      color: var(--text-primary);
-      font-size: 18px;
-      line-height: 1;
-      cursor: pointer;
-    }}
-
-    .zoom-btn:hover {{
-      background: var(--bg-hover);
-      border-color: var(--accent);
-    }}
-
-    .sidebar h2 {{
-      margin: 0 0 12px;
-      font-size: 22px;
-    }}
-
-    .right-stack {{
-      display: grid;
-      grid-template-rows: 190px auto;
-      gap: 18px;
-      min-height: 0;
-    }}
-
-    .bird-wrap {{
-      padding: 16px;
-    }}
-
-    .bird-canvas {{
-      display: block;
-      width: 100%;
-      height: 130px;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      background: linear-gradient(180deg, #121820 0%, #0d1117 100%);
-      cursor: pointer;
-    }}
-
-    .sidebar p {{
-      margin: 0 0 18px;
-      color: var(--text-secondary);
-      font-size: 14px;
-      line-height: 1.5;
-    }}
-
-    .detail-card {{
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      background: var(--bg-panel-alt);
-      padding: 16px;
-      min-height: 200px;
-    }}
-
-    .detail-id {{
-      margin: 0 0 8px;
-      font-size: 16px;
-      font-weight: 700;
-      line-height: 1.3;
-    }}
-
-    .detail-empty {{
-      margin: 0;
-      color: var(--text-secondary);
-      font-size: 14px;
-      line-height: 1.5;
-    }}
-
-    .attrs {{
-      display: grid;
-      gap: 10px;
-      margin-top: 14px;
-    }}
-
-    .attr {{
-      display: grid;
-      gap: 4px;
-      padding-top: 10px;
-      border-top: 1px solid var(--border);
-    }}
-
-    .attr-key {{
-      font-size: 11px;
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-    }}
-
-    .attr-value {{
-      font-size: 15px;
-      line-height: 1.4;
-      word-break: break-word;
-    }}
-
-    .edge {{
-      stroke: var(--edge-color);
-      stroke-width: 1.5;
-      stroke-opacity: 0.74;
-    }}
-
-    .node {{
-      fill-opacity: 0.18;
-      stroke-width: 2.5;
-      cursor: pointer;
-      transition: fill-opacity 120ms ease, stroke-width 120ms ease;
-    }}
-
-    .node.is-active {{
-      fill: rgba(240, 136, 62, 0.18);
-      fill-opacity: 1;
-      stroke: var(--node-selected);
-      stroke-width: 3.6;
-    }}
-
-    .label {{
-      font-size: 12px;
-      font-weight: 600;
-      line-height: 1;
-      fill: var(--text-primary);
-      text-anchor: middle;
-      pointer-events: none;
-    }}
-
-    .caption {{
-      font-size: 11px;
-      font-weight: 500;
-      line-height: 1;
-      fill: var(--text-secondary);
-      text-anchor: middle;
-      pointer-events: none;
-    }}
-
-    .legend {{
-      margin-top: 18px;
-      display: grid;
-      gap: 10px;
-    }}
-
-    .legend-row {{
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--text-secondary);
-      font-size: 13px;
-    }}
-
-    .legend-swatch {{
-      width: 12px;
-      height: 12px;
-      border-radius: 999px;
-      border: 2px solid transparent;
-    }}
-
-    @media (max-width: 980px) {{
-      .frame {{
-        grid-template-columns: 1fr;
-      }}
-
-      .tree-body {{
-        max-height: 280px;
-      }}
-
-      svg {{
-        height: 60vh;
-      }}
-
-      .canvas-toolbar {{
-        right: 28px;
-      }}
-
-      .right-stack {{
-        grid-template-rows: auto;
-      }}
-    }}
-  </style>
+  <link rel="stylesheet" href="gviz/app/static/app/css/main.css">
 </head>
 <body>
-  <div class="page">
-    <div class="frame">
-      <aside class="panel">
+<div class="app-layout">
+  <header class="topbar">
+    <div class="topbar-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="5" cy="12" r="3"></circle>
+        <circle cx="19" cy="5" r="3"></circle>
+        <circle cx="19" cy="19" r="3"></circle>
+        <line x1="7.5" y1="10.5" x2="17" y2="6.5"></line>
+        <line x1="7.5" y1="13.5" x2="17" y2="17.5"></line>
+      </svg>
+      gviz
+    </div>
+    <div class="workspace-tabs">
+      <div class="ws-tab active">
+        <span class="ws-dot"></span>
+        Simple Visualizer Preview
+        <span class="ws-close">✕</span>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" type="button">Plugin Preview</button>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="toolbar-group">
+      <div class="plugin-select-wrap">
+        <span class="select-icon">⬡</span>
+        <select class="plugin-select" disabled>
+          <option selected>Simple Visualizer</option>
+        </select>
+        <span class="select-arrow">▾</span>
+      </div>
+    </div>
+    <div class="toolbar-divider"></div>
+    <div class="toolbar-group">
+      <span style="color:var(--text-muted);font-size:11px">View:</span>
+      <div class="viz-toggle">
+        <button class="viz-toggle-btn active" type="button">Simple</button>
+      </div>
+    </div>
+    <div class="toolbar-divider"></div>
+    <div class="toolbar-group">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" placeholder="Search nodes…" id="search-input">
+      </div>
+      <button class="btn btn-ghost" type="button" id="btn-search">Search</button>
+    </div>
+    <div class="toolbar-divider"></div>
+    <div class="toolbar-group">
+      <div class="filter-wrap">
+        <span class="filter-icon">⚡</span>
+        <input type="text" class="filter-input" placeholder="age > 25" id="filter-input">
+      </div>
+      <button class="btn btn-ghost" type="button" id="btn-filter">Filter</button>
+      <button class="btn btn-ghost" type="button" id="btn-reset">↺ Reset</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="panel panel-tree" id="panel-tree">
+      <div class="panel-header">
+        <span class="panel-title">Tree View</span>
+      </div>
+      <div class="panel-body" id="tree-body"></div>
+    </div>
+
+    <div class="panel panel-main">
+      <div class="graph-stats">
+        <div class="stat-badge">
+          <span class="stat-dot"></span>
+          {len(payload["nodes"])} nodes
+        </div>
+        <div class="stat-badge">
+          <span class="stat-dot edge-dot"></span>
+          {len(payload["edges"])} edges
+        </div>
+        <div class="stat-badge" style="color:var(--accent-orange)">
+          {graph_kind}
+        </div>
+      </div>
+      <svg id="graph-canvas"></svg>
+      <div class="canvas-overlay hidden" id="canvas-overlay">
+        <div class="canvas-overlay-icon">gviz</div>
+        <div class="canvas-overlay-text">No graph loaded</div>
+      </div>
+      <div class="zoom-controls">
+        <button class="zoom-btn" id="zoom-in" title="Zoom in" type="button">+</button>
+        <button class="zoom-btn" id="zoom-fit" title="Fit to screen" type="button">⊡</button>
+        <button class="zoom-btn" id="zoom-out" title="Zoom out" type="button">−</button>
+      </div>
+    </div>
+
+    <div class="panel panel-right">
+      <div class="bird-view-container">
         <div class="panel-header">
-          <span class="panel-title">Tree View</span>
+          <span class="panel-title">Bird View</span>
         </div>
-        <div class="tree-body" id="tree-body"></div>
-      </aside>
-      <section class="panel">
-        <div class="hero">
-          <p class="eyebrow">gviz plugin</p>
-          <h1>Simple graph view</h1>
-          <p class="sub">A lightweight HTML renderer for quick graph inspection.</p>
+        <canvas id="bird-view-canvas"></canvas>
+      </div>
+      <div class="node-details-container">
+        <div class="panel-header">
+          <span class="panel-title">Node Details</span>
         </div>
-        <div class="stats">
-          <div class="stat">{len(payload["nodes"])} nodes</div>
-          <div class="stat">{len(payload["edges"])} edges</div>
-          <div class="stat">{graph_kind}</div>
-          <div class="stat">D3 force layout</div>
-          <div class="stat">drag enabled</div>
-          <div class="stat">hover details</div>
-          <div class="stat">selection sync</div>
+        <div class="node-details-body" id="node-details-body">
+          <div class="detail-empty">Hover or click a node</div>
         </div>
-        <div class="canvas-wrap">
-          <div class="canvas-toolbar">
-            <button class="zoom-btn" id="zoom-in" type="button">+</button>
-            <button class="zoom-btn" id="zoom-fit" type="button">⊡</button>
-            <button class="zoom-btn" id="zoom-out" type="button">−</button>
-          </div>
-          <svg id="graph" viewBox="0 0 960 720" preserveAspectRatio="xMidYMid meet"></svg>
-        </div>
-      </section>
-      <div class="right-stack">
-        <aside class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Bird View</span>
-          </div>
-          <div class="bird-wrap">
-            <canvas class="bird-canvas" id="bird-canvas"></canvas>
-          </div>
-        </aside>
-        <aside class="panel sidebar">
-          <h2>Node details</h2>
-          <p>Pan, zoom and drag nodes in the main view. Hover for quick details, click in any view to keep a node selected.</p>
-          <div class="detail-card" id="details">
-            <p class="detail-empty">No node selected.</p>
-          </div>
-          <div class="legend">
-            <div class="legend-row"><span class="legend-swatch" style="background: rgba(88, 166, 255, 0.18); border-color: #58a6ff;"></span> default node</div>
-            <div class="legend-row"><span class="legend-swatch" style="background: rgba(240, 136, 62, 0.18); border-color: #f0883e;"></span> selected node</div>
-          </div>
-        </aside>
       </div>
     </div>
   </div>
+
+  <div class="terminal-panel">
+    <div class="terminal-header">
+      <div class="terminal-title">
+        <span class="terminal-dot"></span>
+        Terminal
+      </div>
+    </div>
+    <div class="terminal-output" id="term-output"></div>
+    <div class="terminal-input-row">
+      <span class="term-prompt-label">gviz&gt;</span>
+      <input type="text" class="term-input" value="simple visualizer preview ready" readonly>
+    </div>
+  </div>
+</div>
   <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
   <script>
     const graph = {payload_json};
-    const svg = document.getElementById("graph");
+    const svg = document.getElementById("graph-canvas");
     const treeBody = document.getElementById("tree-body");
-    const birdCanvas = document.getElementById("bird-canvas");
-    const details = document.getElementById("details");
+    const birdCanvas = document.getElementById("bird-view-canvas");
+    const details = document.getElementById("node-details-body");
+    const termOutput = document.getElementById("term-output");
     const svgSelection = d3.select(svg);
     const width = 960;
     const height = 720;
@@ -516,20 +186,28 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
 
     function renderDetails(node) {{
       const attrs = Object.entries(node.attributes || {{}});
-      const attrsHtml = attrs.length
-        ? `<div class="attrs">${{attrs.map(([key, value]) => `
-            <div class="attr">
-              <div class="attr-key">${{escapeHtml(key)}}</div>
-              <div class="attr-value">${{escapeHtml(String(value))}}</div>
-            </div>
-          `).join("")}}</div>`
-        : '<p class="detail-empty">This node has no attributes.</p>';
-
-      details.innerHTML = `
-        <p class="detail-id">${{escapeHtml(node.label)}}</p>
-        <p class="detail-empty">Node id: ${{escapeHtml(node.id)}}</p>
-        ${{attrsHtml}}
+      let html = `
+        <div class="detail-node-id">
+          <span class="node-color-dot"></span>
+          <span class="node-id-text">${{escapeHtml(node.id)}}</span>
+        </div>
+        <div class="detail-divider"></div>
       `;
+
+      if (!attrs.length) {{
+        html += '<div class="detail-empty">This node has no attributes.</div>';
+      }}
+
+      attrs.forEach(([key, value]) => {{
+        html += `
+          <div class="detail-row">
+            <span class="detail-key">${{escapeHtml(key)}}</span>
+            <span class="detail-val">${{escapeHtml(String(value))}}</span>
+          </div>
+        `;
+      }});
+
+      details.innerHTML = html;
     }}
 
     function escapeHtml(value) {{
@@ -571,10 +249,19 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
       details.innerHTML = '<p class="detail-empty">No node selected.</p>';
     }}
 
+    function termPrint(text, cls) {{
+      const line = document.createElement("div");
+      line.className = `term-line ${{cls || ""}}`;
+      line.textContent = text;
+      termOutput.appendChild(line);
+      termOutput.scrollTop = termOutput.scrollHeight;
+    }}
+
     function selectNode(nodeId) {{
       activeNodeId = nodeId;
       applySelection();
       syncDetailsPanel();
+      termPrint(`select --node=${{nodeId}}`, "cmd");
     }}
 
     const zoom = d3.zoom()
@@ -626,19 +313,15 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
       .attr("class", "node")
       .attr("r", 18)
       .attr("fill", node => node.color)
-      .attr("stroke", node => node.color);
+      .attr("stroke", node => node.color)
+      .style("fill-opacity", 0.2);
 
     nodeSelection
       .append("text")
       .attr("class", "label")
-      .attr("y", 4)
-      .text(node => (node.label || node.id).slice(0, 14));
-
-    nodeSelection
-      .append("text")
-      .attr("class", "caption")
-      .attr("y", 30)
-      .text(node => node.id);
+      .attr("dy", 26)
+      .style("fill", "#8b949e")
+      .text(node => (node.label || node.id).split(" ")[0].slice(0, 14));
 
     const simulation = d3.forceSimulation(nodes)
       .force("link", d3.forceLink(links).id(node => node.id).distance(84).strength(0.45))
@@ -874,6 +557,24 @@ class SimpleVisualizerPlugin(VisualizerPlugin):
       fitGraph();
     }});
 
+    document.getElementById("btn-reset").addEventListener("click", () => {{
+      activeNodeId = null;
+      hoveredNodeId = null;
+      applySelection();
+      syncDetailsPanel();
+      termPrint("reset", "info");
+    }});
+
+    document.getElementById("btn-search").addEventListener("click", () => {{
+      termPrint(`search '${{document.getElementById("search-input").value.trim()}}'`, "cmd");
+    }});
+
+    document.getElementById("btn-filter").addEventListener("click", () => {{
+      termPrint(`filter '${{document.getElementById("filter-input").value.trim()}}'`, "cmd");
+    }});
+
+    termPrint("simple visualizer preview ready", "info");
+    termPrint("design shell matches the original UI", "muted");
     renderTree();
     setTimeout(fitGraph, 260);
   </script>
