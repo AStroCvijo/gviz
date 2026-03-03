@@ -84,15 +84,26 @@ function setupLoadDataModal() {
   const cancelBtn = $('#load-data-cancel');
   const confirmBtn = $('#load-data-confirm');
   const sourceSelect = $('#data-source-select');
+  const filePresetSelect = $('#data-file-preset');
   const fileInput = $('#data-file-path');
   const directedSelect = $('#data-directed');
 
-  if (!loadButton || !pluginSelect || !modal || !closeBtn || !cancelBtn || !confirmBtn || !sourceSelect || !fileInput || !directedSelect) {
+  if (!loadButton || !pluginSelect || !modal || !closeBtn || !cancelBtn || !confirmBtn || !sourceSelect || !filePresetSelect || !fileInput || !directedSelect) {
     return;
   }
 
   const closeModal = () => modal.classList.remove('open');
   const openModal = () => modal.classList.add('open');
+  const presetValues = new Set(
+    Array.from(filePresetSelect.options)
+      .map(option => option.value)
+      .filter(value => value && value !== '__custom__')
+  );
+
+  const syncPresetFromFile = () => {
+    const fileValue = fileInput.value.trim();
+    filePresetSelect.value = presetValues.has(fileValue) ? fileValue : '__custom__';
+  };
 
   loadButton.addEventListener('click', () => {
     if (!state.activePlugin) {
@@ -100,6 +111,7 @@ function setupLoadDataModal() {
       showToast('Select a plugin first', 'info');
       return;
     }
+    syncPresetFromFile();
     openModal();
   });
 
@@ -110,6 +122,16 @@ function setupLoadDataModal() {
       closeModal();
     }
   });
+
+  filePresetSelect.addEventListener('change', () => {
+    if (filePresetSelect.value === '__custom__') {
+      fileInput.focus();
+      return;
+    }
+    fileInput.value = filePresetSelect.value;
+  });
+
+  fileInput.addEventListener('input', syncPresetFromFile);
 
   confirmBtn.addEventListener('click', async () => {
     const source = sourceSelect.value.trim();
@@ -164,7 +186,7 @@ function setupPredefinedLoader() {
     const params = new URLSearchParams({
       plugin: 'simple-visualizer',
       source: 'json-data-source',
-      file: 'json_data_source/json_data_source/data/acyclic_org.json',
+      file: 'json_data_source/json_data_source/data/demo_mixed_small.json',
       directed: 'true',
     });
     window.location.href = `/?${params.toString()}`;

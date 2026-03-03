@@ -39,8 +39,8 @@
 
     <!-- Top-right actions -->
     <div class="topbar-actions">
-      <button class="btn btn-ghost" id="btn-load-predefined" data-tooltip="Load predefined test graph">
-        Predefined
+      <button class="btn btn-ghost" id="btn-load-predefined" data-tooltip="Load small mixed demo dataset">
+        Demo Dataset
       </button>
       <button class="btn btn-ghost" id="btn-load-data" data-tooltip="Load graph data for the selected plugin">
         <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
@@ -253,9 +253,19 @@
         </select>
       </div>
       <div class="form-group">
+        <label class="form-label">Dataset Preset</label>
+        <select class="form-input" id="data-file-preset">
+          <option value="json_data_source/json_data_source/data/demo_mixed_small.json">Demo Mixed Small</option>
+          <option value="json_data_source/json_data_source/data/acyclic_org.json">Acyclic Org</option>
+          <option value="json_data_source/json_data_source/data/social_network.json">Social Network</option>
+          <option value="__custom__">Custom Path</option>
+        </select>
+        <span class="form-hint">Choose a preset dataset or switch to Custom Path.</span>
+      </div>
+      <div class="form-group">
         <label class="form-label">File Path</label>
-        <input class="form-input" id="data-file-path" type="text" value="json_data_source/json_data_source/data/acyclic_org.json">
-        <span class="form-hint">Unesi putanju do fajla koji želiš da učitaš.</span>
+        <input class="form-input" id="data-file-path" type="text" value="json_data_source/json_data_source/data/demo_mixed_small.json">
+        <span class="form-hint">Preset selection fills this automatically, but you can still enter any path manually.</span>
       </div>
       <div class="form-group">
         <label class="form-label">Graph Type</label>

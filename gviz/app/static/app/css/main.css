@@ -596,6 +596,7 @@ input.filter-input { padding-left: 26px; }
   height: 130px;
   display: block;
   background: var(--bg-app);
+  cursor: pointer;
 }
 
 /* Node details */

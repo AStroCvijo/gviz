@@ -36,8 +36,12 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
   let selectedNodeId = null;
   let currentGraph = null;
   let simulation = null;
-  let birdIntervalId = null;
-  let birdTimeoutId = null;
+  let birdFramePending = false;
+  let currentZoomTransform = d3.zoomIdentity;
+  let currentSvg = null;
+  let currentZoom = null;
+  let mainViewportSize = { width: 960, height: 720 };
+  let birdProjection = null;
 
   const $ = (sel) => document.querySelector(sel);
   const $$ = (sel) => document.querySelectorAll(sel);
@@ -45,6 +49,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
   function render(graph) {
     currentGraph = graph;
     selectedNodeId = null;
+    currentZoomTransform = d3.zoomIdentity;
 
     renderMainView(graph);
     renderBirdView(graph);
@@ -60,14 +65,12 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       simulation.stop();
       simulation = null;
     }
-    if (birdIntervalId) {
-      clearInterval(birdIntervalId);
-      birdIntervalId = null;
-    }
-    if (birdTimeoutId) {
-      clearTimeout(birdTimeoutId);
-      birdTimeoutId = null;
-    }
+    birdFramePending = false;
+    currentZoomTransform = d3.zoomIdentity;
+    currentSvg = null;
+    currentZoom = null;
+    mainViewportSize = { width: 960, height: 720 };
+    birdProjection = null;
     d3.select('#graph-canvas').selectAll('*').remove();
     const treeBody = $('#tree-body');
     if (treeBody) {
@@ -95,6 +98,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     const el = document.getElementById('graph-canvas');
     const W = el.clientWidth || 960;
     const H = el.clientHeight || 720;
+    mainViewportSize = { width: W, height: H };
 
     const defs = svg.append('defs');
     const gridPattern = defs.append('pattern')
@@ -130,8 +134,14 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     const g = svg.append('g').attr('class', 'graph-container');
     const zoom = d3.zoom()
       .scaleExtent([0.2, 4])
-      .on('zoom', event => g.attr('transform', event.transform));
+      .on('zoom', event => {
+        currentZoomTransform = event.transform;
+        g.attr('transform', event.transform);
+        scheduleBirdViewRedraw(graph);
+      });
     svg.call(zoom);
+    currentSvg = svg;
+    currentZoom = zoom;
 
     const color = d => palette[graph.nodes.findIndex(n => n.id === d.id) % palette.length];
     const nodes = graph.nodes.map(n => ({ ...n }));
@@ -221,6 +231,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
         .attr('x2', d => d.target.x)
         .attr('y2', d => d.target.y);
       nodeSel.attr('transform', d => `translate(${d.x},${d.y})`);
+      scheduleBirdViewRedraw(graph);
     });
 
     $('#zoom-in').onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 1.4);
@@ -304,6 +315,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
 
     const node = graph.nodes.find(n => n.id === nodeId);
     if (node) showNodeDetails(node);
+    redrawBirdView(graph);
 
     if (typeof termPrint === 'function') {
       termPrint(`$ select --node=${nodeId}`, 'cmd');
@@ -332,6 +344,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     });
 
     clearDetails();
+    redrawBirdView(graph);
 
     if (typeof termPrint === 'function') {
       termPrint('$ select --clear', 'cmd');
@@ -340,28 +353,48 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
 
   function renderBirdView(graph) {
     const canvas = document.getElementById('bird-view-canvas');
+    if (canvas) {
+      canvas.onclick = event => focusMainViewFromBird(event);
+    }
+    redrawBirdView(graph);
+  }
+
+  function scheduleBirdViewRedraw(graph = currentGraph) {
+    if (birdFramePending) return;
+    birdFramePending = true;
+    requestAnimationFrame(() => {
+      birdFramePending = false;
+      redrawBirdView(graph);
+    });
+  }
+
+  function redrawBirdView(graph = currentGraph) {
+    if (!graph) return;
+    const canvas = document.getElementById('bird-view-canvas');
+    if (!canvas) return;
     const W = canvas.clientWidth || 240;
     const H = 130;
     const ctx = canvas.getContext('2d');
     canvas.width = W;
     canvas.height = H;
-
-    if (birdIntervalId) clearInterval(birdIntervalId);
-    if (birdTimeoutId) clearTimeout(birdTimeoutId);
-
-    birdTimeoutId = setTimeout(() => drawBirdViewSnapshot(graph, ctx, W, H), 1200);
-    birdIntervalId = setInterval(() => drawBirdViewSnapshot(graph, ctx, W, H), 2500);
+    drawBirdViewSnapshot(graph, ctx, W, H);
   }
 
   function drawBirdViewSnapshot(graph, ctx, W, H) {
     const nodes = d3.selectAll('.d3-node');
-    if (nodes.empty()) return;
+    if (nodes.empty()) {
+      birdProjection = null;
+      return;
+    }
 
     const positions = [];
     nodes.each(d => {
       if (d.x && d.y) positions.push({ id: d.id, x: d.x, y: d.y });
     });
-    if (!positions.length) return;
+    if (!positions.length) {
+      birdProjection = null;
+      return;
+    }
 
     const xs = positions.map(p => p.x);
     const ys = positions.map(p => p.y);
@@ -374,6 +407,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     const scale = Math.min(scaleX, scaleY) * 0.9;
     const offsetX = (W - (maxX - minX) * scale) / 2 - minX * scale;
     const offsetY = (H - (maxY - minY) * scale) / 2 - minY * scale;
+    birdProjection = { scale, offsetX, offsetY };
 
     ctx.clearRect(0, 0, W, H);
     ctx.fillStyle = '#0d1117';
@@ -419,8 +453,40 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     ctx.strokeStyle = '#58a6ff';
     ctx.lineWidth = 1;
     ctx.setLineDash([3, 3]);
-    ctx.strokeRect(W * 0.15, H * 0.2, W * 0.65, H * 0.6);
+
+    const viewport = {
+      x: (-currentZoomTransform.x) / currentZoomTransform.k,
+      y: (-currentZoomTransform.y) / currentZoomTransform.k,
+      width: mainViewportSize.width / currentZoomTransform.k,
+      height: mainViewportSize.height / currentZoomTransform.k,
+    };
+
+    const vx = viewport.x * scale + offsetX;
+    const vy = viewport.y * scale + offsetY;
+    const vw = viewport.width * scale;
+    const vh = viewport.height * scale;
+
+    ctx.strokeRect(vx, vy, vw, vh);
+    ctx.fillStyle = 'rgba(88, 166, 255, 0.08)';
+    ctx.fillRect(vx, vy, vw, vh);
     ctx.setLineDash([]);
+  }
+
+  function focusMainViewFromBird(event) {
+    if (!birdProjection || !currentSvg || !currentZoom) return;
+    const canvas = event.currentTarget;
+    const rect = canvas.getBoundingClientRect();
+    const clickX = ((event.clientX - rect.left) / rect.width) * canvas.width;
+    const clickY = ((event.clientY - rect.top) / rect.height) * canvas.height;
+    const graphX = (clickX - birdProjection.offsetX) / birdProjection.scale;
+    const graphY = (clickY - birdProjection.offsetY) / birdProjection.scale;
+    const nextTransform = d3.zoomIdentity
+      .translate(
+        mainViewportSize.width / 2 - graphX * currentZoomTransform.k,
+        mainViewportSize.height / 2 - graphY * currentZoomTransform.k
+      )
+      .scale(currentZoomTransform.k);
+    currentSvg.transition().duration(220).call(currentZoom.transform, nextTransform);
   }
 
   function renderTree(graph) {
@@ -444,35 +510,37 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
 
     const rootCandidates = graph.nodes.filter(node => (inDegree.get(node.id) || 0) === 0);
     const rootPool = rootCandidates.length ? rootCandidates : graph.nodes;
-    const root = rootPool.reduce((best, node) => {
-      if (!best) return node;
-      return (outDegree.get(node.id) || 0) > (outDegree.get(best.id) || 0) ? node : best;
-    }, null) || graph.nodes[0];
     const nodeById = new Map(graph.nodes.map(node => [node.id, node]));
+    const renderedNodes = new Set();
+
+    function buildReferenceRow(node, depth) {
+      const row = document.createElement('div');
+      row.className = 'tree-node-row';
+      row.dataset.nodeId = node.id;
+      row.style.paddingLeft = `${8 + depth * 16}px`;
+      row.innerHTML = `
+        <span class="tree-toggle leaf"></span>
+        <span class="tree-icon" style="color:var(--accent-orange)">↩</span>
+        <span class="tree-label" style="color:var(--text-muted);font-style:italic">${(node.attrs && node.attrs.name) || node.id} (ref)</span>
+      `;
+      row.addEventListener('click', () => {
+        if (selectedNodeId === node.id) {
+          clearSelection(graph);
+          return;
+        }
+        selectNode(node.id, graph, { scrollTree: false });
+      });
+      return row;
+    }
 
     function buildNodeEl(node, depth, visited) {
-      if (visited.has(node.id)) {
-        const row = document.createElement('div');
-        row.className = 'tree-node-row';
-        row.dataset.nodeId = node.id;
-        row.style.paddingLeft = `${8 + depth * 16}px`;
-        row.innerHTML = `
-          <span class="tree-toggle leaf"></span>
-          <span class="tree-icon" style="color:var(--accent-orange)">↩</span>
-          <span class="tree-label" style="color:var(--text-muted);font-style:italic">${(node.attrs && node.attrs.name) || node.id} (ref)</span>
-        `;
-        row.addEventListener('click', () => {
-          if (selectedNodeId === node.id) {
-            clearSelection(graph);
-            return;
-          }
-          selectNode(node.id, graph, { scrollTree: false });
-        });
-        return row;
+      if (visited.has(node.id) || renderedNodes.has(node.id)) {
+        return buildReferenceRow(node, depth);
       }
 
       const nextVisited = new Set(visited);
       nextVisited.add(node.id);
+      renderedNodes.add(node.id);
       const children = edgesFrom(node.id);
       const hasChildren = children.length > 0;
       const label = (node.attrs && node.attrs.name) || node.id;
@@ -540,7 +608,20 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       return wrap;
     }
 
-    container.appendChild(buildNodeEl(root, 0, new Set()));
+    rootPool
+      .slice()
+      .sort((a, b) => ((outDegree.get(b.id) || 0) - (outDegree.get(a.id) || 0)))
+      .forEach(rootNode => {
+        if (!renderedNodes.has(rootNode.id)) {
+          container.appendChild(buildNodeEl(rootNode, 0, new Set()));
+        }
+      });
+
+    graph.nodes.forEach(node => {
+      if (!renderedNodes.has(node.id)) {
+        container.appendChild(buildNodeEl(node, 0, new Set()));
+      }
+    });
   }
 
   function showNodeDetails(node) {
