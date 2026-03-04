@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, Optional, Set
 
 from api.exceptions import ParseError
 from api.models import AttributeValue
@@ -15,6 +15,7 @@ class XMLParser:
     def __init__(self, directed: bool = True) -> None:
         self._directed = directed
         self._graph: ConcreteGraph = ConcreteGraph(directed=directed)
+        self._known_ids: Set[str] = set()
         self._edge_counter: int = 0
 
     def parse_file(self, file_path: str, directed: bool = True) -> ConcreteGraph:
@@ -42,25 +43,39 @@ class XMLParser:
     def _build_graph(self, root: ET.Element, directed: bool) -> ConcreteGraph:
         self._directed = directed
         self._graph = ConcreteGraph(directed=directed)
+        self._known_ids = set()
         self._edge_counter = 0
 
+        self._collect_ids(root)
         self._process_element(root, parent_id=None)
 
         return self._graph
 
+    def _collect_ids(self, element: ET.Element) -> None:
+        elem_id = element.get("id")
+        if elem_id is not None:
+            self._known_ids.add(elem_id)
+        for child in element:
+            self._collect_ids(child)
+
     def _process_element(self, element: ET.Element, parent_id: Optional[str]) -> str:
         node_id = element.get("id") or str(uuid.uuid4())
 
-        # Build node attributes
+        ref_target = element.get("ref")
+        if ref_target and ref_target in self._known_ids:
+            if parent_id is not None:
+                label = element.get("label") or element.tag or "ref"
+                self._add_edge(parent_id, ref_target, label=label)
+            return ref_target
+
         attributes: Dict[str, AttributeValue] = {}
         attributes["tag"] = element.tag
 
         for attr_name, attr_value in element.attrib.items():
-            if attr_name == "id":
+            if attr_name in ("id", "ref"):
                 continue
             attributes[attr_name] = attr_value
 
-        # Text content
         text = (element.text or "").strip()
         if text and not len(element):
             attributes["text"] = text
@@ -69,7 +84,7 @@ class XMLParser:
         self._graph.add_or_update_node(node)
 
         if parent_id is not None:
-            label = element.tag or "child"
+            label = element.get("label") or element.tag or "child"
             self._add_edge(parent_id, node_id, label=label)
 
         for child in element:
