@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import re
 import uuid
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from typing import Dict, Optional, Set
+from datetime import date
+from typing import Any, Dict, Optional, Set
 
 from api.exceptions import ParseError
 from api.models import AttributeValue
@@ -74,11 +76,15 @@ class XMLParser:
         for attr_name, attr_value in element.attrib.items():
             if attr_name in ("id", "ref"):
                 continue
-            attributes[attr_name] = attr_value
+            typed = _infer_type(attr_value)
+            if typed is not None:
+                attributes[attr_name] = typed
 
         text = (element.text or "").strip()
         if text and not len(element):
-            attributes["text"] = text
+            typed = _infer_type(text)
+            if typed is not None:
+                attributes["text"] = typed
 
         node = ConcreteNode(node_id=node_id, attributes=attributes)
         self._graph.add_or_update_node(node)
@@ -106,3 +112,27 @@ class XMLParser:
             self._graph.add_edge_loose(edge)
         except ValueError:
             pass
+
+
+_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def _infer_type(value: Any) -> Optional[AttributeValue]:
+    if value is None:
+        return None
+    if isinstance(value, str):
+        try:
+            return int(value)
+        except ValueError:
+            pass
+        try:
+            return float(value)
+        except ValueError:
+            pass
+        if _DATE_RE.match(value):
+            try:
+                return date.fromisoformat(value)
+            except ValueError:
+                pass
+        return value
+    return str(value)
