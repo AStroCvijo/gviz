@@ -15,21 +15,33 @@ class XMLDataSourcePlugin(DataSourcePlugin):
         return "xml-data-source"
 
     def get_description(self) -> str:
-        return "Parses an XML file and constructs a graph from its element hierarchy."
+        return (
+            "Parses an arbitrary XML file and constructs a graph.  "
+            "Each XML element becomes a node with its attributes and text content.  "
+            "Supports cyclic structures via ref semantics: any element with a "
+            "ref attribute pointing to the id of another element is resolved "
+            "as a directed edge rather than a new node."
+        )
 
     def get_parameters(self) -> List[PluginParameter]:
         return [
             PluginParameter(
                 name="file_path",
                 label="XML file path",
-                description="Absolute or relative path to the XML file.",
+                description=(
+                    "Absolute or relative path to the XML file.  "
+                    "The file must be UTF-8 encoded and contain valid XML."
+                ),
                 required=True,
                 param_type=str,
             ),
             PluginParameter(
                 name="directed",
                 label="Directed graph",
-                description="Set to 'true' for directed (default), 'false' for undirected.",
+                description=(
+                    "Set to 'true' to treat the graph as directed (default), "
+                    "or 'false' for an undirected graph."
+                ),
                 required=False,
                 default="true",
                 param_type=str,
