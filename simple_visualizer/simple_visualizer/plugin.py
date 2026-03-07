@@ -354,7 +354,16 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
   function renderBirdView(graph) {
     const canvas = document.getElementById('bird-view-canvas');
     if (canvas) {
-      canvas.onclick = event => focusMainViewFromBird(event);
+      let birdDragging = false;
+      canvas.addEventListener('mousedown', event => {
+        birdDragging = true;
+        focusMainViewFromBird(event);
+      });
+      canvas.addEventListener('mousemove', event => {
+        if (birdDragging) focusMainViewFromBird(event);
+      });
+      canvas.addEventListener('mouseup', () => { birdDragging = false; });
+      canvas.addEventListener('mouseleave', () => { birdDragging = false; });
     }
     redrawBirdView(graph);
   }
