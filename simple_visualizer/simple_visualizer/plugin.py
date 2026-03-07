@@ -622,6 +622,46 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
         container.appendChild(buildNodeEl(node, 0, new Set()));
       }
     });
+
+    const collapseBtn = $('#btn-collapse-all');
+    if (collapseBtn) {
+      collapseBtn.onclick = () => {
+        container.querySelectorAll('.tree-children.open').forEach(ch => {
+          ch.classList.remove('open');
+          const toggle = ch.previousElementSibling
+            ? ch.previousElementSibling.querySelector('[data-toggle]')
+            : null;
+          if (toggle) {
+            toggle.textContent = '\u25b6';
+            toggle.classList.remove('expanded');
+          }
+        });
+      };
+    }
+
+    const expandBtn = $('#btn-expand-all');
+    if (expandBtn) {
+      expandBtn.onclick = () => {
+        container.querySelectorAll('.tree-children').forEach(ch => {
+          const row = ch.previousElementSibling;
+          if (row && row.querySelector('[data-toggle]')) {
+            if (!ch.classList.contains('open')) {
+              row.click();
+            }
+          }
+        });
+        container.querySelectorAll('.tree-children').forEach(ch => {
+          ch.classList.add('open');
+          const toggle = ch.previousElementSibling
+            ? ch.previousElementSibling.querySelector('[data-toggle]')
+            : null;
+          if (toggle && toggle.textContent.trim()) {
+            toggle.textContent = '\u25bc';
+            toggle.classList.add('expanded');
+          }
+        });
+      };
+    }
   }
 
   function showNodeDetails(node) {
