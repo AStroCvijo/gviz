@@ -127,7 +127,7 @@
                 <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 2.5a.5.5 0 0 1-1 0V6.707L5.354 8.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 6.707V10.5z"/>
               </svg>
             </button>
-            <button class="btn btn-icon" data-tooltip="Expand all">
+            <button class="btn btn-icon" id="btn-expand-all" data-tooltip="Expand all">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5-3.5a.5.5 0 0 1 1 0V9.293l1.646-1.647a.5.5 0 0 1 .708.708l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5a.5.5 0 1 1 .708-.708L7.5 9.293V4.5z"/>
               </svg>
@@ -250,14 +250,18 @@
         <label class="form-label">Data Source Plugin</label>
         <select class="form-input" id="data-source-select">
           <option value="json-data-source">JSON Data Source</option>
+          <option value="xml-data-source">XML Data Source</option>
         </select>
       </div>
       <div class="form-group">
         <label class="form-label">Dataset Preset</label>
         <select class="form-input" id="data-file-preset">
-          <option value="json_data_source/json_data_source/data/demo_mixed_small.json">Demo Mixed Small</option>
-          <option value="json_data_source/json_data_source/data/acyclic_org.json">Acyclic Org</option>
-          <option value="json_data_source/json_data_source/data/social_network.json">Social Network</option>
+          <option value="json_data_source/json_data_source/data/demo_mixed_small.json">Demo Mixed Small (JSON)</option>
+          <option value="json_data_source/json_data_source/data/acyclic_org.json">Acyclic Org (JSON)</option>
+          <option value="json_data_source/json_data_source/data/social_network.json">Social Network (JSON)</option>
+          <option value="xml_data_source/xml_data_source/data/demo_small.xml">Demo Small (XML)</option>
+          <option value="xml_data_source/xml_data_source/data/acyclic_org.xml">Acyclic Org (XML)</option>
+          <option value="xml_data_source/xml_data_source/data/cyclic_network.xml">Cyclic Network (XML)</option>
           <option value="__custom__">Custom Path</option>
         </select>
         <span class="form-hint">Choose a preset dataset or switch to Custom Path.</span>

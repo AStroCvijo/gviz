@@ -1,0 +1,698 @@
+<organization id="org-root" name="TechCorp Global" founded="2005-03-15">
+  <department id="dept-eng" name="Engineering">
+    <team id="dept-eng-team-1" name="Engineering Team A" location="Paris">
+      <employee id="emp-1" name="Tina Garcia" title="Manager" age="37" salary="62464" hire_date="2012-05-24">
+        <mentor ref="emp-42" label="mentor"/>
+      </employee>
+      <employee id="emp-2" name="Mia Martin" title="Director" age="27" salary="126778" hire_date="2025-04-14">
+        <mentor ref="emp-9" label="mentor"/>
+        <collaborator ref="emp-152" label="collaborator"/>
+      </employee>
+      <employee id="emp-3" name="Xander Clark" title="Consultant" age="35" salary="148889" hire_date="2021-07-28">
+        <mentor ref="emp-133" label="mentor"/>
+        <collaborator ref="emp-83" label="collaborator"/>
+      </employee>
+      <employee id="emp-4" name="Vic Miller" title="Lead" age="51" salary="131581" hire_date="2015-10-11">
+        <mentor ref="emp-130" label="mentor"/>
+      </employee>
+      <employee id="emp-5" name="Carol Martin" title="Senior Engineer" age="52" salary="86468" hire_date="2022-01-09">
+        <mentor ref="emp-120" label="mentor"/>
+        <collaborator ref="emp-13" label="collaborator"/>
+      </employee>
+    </team>
+    <team id="dept-eng-team-2" name="Engineering Team B" location="New York">
+      <employee id="emp-6" name="Grace Taylor" title="Director" age="27" salary="105566" hire_date="2016-10-15">
+        <mentor ref="emp-122" label="mentor"/>
+        <collaborator ref="emp-75" label="collaborator"/>
+      </employee>
+      <employee id="emp-7" name="Bob Taylor" title="Lead" age="35" salary="138735" hire_date="2015-12-26">
+        <mentor ref="emp-164" label="mentor"/>
+      </employee>
+      <employee id="emp-8" name="Olivia Clark" title="Lead" age="54" salary="131546" hire_date="2015-01-04">
+        <mentor ref="emp-11" label="mentor"/>
+        <collaborator ref="emp-71" label="collaborator"/>
+      </employee>
+      <employee id="emp-9" name="Alice Garcia" title="Architect" age="48" salary="55637" hire_date="2023-11-03">
+        <mentor ref="emp-148" label="mentor"/>
+      </employee>
+      <employee id="emp-10" name="Eve Martinez" title="Consultant" age="22" salary="94946" hire_date="2020-03-17">
+        <mentor ref="emp-150" label="mentor"/>
+      </employee>
+      <employee id="emp-11" name="Mia Miller" title="Engineer" age="62" salary="72713" hire_date="2024-05-18">
+        <mentor ref="emp-103" label="mentor"/>
+        <collaborator ref="emp-156" label="collaborator"/>
+      </employee>
+      <employee id="emp-12" name="Mia Jones" title="Specialist" age="52" salary="52316" hire_date="2014-12-28">
+        <mentor ref="emp-24" label="mentor"/>
+      </employee>
+    </team>
+    <team id="dept-eng-team-3" name="Engineering Team C" location="Berlin">
+      <employee id="emp-13" name="Nate Brown" title="Senior Engineer" age="29" salary="63830" hire_date="2019-03-06">
+        <mentor ref="emp-41" label="mentor"/>
+        <collaborator ref="emp-186" label="collaborator"/>
+      </employee>
+      <employee id="emp-14" name="Nate Jones" title="Manager" age="57" salary="86825" hire_date="2025-04-28">
+        <mentor ref="emp-123" label="mentor"/>
+      </employee>
+      <employee id="emp-15" name="Ivy Brown" title="Specialist" age="33" salary="133909" hire_date="2012-09-10">
+        <mentor ref="emp-123" label="mentor"/>
+      </employee>
+      <employee id="emp-16" name="Alice Moore" title="Engineer" age="43" salary="73353" hire_date="2022-07-11">
+        <mentor ref="emp-117" label="mentor"/>
+      </employee>
+      <employee id="emp-17" name="Zane Thomas" title="Coordinator" age="48" salary="93624" hire_date="2012-03-02">
+        <mentor ref="emp-155" label="mentor"/>
+      </employee>
+      <employee id="emp-18" name="Leo Thomas" title="Architect" age="36" salary="85818" hire_date="2017-11-24">
+        <mentor ref="emp-161" label="mentor"/>
+      </employee>
+      <employee id="emp-19" name="Jack Brown" title="Specialist" age="35" salary="145138" hire_date="2017-07-10">
+        <mentor ref="emp-15" label="mentor"/>
+      </employee>
+      <employee id="emp-20" name="Olivia Williams" title="Architect" age="48" salary="78582" hire_date="2012-09-10">
+        <mentor ref="emp-41" label="mentor"/>
+      </employee>
+    </team>
+    <team id="dept-eng-team-4" name="Engineering Team D" location="Toronto">
+      <employee id="emp-21" name="Rita Jones" title="Analyst" age="49" salary="83126" hire_date="2023-11-27">
+        <mentor ref="emp-59" label="mentor"/>
+        <collaborator ref="emp-187" label="collaborator"/>
+      </employee>
+      <employee id="emp-22" name="Tina Garcia" title="Analyst" age="46" salary="133898" hire_date="2024-04-13">
+        <mentor ref="emp-36" label="mentor"/>
+      </employee>
+      <employee id="emp-23" name="Karen Miller" title="Specialist" age="22" salary="132433" hire_date="2021-12-10">
+        <mentor ref="emp-6" label="mentor"/>
+        <collaborator ref="emp-91" label="collaborator"/>
+      </employee>
+      <employee id="emp-24" name="Grace Garcia" title="Analyst" age="48" salary="142388" hire_date="2017-07-28">
+        <mentor ref="emp-122" label="mentor"/>
+      </employee>
+      <employee id="emp-25" name="Leo Thomas" title="Engineer" age="29" salary="110753" hire_date="2016-01-17">
+        <mentor ref="emp-99" label="mentor"/>
+      </employee>
+      <employee id="emp-26" name="Jack Garcia" title="Director" age="50" salary="71908" hire_date="2018-12-28">
+        <mentor ref="emp-81" label="mentor"/>
+        <collaborator ref="emp-130" label="collaborator"/>
+      </employee>
+      <employee id="emp-27" name="Xander Jackson" title="Architect" age="57" salary="114603" hire_date="2019-04-24">
+        <mentor ref="emp-165" label="mentor"/>
+      </employee>
+    </team>
+  </department>
+  <department id="dept-sales" name="Sales">
+    <team id="dept-sales-team-1" name="Sales Team A" location="London">
+      <employee id="emp-28" name="Carol Moore" title="Engineer" age="25" salary="99627" hire_date="2019-06-18">
+        <mentor ref="emp-14" label="mentor"/>
+      </employee>
+      <employee id="emp-29" name="Uma Moore" title="Consultant" age="40" salary="70428" hire_date="2013-07-13">
+        <mentor ref="emp-60" label="mentor"/>
+      </employee>
+      <employee id="emp-30" name="Zane Garcia" title="Analyst" age="51" salary="88130" hire_date="2014-03-15">
+        <mentor ref="emp-34" label="mentor"/>
+      </employee>
+      <employee id="emp-31" name="Wendy Thomas" title="Coordinator" age="57" salary="138722" hire_date="2015-06-09">
+        <mentor ref="emp-1" label="mentor"/>
+      </employee>
+      <employee id="emp-32" name="Grace Rodriguez" title="Architect" age="58" salary="136717" hire_date="2022-03-27">
+        <mentor ref="emp-35" label="mentor"/>
+      </employee>
+      <employee id="emp-33" name="Paul Moore" title="Architect" age="32" salary="54797" hire_date="2017-08-17">
+        <mentor ref="emp-3" label="mentor"/>
+      </employee>
+    </team>
+    <team id="dept-sales-team-2" name="Sales Team B" location="New York">
+      <employee id="emp-34" name="Karen Harris" title="Senior Engineer" age="43" salary="130876" hire_date="2010-10-22">
+        <mentor ref="emp-113" label="mentor"/>
+      </employee>
+      <employee id="emp-35" name="Rita Rodriguez" title="Engineer" age="59" salary="86823" hire_date="2023-05-06">
+        <mentor ref="emp-99" label="mentor"/>
+      </employee>
+      <employee id="emp-36" name="Eve Moore" title="Engineer" age="47" salary="49737" hire_date="2011-06-17">
+        <mentor ref="emp-97" label="mentor"/>
+      </employee>
+      <employee id="emp-37" name="Hank Thompson" title="Analyst" age="32" salary="102551" hire_date="2011-12-25">
+        <mentor ref="emp-186" label="mentor"/>
+        <collaborator ref="emp-149" label="collaborator"/>
+      </employee>
+    </team>
+    <team id="dept-sales-team-3" name="Sales Team C" location="Paris">
+      <employee id="emp-38" name="Zane Miller" title="Senior Engineer" age="53" salary="67523" hire_date="2018-05-22">
+        <mentor ref="emp-183" label="mentor"/>
+        <collaborator ref="emp-37" label="collaborator"/>
+      </employee>
+      <employee id="emp-39" name="Leo Williams" title="Director" age="34" salary="146658" hire_date="2015-12-12">
+        <mentor ref="emp-28" label="mentor"/>
+      </employee>
+      <employee id="emp-40" name="Uma Thompson" title="Senior Engineer" age="29" salary="139994" hire_date="2014-03-05">
+        <mentor ref="emp-141" label="mentor"/>
+      </employee>
+      <employee id="emp-41" name="Rita Williams" title="Engineer" age="54" salary="129752" hire_date="2022-03-12">
+        <mentor ref="emp-10" label="mentor"/>
+      </employee>
+      <employee id="emp-42" name="Zane Davis" title="Consultant" age="60" salary="144687" hire_date="2015-06-25">
+        <mentor ref="emp-76" label="mentor"/>
+      </employee>
+    </team>
+  </department>
+  <department id="dept-hr" name="Human Resources">
+    <team id="dept-hr-team-1" name="Human Resources Team A" location="Toronto">
+      <employee id="emp-43" name="Grace Martinez" title="Lead" age="29" salary="64210" hire_date="2025-11-17">
+        <mentor ref="emp-38" label="mentor"/>
+      </employee>
+      <employee id="emp-44" name="Xander Smith" title="Manager" age="46" salary="134407" hire_date="2013-04-19">
+        <mentor ref="emp-64" label="mentor"/>
+      </employee>
+      <employee id="emp-45" name="Olivia Clark" title="Senior Engineer" age="32" salary="66819" hire_date="2024-06-09">
+        <mentor ref="emp-75" label="mentor"/>
+        <collaborator ref="emp-22" label="collaborator"/>
+      </employee>
+      <employee id="emp-46" name="Karen Moore" title="Engineer" age="59" salary="96973" hire_date="2010-05-06">
+        <mentor ref="emp-159" label="mentor"/>
+      </employee>
+      <employee id="emp-47" name="Eve Smith" title="Analyst" age="57" salary="83762" hire_date="2019-02-16">
+        <mentor ref="emp-135" label="mentor"/>
+        <collaborator ref="emp-131" label="collaborator"/>
+      </employee>
+      <employee id="emp-48" name="Nate Williams" title="Engineer" age="44" salary="66489" hire_date="2020-06-22">
+        <mentor ref="emp-26" label="mentor"/>
+      </employee>
+      <employee id="emp-49" name="Karen Johnson" title="Coordinator" age="39" salary="124989" hire_date="2017-09-05">
+        <mentor ref="emp-120" label="mentor"/>
+        <collaborator ref="emp-35" label="collaborator"/>
+      </employee>
+    </team>
+    <team id="dept-hr-team-2" name="Human Resources Team B" location="New York">
+      <employee id="emp-50" name="Xander Thomas" title="Coordinator" age="54" salary="138796" hire_date="2017-03-17">
+        <mentor ref="emp-94" label="mentor"/>
+      </employee>
+      <employee id="emp-51" name="Nate Johnson" title="Manager" age="37" salary="129909" hire_date="2018-03-27">
+        <mentor ref="emp-85" label="mentor"/>
+      </employee>
+      <employee id="emp-52" name="Sam Brown" title="Coordinator" age="22" salary="119129" hire_date="2010-04-05">
+        <mentor ref="emp-68" label="mentor"/>
+      </employee>
+      <employee id="emp-53" name="Frank Martinez" title="Engineer" age="38" salary="69017" hire_date="2023-03-01">
+        <mentor ref="emp-112" label="mentor"/>
+        <collaborator ref="emp-153" label="collaborator"/>
+      </employee>
+      <employee id="emp-54" name="Uma Johnson" title="Director" age="47" salary="103490" hire_date="2012-03-19">
+        <mentor ref="emp-127" label="mentor"/>
+      </employee>
+      <employee id="emp-55" name="Hank Anderson" title="Coordinator" age="30" salary="107674" hire_date="2012-06-17">
+        <mentor ref="emp-90" label="mentor"/>
+      </employee>
+    </team>
+    <team id="dept-hr-team-3" name="Human Resources Team C" location="Berlin">
+      <employee id="emp-56" name="Xander Moore" title="Architect" age="35" salary="138777" hire_date="2013-07-20">
+        <mentor ref="emp-140" label="mentor"/>
+      </employee>
+      <employee id="emp-57" name="Grace Garcia" title="Lead" age="52" salary="141751" hire_date="2017-03-27">
+        <mentor ref="emp-126" label="mentor"/>
+      </employee>
+      <employee id="emp-58" name="Vic Rodriguez" title="Lead" age="55" salary="133113" hire_date="2012-04-08">
+        <mentor ref="emp-32" label="mentor"/>
+      </employee>
+      <employee id="emp-59" name="Quinn Davis" title="Coordinator" age="47" salary="113730" hire_date="2012-04-09">
+        <mentor ref="emp-42" label="mentor"/>
+      </employee>
+      <employee id="emp-60" name="Karen Moore" title="Specialist" age="53" salary="69784" hire_date="2013-11-01">
+        <mentor ref="emp-18" label="mentor"/>
+      </employee>
+    </team>
+  </department>
+  <department id="dept-mkt" name="Marketing">
+    <team id="dept-mkt-team-1" name="Marketing Team A" location="Paris">
+      <employee id="emp-61" name="Karen Miller" title="Engineer" age="40" salary="69263" hire_date="2018-11-09">
+        <mentor ref="emp-90" label="mentor"/>
+      </employee>
+      <employee id="emp-62" name="Alice Moore" title="Director" age="40" salary="70721" hire_date="2021-02-06">
+        <mentor ref="emp-136" label="mentor"/>
+        <collaborator ref="emp-153" label="collaborator"/>
+      </employee>
+      <employee id="emp-63" name="Leo Thomas" title="Lead" age="41" salary="114580" hire_date="2018-04-15">
+        <mentor ref="emp-165" label="mentor"/>
+      </employee>
+      <employee id="emp-64" name="Bob Smith" title="Specialist" age="36" salary="63499" hire_date="2012-07-01">
+        <mentor ref="emp-100" label="mentor"/>
+      </employee>
+    </team>
+    <team id="dept-mkt-team-2" name="Marketing Team B" location="Toronto">
+      <employee id="emp-65" name="Mia Davis" title="Director" age="31" salary="147209" hire_date="2012-01-01">
+        <mentor ref="emp-46" label="mentor"/>
+        <collaborator ref="emp-157" label="collaborator"/>
+      </employee>
+      <employee id="emp-66" name="Frank Miller" title="Manager" age="43" salary="126360" hire_date="2018-02-21">
+        <mentor ref="emp-88" label="mentor"/>
+      </employee>
+      <employee id="emp-67" name="Alice Jackson" title="Senior Engineer" age="49" salary="55612" hire_date="2021-08-14">
+        <mentor ref="emp-116" label="mentor"/>
+      </employee>
+      <employee id="emp-68" name="Rita Thomas" title="Director" age="38" salary="87871" hire_date="2021-02-09">
+        <mentor ref="emp-1" label="mentor"/>
+      </employee>
+      <employee id="emp-69" name="Quinn Davis" title="Senior Engineer" age="24" salary="73797" hire_date="2018-06-20">
+        <mentor ref="emp-13" label="mentor"/>
+      </employee>
+      <employee id="emp-70" name="David Rodriguez" title="Analyst" age="61" salary="126902" hire_date="2017-04-15">
+        <mentor ref="emp-65" label="mentor"/>
+      </employee>
+    </team>
+    <team id="dept-mkt-team-3" name="Marketing Team C" location="Singapore">
+      <employee id="emp-71" name="Alice Clark" title="Analyst" age="26" salary="146805" hire_date="2022-02-24">
+        <mentor ref="emp-78" label="mentor"/>
+      </employee>
+      <employee id="emp-72" name="Alice Martinez" title="Architect" age="50" salary="100812" hire_date="2020-09-08">
+        <mentor ref="emp-24" label="mentor"/>
+      </employee>
+      <employee id="emp-73" name="Tina Thompson" title="Senior Engineer" age="40" salary="97215" hire_date="2016-02-19">
+        <mentor ref="emp-150" label="mentor"/>
+        <collaborator ref="emp-85" label="collaborator"/>
+      </employee>
+      <employee id="emp-74" name="Ivy White" title="Architect" age="43" salary="123034" hire_date="2012-12-01">
+        <mentor ref="emp-148" label="mentor"/>
+      </employee>
+      <employee id="emp-75" name="Bob Moore" title="Senior Engineer" age="62" salary="62000" hire_date="2023-04-14">
+        <mentor ref="emp-50" label="mentor"/>
+        <collaborator ref="emp-185" label="collaborator"/>
+      </employee>
+      <employee id="emp-76" name="Vic Moore" title="Consultant" age="23" salary="47567" hire_date="2013-06-07">
+        <mentor ref="emp-112" label="mentor"/>
+      </employee>
+      <employee id="emp-77" name="Grace Brown" title="Engineer" age="49" salary="82602" hire_date="2015-03-27">
+        <mentor ref="emp-54" label="mentor"/>
+        <collaborator ref="emp-12" label="collaborator"/>
+      </employee>
+      <employee id="emp-78" name="Yara Martinez" title="Lead" age="48" salary="58721" hire_date="2019-03-25">
+        <mentor ref="emp-187" label="mentor"/>
+      </employee>
+    </team>
+  </department>
+  <department id="dept-fin" name="Finance">
+    <team id="dept-fin-team-1" name="Finance Team A" location="Paris">
+      <employee id="emp-79" name="Carol Rodriguez" title="Director" age="41" salary="77793" hire_date="2015-05-24">
+        <mentor ref="emp-85" label="mentor"/>
+        <collaborator ref="emp-113" label="collaborator"/>
+      </employee>
+      <employee id="emp-80" name="David Johnson" title="Consultant" age="26" salary="77874" hire_date="2025-07-05">
+        <mentor ref="emp-116" label="mentor"/>
+        <collaborator ref="emp-96" label="collaborator"/>
+      </employee>
+      <employee id="emp-81" name="Jack Clark" title="Architect" age="35" salary="145875" hire_date="2019-08-09">
+        <mentor ref="emp-50" label="mentor"/>
+      </employee>
+      <employee id="emp-82" name="Quinn Rodriguez" title="Lead" age="51" salary="82123" hire_date="2014-04-11">
+        <mentor ref="emp-109" label="mentor"/>
+        <collaborator ref="emp-151" label="collaborator"/>
+      </employee>
+    </team>
+    <team id="dept-fin-team-2" name="Finance Team B" location="Berlin">
+      <employee id="emp-83" name="Hank Clark" title="Specialist" age="60" salary="112639" hire_date="2012-04-18">
+        <mentor ref="emp-71" label="mentor"/>
+      </employee>
+      <employee id="emp-84" name="Nate Jones" title="Consultant" age="22" salary="89270" hire_date="2022-10-26">
+        <mentor ref="emp-60" label="mentor"/>
+      </employee>
+      <employee id="emp-85" name="Carol Smith" title="Coordinator" age="27" salary="100804" hire_date="2024-02-03">
+        <mentor ref="emp-28" label="mentor"/>
+      </employee>
+      <employee id="emp-86" name="Alice Miller" title="Senior Engineer" age="37" salary="84153" hire_date="2016-02-05">
+        <mentor ref="emp-14" label="mentor"/>
+        <collaborator ref="emp-23" label="collaborator"/>
+      </employee>
+      <employee id="emp-87" name="Xander Rodriguez" title="Analyst" age="33" salary="117741" hire_date="2016-02-20">
+        <mentor ref="emp-20" label="mentor"/>
+      </employee>
+      <employee id="emp-88" name="David Anderson" title="Engineer" age="35" salary="84029" hire_date="2022-06-17">
+        <mentor ref="emp-157" label="mentor"/>
+        <collaborator ref="emp-172" label="collaborator"/>
+      </employee>
+      <employee id="emp-89" name="Bob White" title="Analyst" age="52" salary="116075" hire_date="2021-04-12">
+        <mentor ref="emp-103" label="mentor"/>
+        <collaborator ref="emp-141" label="collaborator"/>
+      </employee>
+      <employee id="emp-90" name="Eve Johnson" title="Specialist" age="57" salary="133242" hire_date="2017-04-26">
+        <mentor ref="emp-146" label="mentor"/>
+      </employee>
+    </team>
+    <team id="dept-fin-team-3" name="Finance Team C" location="Paris">
+      <employee id="emp-91" name="Frank Clark" title="Specialist" age="57" salary="68153" hire_date="2019-01-01">
+        <mentor ref="emp-154" label="mentor"/>
+      </employee>
+      <employee id="emp-92" name="Tina Moore" title="Specialist" age="31" salary="61818" hire_date="2023-01-03">
+        <mentor ref="emp-64" label="mentor"/>
+      </employee>
+      <employee id="emp-93" name="Rita Anderson" title="Director" age="40" salary="92569" hire_date="2015-09-11">
+        <mentor ref="emp-150" label="mentor"/>
+      </employee>
+      <employee id="emp-94" name="Wendy Brown" title="Director" age="40" salary="49315" hire_date="2020-07-07">
+        <mentor ref="emp-66" label="mentor"/>
+      </employee>
+      <employee id="emp-95" name="Uma Garcia" title="Engineer" age="33" salary="127408" hire_date="2012-08-13">
+        <mentor ref="emp-116" label="mentor"/>
+      </employee>
+      <employee id="emp-96" name="Nate Thompson" title="Director" age="46" salary="93840" hire_date="2022-05-04">
+        <mentor ref="emp-118" label="mentor"/>
+      </employee>
+      <employee id="emp-97" name="Grace Taylor" title="Lead" age="26" salary="79305" hire_date="2013-01-12">
+        <mentor ref="emp-67" label="mentor"/>
+      </employee>
+    </team>
+    <team id="dept-fin-team-4" name="Finance Team D" location="Paris">
+      <employee id="emp-98" name="Sam Davis" title="Consultant" age="29" salary="124221" hire_date="2019-05-14">
+        <mentor ref="emp-156" label="mentor"/>
+      </employee>
+      <employee id="emp-99" name="Eve Jones" title="Lead" age="40" salary="136951" hire_date="2010-09-17">
+        <mentor ref="emp-57" label="mentor"/>
+      </employee>
+      <employee id="emp-100" name="Rita Rodriguez" title="Lead" age="37" salary="98910" hire_date="2014-05-10">
+        <mentor ref="emp-180" label="mentor"/>
+      </employee>
+      <employee id="emp-101" name="Nate Thomas" title="Senior Engineer" age="44" salary="48851" hire_date="2025-04-16">
+        <mentor ref="emp-36" label="mentor"/>
+      </employee>
+      <employee id="emp-102" name="Uma Williams" title="Architect" age="41" salary="76676" hire_date="2011-03-15">
+        <mentor ref="emp-150" label="mentor"/>
+      </employee>
+      <employee id="emp-103" name="Zane Williams" title="Specialist" age="57" salary="61903" hire_date="2021-12-18">
+        <mentor ref="emp-145" label="mentor"/>
+      </employee>
+    </team>
+  </department>
+  <department id="dept-ops" name="Operations">
+    <team id="dept-ops-team-1" name="Operations Team A" location="London">
+      <employee id="emp-104" name="Grace Smith" title="Architect" age="34" salary="129309" hire_date="2024-08-21">
+        <mentor ref="emp-171" label="mentor"/>
+      </employee>
+      <employee id="emp-105" name="Wendy Smith" title="Manager" age="24" salary="124578" hire_date="2017-03-21">
+        <mentor ref="emp-114" label="mentor"/>
+      </employee>
+      <employee id="emp-106" name="Nate Garcia" title="Lead" age="57" salary="104984" hire_date="2019-10-01">
+        <mentor ref="emp-77" label="mentor"/>
+      </employee>
+      <employee id="emp-107" name="Yara Johnson" title="Analyst" age="25" salary="126946" hire_date="2011-11-08">
+        <mentor ref="emp-92" label="mentor"/>
+        <collaborator ref="emp-45" label="collaborator"/>
+      </employee>
+    </team>
+    <team id="dept-ops-team-2" name="Operations Team B" location="Paris">
+      <employee id="emp-108" name="Yara Harris" title="Lead" age="40" salary="120219" hire_date="2021-12-05">
+        <mentor ref="emp-74" label="mentor"/>
+        <collaborator ref="emp-13" label="collaborator"/>
+      </employee>
+      <employee id="emp-109" name="Wendy Johnson" title="Specialist" age="58" salary="93876" hire_date="2016-11-14">
+        <mentor ref="emp-76" label="mentor"/>
+      </employee>
+      <employee id="emp-110" name="Vic Rodriguez" title="Lead" age="54" salary="78300" hire_date="2025-02-13">
+        <mentor ref="emp-174" label="mentor"/>
+      </employee>
+      <employee id="emp-111" name="Wendy Jackson" title="Analyst" age="60" salary="84756" hire_date="2025-01-18">
+        <mentor ref="emp-116" label="mentor"/>
+      </employee>
+      <employee id="emp-112" name="Frank Smith" title="Analyst" age="36" salary="67661" hire_date="2010-03-17">
+        <mentor ref="emp-32" label="mentor"/>
+      </employee>
+      <employee id="emp-113" name="Hank Martinez" title="Analyst" age="42" salary="96566" hire_date="2021-07-06">
+        <mentor ref="emp-101" label="mentor"/>
+        <collaborator ref="emp-121" label="collaborator"/>
+      </employee>
+    </team>
+    <team id="dept-ops-team-3" name="Operations Team C" location="Sydney">
+      <employee id="emp-114" name="Zane Garcia" title="Engineer" age="31" salary="116689" hire_date="2024-08-09">
+        <mentor ref="emp-154" label="mentor"/>
+      </employee>
+      <employee id="emp-115" name="Xander Harris" title="Specialist" age="62" salary="68244" hire_date="2020-10-05">
+        <mentor ref="emp-14" label="mentor"/>
+        <collaborator ref="emp-129" label="collaborator"/>
+      </employee>
+      <employee id="emp-116" name="Wendy Clark" title="Engineer" age="54" salary="97290" hire_date="2014-08-07">
+        <mentor ref="emp-151" label="mentor"/>
+      </employee>
+      <employee id="emp-117" name="Quinn Brown" title="Coordinator" age="43" salary="146338" hire_date="2023-09-11">
+        <mentor ref="emp-157" label="mentor"/>
+        <collaborator ref="emp-28" label="collaborator"/>
+      </employee>
+      <employee id="emp-118" name="Karen Miller" title="Senior Engineer" age="27" salary="74339" hire_date="2017-07-06">
+        <mentor ref="emp-15" label="mentor"/>
+      </employee>
+      <employee id="emp-119" name="Hank Jackson" title="Manager" age="43" salary="55580" hire_date="2015-01-24">
+        <mentor ref="emp-135" label="mentor"/>
+        <collaborator ref="emp-79" label="collaborator"/>
+      </employee>
+    </team>
+  </department>
+  <department id="dept-legal" name="Legal">
+    <team id="dept-legal-team-1" name="Legal Team A" location="London">
+      <employee id="emp-120" name="Mia Miller" title="Analyst" age="50" salary="89464" hire_date="2010-03-21">
+        <mentor ref="emp-62" label="mentor"/>
+      </employee>
+      <employee id="emp-121" name="Rita Jackson" title="Consultant" age="49" salary="86819" hire_date="2018-12-06">
+        <mentor ref="emp-181" label="mentor"/>
+      </employee>
+      <employee id="emp-122" name="Tina Jones" title="Architect" age="58" salary="94070" hire_date="2014-08-15">
+        <mentor ref="emp-150" label="mentor"/>
+      </employee>
+      <employee id="emp-123" name="Olivia Garcia" title="Architect" age="55" salary="108856" hire_date="2019-09-15">
+        <mentor ref="emp-31" label="mentor"/>
+        <collaborator ref="emp-119" label="collaborator"/>
+      </employee>
+      <employee id="emp-124" name="Tina White" title="Senior Engineer" age="52" salary="49385" hire_date="2024-04-04">
+        <mentor ref="emp-45" label="mentor"/>
+      </employee>
+      <employee id="emp-125" name="Leo Harris" title="Engineer" age="46" salary="102143" hire_date="2020-01-24">
+        <mentor ref="emp-53" label="mentor"/>
+      </employee>
+      <employee id="emp-126" name="Grace Jones" title="Senior Engineer" age="57" salary="101314" hire_date="2010-02-05">
+        <mentor ref="emp-170" label="mentor"/>
+      </employee>
+    </team>
+    <team id="dept-legal-team-2" name="Legal Team B" location="Tokyo">
+      <employee id="emp-127" name="Hank Rodriguez" title="Engineer" age="44" salary="137439" hire_date="2011-01-25">
+        <mentor ref="emp-38" label="mentor"/>
+      </employee>
+      <employee id="emp-128" name="Grace Johnson" title="Manager" age="36" salary="124081" hire_date="2016-04-17">
+        <mentor ref="emp-131" label="mentor"/>
+        <collaborator ref="emp-89" label="collaborator"/>
+      </employee>
+      <employee id="emp-129" name="Yara Smith" title="Lead" age="51" salary="79648" hire_date="2025-06-27">
+        <mentor ref="emp-39" label="mentor"/>
+        <collaborator ref="emp-7" label="collaborator"/>
+      </employee>
+      <employee id="emp-130" name="Leo Taylor" title="Specialist" age="37" salary="83308" hire_date="2010-11-15">
+        <mentor ref="emp-94" label="mentor"/>
+      </employee>
+      <employee id="emp-131" name="David Garcia" title="Consultant" age="24" salary="72983" hire_date="2022-05-25">
+        <mentor ref="emp-30" label="mentor"/>
+        <collaborator ref="emp-138" label="collaborator"/>
+      </employee>
+    </team>
+    <team id="dept-legal-team-3" name="Legal Team C" location="Toronto">
+      <employee id="emp-132" name="Frank Harris" title="Specialist" age="41" salary="148183" hire_date="2025-11-16">
+        <mentor ref="emp-94" label="mentor"/>
+      </employee>
+      <employee id="emp-133" name="Alice Harris" title="Engineer" age="38" salary="115247" hire_date="2012-06-04">
+        <mentor ref="emp-104" label="mentor"/>
+      </employee>
+      <employee id="emp-134" name="Alice Jackson" title="Specialist" age="22" salary="67926" hire_date="2021-06-12">
+        <mentor ref="emp-162" label="mentor"/>
+        <collaborator ref="emp-74" label="collaborator"/>
+      </employee>
+      <employee id="emp-135" name="Sam Anderson" title="Analyst" age="42" salary="142479" hire_date="2018-07-06">
+        <mentor ref="emp-99" label="mentor"/>
+        <collaborator ref="emp-139" label="collaborator"/>
+      </employee>
+      <employee id="emp-136" name="Tina Davis" title="Analyst" age="56" salary="55324" hire_date="2012-11-16">
+        <mentor ref="emp-23" label="mentor"/>
+      </employee>
+      <employee id="emp-137" name="Carol Williams" title="Manager" age="29" salary="90097" hire_date="2022-06-08">
+        <mentor ref="emp-166" label="mentor"/>
+        <collaborator ref="emp-159" label="collaborator"/>
+      </employee>
+    </team>
+  </department>
+  <department id="dept-rnd" name="Research">
+    <team id="dept-rnd-team-1" name="Research Team A" location="New York">
+      <employee id="emp-138" name="Rita Rodriguez" title="Director" age="47" salary="67004" hire_date="2010-06-11">
+        <mentor ref="emp-1" label="mentor"/>
+      </employee>
+      <employee id="emp-139" name="Grace Thomas" title="Analyst" age="53" salary="141360" hire_date="2015-03-23">
+        <mentor ref="emp-144" label="mentor"/>
+      </employee>
+      <employee id="emp-140" name="Sam Smith" title="Engineer" age="31" salary="49317" hire_date="2019-06-16">
+        <mentor ref="emp-91" label="mentor"/>
+        <collaborator ref="emp-112" label="collaborator"/>
+      </employee>
+      <employee id="emp-141" name="Eve Johnson" title="Lead" age="40" salary="130318" hire_date="2021-10-09">
+        <mentor ref="emp-120" label="mentor"/>
+      </employee>
+      <employee id="emp-142" name="Hank Anderson" title="Manager" age="25" salary="77555" hire_date="2018-07-04">
+        <mentor ref="emp-103" label="mentor"/>
+        <collaborator ref="emp-123" label="collaborator"/>
+      </employee>
+    </team>
+    <team id="dept-rnd-team-2" name="Research Team B" location="London">
+      <employee id="emp-143" name="Frank Smith" title="Consultant" age="34" salary="86513" hire_date="2025-07-12">
+        <mentor ref="emp-99" label="mentor"/>
+      </employee>
+      <employee id="emp-144" name="Eve Clark" title="Manager" age="35" salary="101113" hire_date="2024-05-14">
+        <mentor ref="emp-158" label="mentor"/>
+      </employee>
+      <employee id="emp-145" name="Grace White" title="Manager" age="40" salary="112971" hire_date="2011-12-07">
+        <mentor ref="emp-112" label="mentor"/>
+        <collaborator ref="emp-125" label="collaborator"/>
+      </employee>
+      <employee id="emp-146" name="Karen White" title="Manager" age="28" salary="117575" hire_date="2011-03-02">
+        <mentor ref="emp-67" label="mentor"/>
+        <collaborator ref="emp-31" label="collaborator"/>
+      </employee>
+      <employee id="emp-147" name="Grace Rodriguez" title="Coordinator" age="22" salary="54264" hire_date="2012-03-01">
+        <mentor ref="emp-151" label="mentor"/>
+      </employee>
+      <employee id="emp-148" name="Hank Williams" title="Senior Engineer" age="26" salary="54025" hire_date="2012-01-24">
+        <mentor ref="emp-40" label="mentor"/>
+      </employee>
+      <employee id="emp-149" name="Ivy Taylor" title="Specialist" age="33" salary="103340" hire_date="2022-10-02">
+        <mentor ref="emp-76" label="mentor"/>
+        <collaborator ref="emp-115" label="collaborator"/>
+      </employee>
+      <employee id="emp-150" name="Nate Garcia" title="Architect" age="34" salary="112184" hire_date="2024-06-03">
+        <mentor ref="emp-138" label="mentor"/>
+      </employee>
+    </team>
+    <team id="dept-rnd-team-3" name="Research Team C" location="Toronto">
+      <employee id="emp-151" name="Wendy Martinez" title="Analyst" age="60" salary="50598" hire_date="2016-11-07">
+        <mentor ref="emp-4" label="mentor"/>
+      </employee>
+      <employee id="emp-152" name="Bob Martin" title="Director" age="42" salary="143147" hire_date="2017-10-15">
+        <mentor ref="emp-80" label="mentor"/>
+        <collaborator ref="emp-18" label="collaborator"/>
+      </employee>
+      <employee id="emp-153" name="David Rodriguez" title="Director" age="48" salary="142656" hire_date="2016-02-02">
+        <mentor ref="emp-149" label="mentor"/>
+        <collaborator ref="emp-109" label="collaborator"/>
+      </employee>
+      <employee id="emp-154" name="Frank Harris" title="Senior Engineer" age="33" salary="71444" hire_date="2014-03-21">
+        <mentor ref="emp-97" label="mentor"/>
+      </employee>
+      <employee id="emp-155" name="Nate Williams" title="Consultant" age="38" salary="55529" hire_date="2017-04-27">
+        <mentor ref="emp-153" label="mentor"/>
+      </employee>
+    </team>
+  </department>
+  <department id="dept-support" name="Support">
+    <team id="dept-support-team-1" name="Support Team A" location="New York">
+      <employee id="emp-156" name="Olivia Clark" title="Architect" age="61" salary="80505" hire_date="2018-09-15">
+        <mentor ref="emp-99" label="mentor"/>
+        <collaborator ref="emp-164" label="collaborator"/>
+      </employee>
+      <employee id="emp-157" name="Eve Thompson" title="Architect" age="56" salary="90124" hire_date="2025-04-26">
+        <mentor ref="emp-38" label="mentor"/>
+      </employee>
+      <employee id="emp-158" name="Quinn Clark" title="Senior Engineer" age="30" salary="53958" hire_date="2012-03-20">
+        <mentor ref="emp-32" label="mentor"/>
+      </employee>
+      <employee id="emp-159" name="Hank Martin" title="Lead" age="55" salary="121751" hire_date="2023-11-10">
+        <mentor ref="emp-55" label="mentor"/>
+      </employee>
+      <employee id="emp-160" name="Zane Smith" title="Analyst" age="46" salary="69351" hire_date="2021-10-02">
+        <mentor ref="emp-173" label="mentor"/>
+        <collaborator ref="emp-124" label="collaborator"/>
+      </employee>
+      <employee id="emp-161" name="Carol Clark" title="Manager" age="54" salary="142870" hire_date="2018-06-05">
+        <mentor ref="emp-1" label="mentor"/>
+      </employee>
+      <employee id="emp-162" name="Eve Harris" title="Specialist" age="58" salary="105708" hire_date="2015-06-12">
+        <mentor ref="emp-10" label="mentor"/>
+      </employee>
+      <employee id="emp-163" name="Vic Davis" title="Manager" age="39" salary="81444" hire_date="2017-10-17">
+        <mentor ref="emp-13" label="mentor"/>
+      </employee>
+    </team>
+    <team id="dept-support-team-2" name="Support Team B" location="London">
+      <employee id="emp-164" name="Wendy Moore" title="Lead" age="52" salary="81467" hire_date="2018-08-28">
+        <mentor ref="emp-9" label="mentor"/>
+      </employee>
+      <employee id="emp-165" name="Frank Miller" title="Consultant" age="41" salary="143495" hire_date="2010-09-15">
+        <mentor ref="emp-17" label="mentor"/>
+      </employee>
+      <employee id="emp-166" name="Ivy Smith" title="Specialist" age="22" salary="146015" hire_date="2022-03-20">
+        <mentor ref="emp-179" label="mentor"/>
+      </employee>
+      <employee id="emp-167" name="Rita Rodriguez" title="Director" age="27" salary="63223" hire_date="2022-09-28">
+        <mentor ref="emp-165" label="mentor"/>
+      </employee>
+      <employee id="emp-168" name="Sam Clark" title="Lead" age="56" salary="93761" hire_date="2016-03-27">
+        <mentor ref="emp-131" label="mentor"/>
+      </employee>
+      <employee id="emp-169" name="Alice Martin" title="Senior Engineer" age="52" salary="58713" hire_date="2023-05-22">
+        <mentor ref="emp-151" label="mentor"/>
+        <collaborator ref="emp-66" label="collaborator"/>
+      </employee>
+      <employee id="emp-170" name="Quinn Thomas" title="Consultant" age="55" salary="142246" hire_date="2025-01-20">
+        <mentor ref="emp-183" label="mentor"/>
+        <collaborator ref="emp-86" label="collaborator"/>
+      </employee>
+    </team>
+    <team id="dept-support-team-3" name="Support Team C" location="London">
+      <employee id="emp-171" name="Sam Moore" title="Consultant" age="45" salary="77014" hire_date="2021-06-04">
+        <mentor ref="emp-173" label="mentor"/>
+        <collaborator ref="emp-163" label="collaborator"/>
+      </employee>
+      <employee id="emp-172" name="Wendy Smith" title="Senior Engineer" age="32" salary="142856" hire_date="2017-12-10">
+        <mentor ref="emp-155" label="mentor"/>
+      </employee>
+      <employee id="emp-173" name="Sam Miller" title="Manager" age="58" salary="107534" hire_date="2011-05-07">
+        <mentor ref="emp-2" label="mentor"/>
+      </employee>
+      <employee id="emp-174" name="Mia White" title="Analyst" age="25" salary="68129" hire_date="2016-10-03">
+        <mentor ref="emp-151" label="mentor"/>
+      </employee>
+      <employee id="emp-175" name="Carol Thomas" title="Lead" age="56" salary="102272" hire_date="2014-04-19">
+        <mentor ref="emp-47" label="mentor"/>
+      </employee>
+      <employee id="emp-176" name="Nate Martinez" title="Senior Engineer" age="27" salary="53978" hire_date="2020-08-05">
+        <mentor ref="emp-29" label="mentor"/>
+        <collaborator ref="emp-70" label="collaborator"/>
+      </employee>
+      <employee id="emp-177" name="Hank Martin" title="Senior Engineer" age="26" salary="97350" hire_date="2017-09-10">
+        <mentor ref="emp-44" label="mentor"/>
+      </employee>
+    </team>
+    <team id="dept-support-team-4" name="Support Team D" location="Singapore">
+      <employee id="emp-178" name="Rita Anderson" title="Consultant" age="49" salary="122206" hire_date="2020-12-06">
+        <mentor ref="emp-118" label="mentor"/>
+      </employee>
+      <employee id="emp-179" name="Olivia Jones" title="Manager" age="31" salary="98483" hire_date="2024-08-09">
+        <mentor ref="emp-90" label="mentor"/>
+      </employee>
+      <employee id="emp-180" name="Leo Thomas" title="Specialist" age="26" salary="126375" hire_date="2011-04-16">
+        <mentor ref="emp-7" label="mentor"/>
+        <collaborator ref="emp-65" label="collaborator"/>
+      </employee>
+      <employee id="emp-181" name="Quinn Thompson" title="Engineer" age="50" salary="133866" hire_date="2023-09-02">
+        <mentor ref="emp-146" label="mentor"/>
+      </employee>
+      <employee id="emp-182" name="Vic Miller" title="Senior Engineer" age="50" salary="122368" hire_date="2023-08-01">
+        <mentor ref="emp-15" label="mentor"/>
+        <collaborator ref="emp-157" label="collaborator"/>
+      </employee>
+    </team>
+    <team id="dept-support-team-5" name="Support Team E" location="Tokyo">
+      <employee id="emp-183" name="Carol Davis" title="Director" age="46" salary="67465" hire_date="2014-11-08">
+        <mentor ref="emp-142" label="mentor"/>
+      </employee>
+      <employee id="emp-184" name="Karen Thomas" title="Specialist" age="26" salary="121660" hire_date="2025-01-25">
+        <mentor ref="emp-136" label="mentor"/>
+      </employee>
+      <employee id="emp-185" name="Grace Jackson" title="Director" age="47" salary="142841" hire_date="2014-01-11">
+        <mentor ref="emp-163" label="mentor"/>
+      </employee>
+      <employee id="emp-186" name="Rita Anderson" title="Manager" age="39" salary="92763" hire_date="2013-04-16">
+        <mentor ref="emp-3" label="mentor"/>
+      </employee>
+      <employee id="emp-187" name="Jack White" title="Specialist" age="61" salary="148272" hire_date="2022-11-24">
+        <mentor ref="emp-40" label="mentor"/>
+      </employee>
+    </team>
+  </department>
+</organization>
