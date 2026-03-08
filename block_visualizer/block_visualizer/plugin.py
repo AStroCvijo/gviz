@@ -45,6 +45,13 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
 
   const $ = (sel) => document.querySelector(sel);
   const $$ = (sel) => document.querySelectorAll(sel);
+  
+  const MIN_NODE_WIDTH = 160;
+  const MAX_NODE_WIDTH = 320;
+  const HEADER_HEIGHT = 34;
+  const LINE_HEIGHT = 16;
+  const CHAR_WIDTH = 6.2;
+  const PADDING = 3;
 
   function render(graph) {
     currentGraph = graph;
@@ -151,7 +158,11 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       .force('link', d3.forceLink(edges).id(d => d.id).distance(100).strength(0.5))
       .force('charge', d3.forceManyBody().strength(-320))
       .force('center', d3.forceCenter(W / 2, H / 2))
-      .force('collision', d3.forceCollide(36));
+      .force('collision', d3.forceCollide(d => {
+          const w = computeNodeWidth(d);
+          const h = computeNodeHeight(d);
+          return Math.max(w, h) / 2 + 36;
+      }));
 
     const edgeG = g.append('g').attr('class', 'edges');
     const edgeSel = edgeG.selectAll('.d3-edge')
@@ -165,7 +176,27 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       .style('stroke', '#444c56')
       .style('stroke-width', 1.5)
       .style('stroke-opacity', 0.7);
-
+    
+    function computeNodeHeight(d) {
+      const attrs = d.attrs ? Object.entries(d.attrs) : [];
+      return HEADER_HEIGHT + attrs.length * LINE_HEIGHT + PADDING;
+    }
+    
+    function computeNodeWidth(d) {
+      const attrs = d.attrs ? Object.entries(d.attrs) : [];
+      const longest = Math.max(
+        d.id.length,
+        ...attrs.map(([k,v]) => `${k}: ${v}`.length)
+      );
+    
+      return Math.max(MIN_NODE_WIDTH, Math.min(MAX_NODE_WIDTH, longest * CHAR_WIDTH + 20));
+    }
+    
+    function truncateText(str, maxChars = 32) {
+      if (str.length <= maxChars) return str;
+      return str.slice(0, maxChars - 3) + "...";
+    }
+    
     const nodeG = g.append('g').attr('class', 'nodes');
     const nodeSel = nodeG.selectAll('.d3-node')
       .data(nodes)
@@ -178,31 +209,78 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
           .on('drag', dragged)
           .on('end', dragEnd)
       );
-
-    nodeSel.append('circle')
-      .attr('class', 'node-halo')
-      .attr('r', 28)
-      .style('fill', d => color(d))
-      .style('fill-opacity', 0.8)
-      .style('stroke', 'none')
-      .style('pointer-events', 'none');
-
-    nodeSel.append('circle')
-      .attr('class', 'node-core')
-      .attr('r', 18)
-      .style('fill', d => color(d))
-      .style('fill-opacity', 0.2)
-      .style('stroke', d => color(d))
-      .style('stroke-width', 2.5)
-      .style('cursor', 'pointer');
-
-    nodeSel.append('text')
-      .text(d => ((d.attrs && d.attrs.name) || d.id).split(' ')[0])
-      .attr('dy', 26)
-      .style('font-size', '11px')
-      .style('fill', '#8b949e')
-      .style('text-anchor', 'middle')
-      .style('pointer-events', 'none');
+    
+    nodeSel.each(function (d) {
+    
+      const g = d3.select(this);
+      const colorVal = color(d);
+      const attrs = d.attrs ? Object.entries(d.attrs) : [];
+      const height = computeNodeHeight(d);
+      const width = computeNodeWidth(d);
+    
+      g.append('rect')
+        .attr('class', 'node-halo')
+        .attr('x', -width/2 - 6)
+        .attr('y', -height/2 - 6)
+        .attr('width', width + 12)
+        .attr('height', height + 12)
+        .attr('rx', 6)
+        .style('fill', colorVal)
+        .style('fill-opacity', 0.15)
+        .style('pointer-events', 'none');
+    
+      g.append('rect')
+        .attr('class', 'node-core')
+        .attr('x', -width/2)
+        .attr('y', -height/2)
+        .attr('width', width)
+        .attr('height', height)
+        .attr('rx', 4)
+        .style('fill', '#0d1117')
+        .style('stroke', colorVal)
+        .style('stroke-width', 2)
+        .style('cursor', 'pointer');
+    
+      g.append('rect')
+        .attr('x', -width/2)
+        .attr('y', -height/2)
+        .attr('width', width)
+        .attr('height', HEADER_HEIGHT)
+        .style('fill', colorVal)
+        .style('fill-opacity', 0.2);
+    
+      g.append('text')
+        .text(d.id)
+        .attr('x', 0)
+        .attr('y', -height/2 + HEADER_HEIGHT/2 - LINE_HEIGHT/4)
+        .style('font-size', '11px')
+        .style('font-weight', '600')
+        .style('fill', '#c9d1d9')
+        .style('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .style('pointer-events', 'none');
+    
+      g.append('line')
+        .attr('x1', -width/2)
+        .attr('x2', width/2)
+        .attr('y1', -height/2 + HEADER_HEIGHT)
+        .attr('y2', -height/2 + HEADER_HEIGHT)
+        .style('stroke', '#30363d')
+        .style('stroke-width', 1);
+    
+      attrs.forEach(([key, val], i) => {
+        g.append('text')
+          .text(`${key}: ${truncateText(val.toString())}`)
+          .attr('x', -width/2 + PADDING)
+          .attr('y', -height/2 + HEADER_HEIGHT + PADDING + i * LINE_HEIGHT)
+          .attr('dominant-baseline', 'middle')
+          .style('font-size', '10px')
+          .style('fill', '#8b949e')
+          .style('text-anchor', 'start')
+          .style('pointer-events', 'none');
+      });
+    
+    });
 
     nodeSel
       .on('mouseover', (event, d) => {
