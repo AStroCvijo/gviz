@@ -69,7 +69,9 @@
         <span class="select-icon">⬡</span>
         <select class="plugin-select" id="plugin-select">
           <option value="">Select Plugin</option>
-          <option value="simple-visualizer"{% if initial_graph_loaded %} selected{% endif %}>Simple Visualizer</option>
+          {% for visualizer in visualization_plugins  %}
+            <option value="{{ visualizer.name }}"{% if initial_graph_loaded %} selected{% endif %}>{{ visualizer.text }}</option>
+          {% endfor %}
         </select>
         <span class="select-arrow">▾</span>
       </div>
