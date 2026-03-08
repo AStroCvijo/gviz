@@ -6,7 +6,7 @@ from typing import Any, List
 from api.exceptions import ParseError
 from api.models import Graph
 from api.plugins import DataSourcePlugin, PluginParameter
-from xml_data_source.parser import XMLParser
+from xml_data_source.parser import XMLParser, XMLWriter
 
 
 class XMLDataSourcePlugin(DataSourcePlugin):
@@ -61,6 +61,10 @@ class XMLDataSourcePlugin(DataSourcePlugin):
         parser = XMLParser(directed=directed)
         graph = parser.parse_file(file_path, directed=directed)
         return graph
+
+    def export(self, graph: Graph, file_path: str) -> None:
+        writer = XMLWriter()
+        writer.write_file(graph, file_path)
 
     def __repr__(self) -> str:
         return "XMLDataSourcePlugin()"
