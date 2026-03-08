@@ -250,14 +250,18 @@
         <label class="form-label">Data Source Plugin</label>
         <select class="form-input" id="data-source-select">
           <option value="json-data-source">JSON Data Source</option>
+          <option value="xml-data-source">XML Data Source</option>
         </select>
       </div>
       <div class="form-group">
         <label class="form-label">Dataset Preset</label>
         <select class="form-input" id="data-file-preset">
-          <option value="json_data_source/json_data_source/data/demo_mixed_small.json">Demo Mixed Small</option>
-          <option value="json_data_source/json_data_source/data/acyclic_org.json">Acyclic Org</option>
-          <option value="json_data_source/json_data_source/data/social_network.json">Social Network</option>
+          <option value="json_data_source/json_data_source/data/demo_mixed_small.json">Demo Mixed Small (JSON)</option>
+          <option value="json_data_source/json_data_source/data/acyclic_org.json">Acyclic Org (JSON)</option>
+          <option value="json_data_source/json_data_source/data/social_network.json">Social Network (JSON)</option>
+          <option value="xml_data_source/xml_data_source/data/demo_small.xml">Demo Small (XML)</option>
+          <option value="xml_data_source/xml_data_source/data/acyclic_org.xml">Acyclic Org (XML)</option>
+          <option value="xml_data_source/xml_data_source/data/cyclic_network.xml">Cyclic Network (XML)</option>
           <option value="__custom__">Custom Path</option>
         </select>
         <span class="form-hint">Choose a preset dataset or switch to Custom Path.</span>
