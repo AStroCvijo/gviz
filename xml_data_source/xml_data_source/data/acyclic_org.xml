@@ -1,0 +1,296 @@
+<organization id="org-root" name="TechCorp Global" founded="2005-03-15">
+  <department id="dept-eng" name="Engineering">
+    <team id="dept-eng-team-1" name="Engineering Team A" location="London">
+      <employee id="emp-1" name="Xander Rodriguez" title="Manager" age="36" salary="63289" hire_date="2013-11-24"/>
+      <employee id="emp-2" name="Rita Williams" title="Consultant" age="49" salary="49165" hire_date="2010-02-07"/>
+      <employee id="emp-3" name="Hank Martin" title="Consultant" age="23" salary="118563" hire_date="2016-12-21"/>
+      <employee id="emp-4" name="Wendy Thompson" title="Coordinator" age="36" salary="103878" hire_date="2018-01-25"/>
+    </team>
+    <team id="dept-eng-team-2" name="Engineering Team B" location="Berlin">
+      <employee id="emp-5" name="Karen Rodriguez" title="Lead" age="35" salary="145072" hire_date="2020-02-03"/>
+      <employee id="emp-6" name="Mia Brown" title="Specialist" age="44" salary="124131" hire_date="2018-01-24"/>
+      <employee id="emp-7" name="Olivia Thompson" title="Senior Engineer" age="46" salary="55328" hire_date="2019-11-20"/>
+      <employee id="emp-8" name="Leo Moore" title="Manager" age="26" salary="51006" hire_date="2017-05-03"/>
+      <employee id="emp-9" name="Hank Brown" title="Coordinator" age="39" salary="104429" hire_date="2021-03-12"/>
+      <employee id="emp-10" name="Leo Miller" title="Analyst" age="26" salary="124840" hire_date="2015-09-24"/>
+      <employee id="emp-11" name="Hank Garcia" title="Architect" age="46" salary="80382" hire_date="2017-11-11"/>
+    </team>
+    <team id="dept-eng-team-3" name="Engineering Team C" location="New York">
+      <employee id="emp-12" name="Bob Anderson" title="Coordinator" age="39" salary="53675" hire_date="2016-10-23"/>
+      <employee id="emp-13" name="Karen Miller" title="Architect" age="47" salary="129259" hire_date="2024-03-09"/>
+      <employee id="emp-14" name="Eve Davis" title="Director" age="56" salary="79438" hire_date="2023-10-13"/>
+      <employee id="emp-15" name="Leo Davis" title="Lead" age="54" salary="109686" hire_date="2012-01-28"/>
+      <employee id="emp-16" name="David Jones" title="Lead" age="49" salary="123172" hire_date="2012-07-13"/>
+    </team>
+    <team id="dept-eng-team-4" name="Engineering Team D" location="Singapore">
+      <employee id="emp-17" name="Ivy Thompson" title="Engineer" age="29" salary="134353" hire_date="2018-11-11"/>
+      <employee id="emp-18" name="David Martinez" title="Coordinator" age="32" salary="104470" hire_date="2010-12-24"/>
+      <employee id="emp-19" name="Ivy Martin" title="Lead" age="54" salary="58947" hire_date="2019-11-17"/>
+      <employee id="emp-20" name="Tina Miller" title="Lead" age="45" salary="144943" hire_date="2015-09-25"/>
+      <employee id="emp-21" name="Quinn Smith" title="Consultant" age="42" salary="109042" hire_date="2010-02-12"/>
+      <employee id="emp-22" name="Zane Martinez" title="Manager" age="25" salary="76571" hire_date="2012-02-24"/>
+      <employee id="emp-23" name="Paul Williams" title="Director" age="30" salary="61828" hire_date="2025-09-06"/>
+      <employee id="emp-24" name="Ivy Martin" title="Consultant" age="49" salary="72760" hire_date="2016-12-10"/>
+    </team>
+    <team id="dept-eng-team-5" name="Engineering Team E" location="Paris">
+      <employee id="emp-25" name="Olivia Martin" title="Architect" age="29" salary="77493" hire_date="2017-02-11"/>
+      <employee id="emp-26" name="Alice Moore" title="Director" age="36" salary="122128" hire_date="2017-01-03"/>
+      <employee id="emp-27" name="Wendy Johnson" title="Manager" age="26" salary="49117" hire_date="2020-02-17"/>
+      <employee id="emp-28" name="Hank Rodriguez" title="Architect" age="35" salary="115678" hire_date="2014-12-19"/>
+      <employee id="emp-29" name="Sam Harris" title="Manager" age="52" salary="98354" hire_date="2016-02-04"/>
+      <employee id="emp-30" name="Vic Jackson" title="Specialist" age="49" salary="98883" hire_date="2024-12-02"/>
+    </team>
+  </department>
+  <department id="dept-sales" name="Sales">
+    <team id="dept-sales-team-1" name="Sales Team A" location="London">
+      <employee id="emp-31" name="Mia Anderson" title="Senior Engineer" age="37" salary="70112" hire_date="2016-09-15"/>
+      <employee id="emp-32" name="Eve Jackson" title="Lead" age="39" salary="105637" hire_date="2017-02-15"/>
+      <employee id="emp-33" name="Zane Thompson" title="Senior Engineer" age="25" salary="130477" hire_date="2010-02-25"/>
+      <employee id="emp-34" name="Hank Garcia" title="Coordinator" age="53" salary="108092" hire_date="2016-07-02"/>
+    </team>
+    <team id="dept-sales-team-2" name="Sales Team B" location="Berlin">
+      <employee id="emp-35" name="Alice Thomas" title="Analyst" age="51" salary="82388" hire_date="2023-12-24"/>
+      <employee id="emp-36" name="Zane Thompson" title="Architect" age="31" salary="69890" hire_date="2019-04-02"/>
+      <employee id="emp-37" name="Sam Thompson" title="Engineer" age="42" salary="52492" hire_date="2011-10-16"/>
+      <employee id="emp-38" name="Quinn Martin" title="Lead" age="25" salary="111562" hire_date="2012-03-03"/>
+      <employee id="emp-39" name="Tina Williams" title="Manager" age="47" salary="60713" hire_date="2017-10-20"/>
+      <employee id="emp-40" name="Bob Clark" title="Senior Engineer" age="48" salary="131163" hire_date="2020-05-07"/>
+      <employee id="emp-41" name="Vic Anderson" title="Manager" age="38" salary="96876" hire_date="2014-11-21"/>
+    </team>
+    <team id="dept-sales-team-3" name="Sales Team C" location="Sydney">
+      <employee id="emp-42" name="Karen Williams" title="Engineer" age="51" salary="126416" hire_date="2013-02-18"/>
+      <employee id="emp-43" name="Grace Martin" title="Analyst" age="30" salary="90745" hire_date="2012-04-12"/>
+      <employee id="emp-44" name="Jack Garcia" title="Architect" age="56" salary="137214" hire_date="2019-10-26"/>
+      <employee id="emp-45" name="Uma Martin" title="Engineer" age="57" salary="84240" hire_date="2013-03-09"/>
+      <employee id="emp-46" name="David Brown" title="Director" age="31" salary="80697" hire_date="2019-10-07"/>
+      <employee id="emp-47" name="Wendy Anderson" title="Manager" age="62" salary="79600" hire_date="2025-05-28"/>
+      <employee id="emp-48" name="Bob Williams" title="Coordinator" age="39" salary="50778" hire_date="2010-06-25"/>
+    </team>
+    <team id="dept-sales-team-4" name="Sales Team D" location="Berlin">
+      <employee id="emp-49" name="Frank White" title="Director" age="49" salary="118519" hire_date="2010-02-03"/>
+      <employee id="emp-50" name="Wendy Jones" title="Director" age="24" salary="93393" hire_date="2014-07-05"/>
+      <employee id="emp-51" name="Bob Martinez" title="Specialist" age="24" salary="91898" hire_date="2016-11-08"/>
+      <employee id="emp-52" name="Vic Brown" title="Specialist" age="57" salary="98264" hire_date="2014-04-28"/>
+      <employee id="emp-53" name="Frank Garcia" title="Coordinator" age="23" salary="68509" hire_date="2020-07-26"/>
+      <employee id="emp-54" name="Vic Davis" title="Analyst" age="32" salary="148202" hire_date="2013-07-28"/>
+    </team>
+    <team id="dept-sales-team-5" name="Sales Team E" location="New York">
+      <employee id="emp-55" name="Hank Miller" title="Architect" age="44" salary="85001" hire_date="2017-04-01"/>
+      <employee id="emp-56" name="Vic Miller" title="Coordinator" age="43" salary="81517" hire_date="2012-05-12"/>
+      <employee id="emp-57" name="Uma Martin" title="Coordinator" age="56" salary="88404" hire_date="2010-02-09"/>
+      <employee id="emp-58" name="Frank Moore" title="Analyst" age="24" salary="59208" hire_date="2023-06-24"/>
+      <employee id="emp-59" name="Zane Anderson" title="Coordinator" age="60" salary="112033" hire_date="2013-07-19"/>
+      <employee id="emp-60" name="Grace Rodriguez" title="Engineer" age="49" salary="45221" hire_date="2016-06-14"/>
+      <employee id="emp-61" name="Carol Anderson" title="Consultant" age="42" salary="131951" hire_date="2013-12-10"/>
+    </team>
+  </department>
+  <department id="dept-hr" name="Human Resources">
+    <team id="dept-hr-team-1" name="Human Resources Team A" location="Sydney">
+      <employee id="emp-62" name="Karen Thomas" title="Analyst" age="57" salary="61683" hire_date="2016-07-22"/>
+      <employee id="emp-63" name="Mia Garcia" title="Consultant" age="58" salary="84446" hire_date="2022-09-27"/>
+      <employee id="emp-64" name="Alice Martinez" title="Analyst" age="35" salary="101346" hire_date="2020-08-15"/>
+      <employee id="emp-65" name="Olivia Miller" title="Director" age="52" salary="149036" hire_date="2015-11-03"/>
+      <employee id="emp-66" name="Jack Martin" title="Consultant" age="43" salary="57240" hire_date="2017-11-10"/>
+      <employee id="emp-67" name="Hank Miller" title="Lead" age="23" salary="51057" hire_date="2017-08-20"/>
+      <employee id="emp-68" name="Yara Williams" title="Architect" age="48" salary="127544" hire_date="2016-12-23"/>
+    </team>
+    <team id="dept-hr-team-2" name="Human Resources Team B" location="Paris">
+      <employee id="emp-69" name="Mia Davis" title="Lead" age="22" salary="143430" hire_date="2013-07-08"/>
+      <employee id="emp-70" name="Frank Martin" title="Architect" age="25" salary="118060" hire_date="2017-02-15"/>
+      <employee id="emp-71" name="Eve White" title="Director" age="57" salary="123047" hire_date="2020-08-20"/>
+      <employee id="emp-72" name="Xander Martin" title="Coordinator" age="57" salary="103446" hire_date="2015-12-28"/>
+      <employee id="emp-73" name="Paul White" title="Analyst" age="37" salary="128579" hire_date="2018-09-16"/>
+      <employee id="emp-74" name="Uma Davis" title="Analyst" age="50" salary="55155" hire_date="2019-04-09"/>
+      <employee id="emp-75" name="Karen Anderson" title="Director" age="27" salary="63136" hire_date="2014-04-13"/>
+    </team>
+    <team id="dept-hr-team-3" name="Human Resources Team C" location="Berlin">
+      <employee id="emp-76" name="Carol Jackson" title="Coordinator" age="43" salary="116121" hire_date="2024-07-02"/>
+      <employee id="emp-77" name="Grace Jackson" title="Coordinator" age="59" salary="136163" hire_date="2010-10-13"/>
+      <employee id="emp-78" name="Paul Smith" title="Specialist" age="41" salary="143759" hire_date="2022-07-18"/>
+      <employee id="emp-79" name="Xander Thompson" title="Consultant" age="36" salary="108993" hire_date="2017-05-14"/>
+      <employee id="emp-80" name="Paul Smith" title="Coordinator" age="43" salary="132670" hire_date="2022-12-06"/>
+    </team>
+    <team id="dept-hr-team-4" name="Human Resources Team D" location="Singapore">
+      <employee id="emp-81" name="Tina Thompson" title="Engineer" age="47" salary="122580" hire_date="2010-02-21"/>
+      <employee id="emp-82" name="Nate Jones" title="Architect" age="33" salary="51590" hire_date="2018-07-11"/>
+      <employee id="emp-83" name="Grace White" title="Specialist" age="43" salary="144775" hire_date="2022-05-25"/>
+      <employee id="emp-84" name="Nate Rodriguez" title="Senior Engineer" age="52" salary="47540" hire_date="2011-06-08"/>
+      <employee id="emp-85" name="Uma Williams" title="Engineer" age="23" salary="77411" hire_date="2016-01-20"/>
+    </team>
+    <team id="dept-hr-team-5" name="Human Resources Team E" location="Berlin">
+      <employee id="emp-86" name="Eve Harris" title="Senior Engineer" age="58" salary="73569" hire_date="2024-12-09"/>
+      <employee id="emp-87" name="Yara Taylor" title="Lead" age="60" salary="124593" hire_date="2013-03-10"/>
+      <employee id="emp-88" name="David Moore" title="Engineer" age="41" salary="120470" hire_date="2022-07-23"/>
+      <employee id="emp-89" name="Grace Williams" title="Consultant" age="62" salary="76830" hire_date="2013-12-25"/>
+      <employee id="emp-90" name="Jack Clark" title="Senior Engineer" age="58" salary="147581" hire_date="2011-06-18"/>
+    </team>
+  </department>
+  <department id="dept-mkt" name="Marketing">
+    <team id="dept-mkt-team-1" name="Marketing Team A" location="Toronto">
+      <employee id="emp-91" name="Quinn Anderson" title="Engineer" age="48" salary="109251" hire_date="2013-07-12"/>
+      <employee id="emp-92" name="Uma White" title="Lead" age="49" salary="68086" hire_date="2018-10-26"/>
+      <employee id="emp-93" name="Rita Harris" title="Architect" age="49" salary="140817" hire_date="2018-06-28"/>
+      <employee id="emp-94" name="Hank Williams" title="Analyst" age="50" salary="76963" hire_date="2024-10-20"/>
+    </team>
+    <team id="dept-mkt-team-2" name="Marketing Team B" location="Paris">
+      <employee id="emp-95" name="Alice Harris" title="Specialist" age="33" salary="108904" hire_date="2016-06-26"/>
+      <employee id="emp-96" name="Ivy Anderson" title="Analyst" age="60" salary="136905" hire_date="2018-09-01"/>
+      <employee id="emp-97" name="Quinn Miller" title="Senior Engineer" age="37" salary="139381" hire_date="2023-08-18"/>
+      <employee id="emp-98" name="Yara Davis" title="Architect" age="53" salary="103743" hire_date="2010-02-10"/>
+      <employee id="emp-99" name="Hank Thomas" title="Manager" age="41" salary="132026" hire_date="2021-08-18"/>
+      <employee id="emp-100" name="Quinn Taylor" title="Coordinator" age="57" salary="88357" hire_date="2021-12-15"/>
+    </team>
+    <team id="dept-mkt-team-3" name="Marketing Team C" location="Sydney">
+      <employee id="emp-101" name="Ivy Davis" title="Senior Engineer" age="34" salary="86359" hire_date="2013-12-18"/>
+      <employee id="emp-102" name="Yara Garcia" title="Manager" age="35" salary="141810" hire_date="2025-05-24"/>
+      <employee id="emp-103" name="Sam Martin" title="Consultant" age="40" salary="58176" hire_date="2016-05-08"/>
+      <employee id="emp-104" name="Leo Garcia" title="Analyst" age="22" salary="137801" hire_date="2014-05-02"/>
+      <employee id="emp-105" name="Bob Thompson" title="Analyst" age="30" salary="128606" hire_date="2025-02-28"/>
+      <employee id="emp-106" name="Alice Moore" title="Analyst" age="52" salary="107746" hire_date="2024-06-06"/>
+    </team>
+    <team id="dept-mkt-team-4" name="Marketing Team D" location="New York">
+      <employee id="emp-107" name="Paul Brown" title="Senior Engineer" age="47" salary="109454" hire_date="2012-10-21"/>
+      <employee id="emp-108" name="Vic Johnson" title="Lead" age="31" salary="118772" hire_date="2019-02-08"/>
+      <employee id="emp-109" name="David Thompson" title="Coordinator" age="60" salary="123135" hire_date="2017-09-13"/>
+      <employee id="emp-110" name="Olivia White" title="Analyst" age="59" salary="101207" hire_date="2019-10-20"/>
+      <employee id="emp-111" name="Bob Clark" title="Senior Engineer" age="35" salary="126987" hire_date="2016-05-22"/>
+      <employee id="emp-112" name="Carol Garcia" title="Manager" age="33" salary="117350" hire_date="2012-03-01"/>
+    </team>
+  </department>
+  <department id="dept-fin" name="Finance">
+    <team id="dept-fin-team-1" name="Finance Team A" location="Singapore">
+      <employee id="emp-113" name="Paul Martinez" title="Engineer" age="36" salary="82762" hire_date="2019-12-28"/>
+      <employee id="emp-114" name="Olivia Williams" title="Manager" age="38" salary="148262" hire_date="2016-07-04"/>
+      <employee id="emp-115" name="Rita Davis" title="Lead" age="39" salary="63643" hire_date="2012-01-06"/>
+      <employee id="emp-116" name="Zane Martinez" title="Consultant" age="58" salary="82828" hire_date="2024-02-15"/>
+      <employee id="emp-117" name="Wendy Martinez" title="Coordinator" age="39" salary="110597" hire_date="2025-08-03"/>
+      <employee id="emp-118" name="Tina Johnson" title="Coordinator" age="42" salary="124129" hire_date="2018-01-03"/>
+      <employee id="emp-119" name="Hank Moore" title="Consultant" age="23" salary="145238" hire_date="2018-10-02"/>
+      <employee id="emp-120" name="Yara Garcia" title="Architect" age="55" salary="130394" hire_date="2024-05-06"/>
+    </team>
+    <team id="dept-fin-team-2" name="Finance Team B" location="Paris">
+      <employee id="emp-121" name="Carol Harris" title="Specialist" age="48" salary="88687" hire_date="2020-11-04"/>
+      <employee id="emp-122" name="Frank Anderson" title="Coordinator" age="53" salary="82777" hire_date="2022-09-02"/>
+      <employee id="emp-123" name="Olivia Williams" title="Specialist" age="38" salary="87372" hire_date="2013-07-28"/>
+      <employee id="emp-124" name="Quinn Smith" title="Director" age="51" salary="99165" hire_date="2011-04-17"/>
+      <employee id="emp-125" name="Leo Clark" title="Architect" age="62" salary="102939" hire_date="2011-04-09"/>
+      <employee id="emp-126" name="Rita Jones" title="Analyst" age="50" salary="136521" hire_date="2025-02-01"/>
+      <employee id="emp-127" name="Uma Clark" title="Manager" age="32" salary="85730" hire_date="2010-09-14"/>
+    </team>
+    <team id="dept-fin-team-3" name="Finance Team C" location="London">
+      <employee id="emp-128" name="David White" title="Senior Engineer" age="31" salary="110323" hire_date="2019-09-23"/>
+      <employee id="emp-129" name="Ivy Jackson" title="Architect" age="52" salary="76946" hire_date="2024-09-05"/>
+      <employee id="emp-130" name="Mia Miller" title="Consultant" age="54" salary="142818" hire_date="2014-02-09"/>
+      <employee id="emp-131" name="Yara Jackson" title="Specialist" age="54" salary="80018" hire_date="2010-05-24"/>
+      <employee id="emp-132" name="Jack Moore" title="Consultant" age="53" salary="64476" hire_date="2024-09-16"/>
+    </team>
+    <team id="dept-fin-team-4" name="Finance Team D" location="Toronto">
+      <employee id="emp-133" name="Rita Thompson" title="Coordinator" age="51" salary="87176" hire_date="2016-12-08"/>
+      <employee id="emp-134" name="Sam Thomas" title="Manager" age="48" salary="50720" hire_date="2020-12-16"/>
+      <employee id="emp-135" name="Wendy Thomas" title="Coordinator" age="31" salary="109923" hire_date="2011-03-17"/>
+      <employee id="emp-136" name="Sam Anderson" title="Senior Engineer" age="50" salary="58069" hire_date="2024-01-24"/>
+      <employee id="emp-137" name="Eve Jackson" title="Lead" age="26" salary="106537" hire_date="2018-06-20"/>
+      <employee id="emp-138" name="Wendy Thomas" title="Senior Engineer" age="43" salary="133389" hire_date="2022-06-21"/>
+    </team>
+  </department>
+  <department id="dept-ops" name="Operations">
+    <team id="dept-ops-team-1" name="Operations Team A" location="Singapore">
+      <employee id="emp-139" name="Bob Clark" title="Senior Engineer" age="37" salary="127727" hire_date="2019-04-24"/>
+      <employee id="emp-140" name="Carol Jackson" title="Senior Engineer" age="62" salary="137260" hire_date="2013-08-06"/>
+      <employee id="emp-141" name="Wendy Martinez" title="Engineer" age="24" salary="87516" hire_date="2011-05-12"/>
+      <employee id="emp-142" name="Leo Jackson" title="Lead" age="37" salary="114621" hire_date="2023-10-22"/>
+      <employee id="emp-143" name="Zane Garcia" title="Lead" age="33" salary="55350" hire_date="2022-10-22"/>
+      <employee id="emp-144" name="Hank Harris" title="Consultant" age="31" salary="75433" hire_date="2024-11-09"/>
+      <employee id="emp-145" name="Olivia Rodriguez" title="Engineer" age="51" salary="82700" hire_date="2015-02-15"/>
+      <employee id="emp-146" name="Leo Moore" title="Analyst" age="62" salary="100615" hire_date="2018-08-28"/>
+    </team>
+    <team id="dept-ops-team-2" name="Operations Team B" location="Sydney">
+      <employee id="emp-147" name="Mia Harris" title="Senior Engineer" age="37" salary="94986" hire_date="2021-10-10"/>
+      <employee id="emp-148" name="Wendy Martinez" title="Engineer" age="47" salary="80976" hire_date="2010-10-28"/>
+      <employee id="emp-149" name="Vic Johnson" title="Consultant" age="53" salary="82512" hire_date="2017-10-26"/>
+      <employee id="emp-150" name="Leo Davis" title="Manager" age="61" salary="77850" hire_date="2014-11-04"/>
+      <employee id="emp-151" name="Uma Johnson" title="Analyst" age="50" salary="49373" hire_date="2021-12-05"/>
+    </team>
+    <team id="dept-ops-team-3" name="Operations Team C" location="London">
+      <employee id="emp-152" name="Karen Jackson" title="Lead" age="34" salary="62322" hire_date="2021-09-17"/>
+      <employee id="emp-153" name="Ivy Garcia" title="Analyst" age="52" salary="83684" hire_date="2020-02-15"/>
+      <employee id="emp-154" name="Carol Jones" title="Manager" age="47" salary="118048" hire_date="2021-02-26"/>
+      <employee id="emp-155" name="Mia Smith" title="Analyst" age="56" salary="61199" hire_date="2024-06-22"/>
+      <employee id="emp-156" name="Xander Rodriguez" title="Consultant" age="46" salary="128695" hire_date="2021-02-22"/>
+      <employee id="emp-157" name="Hank Harris" title="Engineer" age="61" salary="118584" hire_date="2020-10-08"/>
+    </team>
+    <team id="dept-ops-team-4" name="Operations Team D" location="London">
+      <employee id="emp-158" name="Wendy Martinez" title="Coordinator" age="29" salary="63320" hire_date="2011-01-10"/>
+      <employee id="emp-159" name="Paul Brown" title="Senior Engineer" age="37" salary="115457" hire_date="2014-07-15"/>
+      <employee id="emp-160" name="Leo Thompson" title="Coordinator" age="59" salary="142290" hire_date="2014-07-21"/>
+      <employee id="emp-161" name="David Harris" title="Consultant" age="48" salary="81666" hire_date="2011-12-12"/>
+      <employee id="emp-162" name="Grace White" title="Architect" age="37" salary="92537" hire_date="2013-11-12"/>
+      <employee id="emp-163" name="Rita Taylor" title="Engineer" age="47" salary="81160" hire_date="2016-02-28"/>
+      <employee id="emp-164" name="Olivia Williams" title="Manager" age="62" salary="123269" hire_date="2010-01-26"/>
+    </team>
+    <team id="dept-ops-team-5" name="Operations Team E" location="Toronto">
+      <employee id="emp-165" name="Eve Moore" title="Manager" age="26" salary="145290" hire_date="2016-10-07"/>
+      <employee id="emp-166" name="Hank Anderson" title="Lead" age="60" salary="45371" hire_date="2018-03-05"/>
+      <employee id="emp-167" name="Rita Rodriguez" title="Lead" age="29" salary="131646" hire_date="2010-03-01"/>
+      <employee id="emp-168" name="Leo Davis" title="Consultant" age="42" salary="47068" hire_date="2015-05-02"/>
+      <employee id="emp-169" name="Eve Jackson" title="Director" age="29" salary="142735" hire_date="2012-08-15"/>
+    </team>
+  </department>
+  <department id="dept-legal" name="Legal">
+    <team id="dept-legal-team-1" name="Legal Team A" location="London">
+      <employee id="emp-170" name="Quinn Davis" title="Consultant" age="24" salary="140321" hire_date="2019-08-21"/>
+      <employee id="emp-171" name="Alice Johnson" title="Architect" age="47" salary="100872" hire_date="2013-08-23"/>
+      <employee id="emp-172" name="Olivia Williams" title="Senior Engineer" age="42" salary="124730" hire_date="2014-02-05"/>
+      <employee id="emp-173" name="Ivy Clark" title="Consultant" age="57" salary="138343" hire_date="2020-07-20"/>
+      <employee id="emp-174" name="Quinn Martinez" title="Architect" age="54" salary="124354" hire_date="2023-02-26"/>
+      <employee id="emp-175" name="Wendy Brown" title="Director" age="35" salary="101370" hire_date="2024-04-14"/>
+      <employee id="emp-176" name="Karen White" title="Coordinator" age="48" salary="140631" hire_date="2013-06-14"/>
+    </team>
+    <team id="dept-legal-team-2" name="Legal Team B" location="Toronto">
+      <employee id="emp-177" name="Leo Jones" title="Architect" age="26" salary="56957" hire_date="2012-02-14"/>
+      <employee id="emp-178" name="David Taylor" title="Lead" age="57" salary="52861" hire_date="2020-11-04"/>
+      <employee id="emp-179" name="Nate Taylor" title="Coordinator" age="25" salary="82700" hire_date="2019-06-04"/>
+      <employee id="emp-180" name="Sam Martin" title="Manager" age="31" salary="131079" hire_date="2025-04-28"/>
+      <employee id="emp-181" name="David Taylor" title="Director" age="45" salary="60058" hire_date="2018-10-08"/>
+      <employee id="emp-182" name="Zane Jackson" title="Director" age="61" salary="125422" hire_date="2010-10-22"/>
+    </team>
+    <team id="dept-legal-team-3" name="Legal Team C" location="Sydney">
+      <employee id="emp-183" name="Frank Rodriguez" title="Analyst" age="43" salary="91009" hire_date="2010-03-28"/>
+      <employee id="emp-184" name="Eve Moore" title="Coordinator" age="26" salary="63595" hire_date="2010-02-24"/>
+      <employee id="emp-185" name="Quinn Miller" title="Coordinator" age="48" salary="104460" hire_date="2020-03-12"/>
+      <employee id="emp-186" name="Jack Anderson" title="Consultant" age="60" salary="56135" hire_date="2011-03-06"/>
+    </team>
+    <team id="dept-legal-team-4" name="Legal Team D" location="New York">
+      <employee id="emp-187" name="Ivy White" title="Coordinator" age="53" salary="124570" hire_date="2024-07-09"/>
+      <employee id="emp-188" name="Grace Martin" title="Senior Engineer" age="44" salary="101349" hire_date="2013-05-22"/>
+      <employee id="emp-189" name="Vic Moore" title="Architect" age="55" salary="132442" hire_date="2019-01-08"/>
+      <employee id="emp-190" name="Mia Clark" title="Engineer" age="22" salary="71794" hire_date="2019-04-25"/>
+    </team>
+  </department>
+  <department id="dept-support" name="Support">
+    <team id="dept-support-team-1" name="Support Team A" location="Sydney">
+      <employee id="emp-191" name="Karen Brown" title="Engineer" age="53" salary="142912" hire_date="2023-03-05"/>
+      <employee id="emp-192" name="Mia Thompson" title="Manager" age="54" salary="118233" hire_date="2021-02-13"/>
+      <employee id="emp-193" name="Xander Johnson" title="Coordinator" age="23" salary="105260" hire_date="2012-06-19"/>
+      <employee id="emp-194" name="Nate Moore" title="Coordinator" age="62" salary="99747" hire_date="2019-02-13"/>
+      <employee id="emp-195" name="Alice Anderson" title="Lead" age="61" salary="105305" hire_date="2021-02-14"/>
+      <employee id="emp-196" name="David Davis" title="Coordinator" age="59" salary="97487" hire_date="2012-07-28"/>
+    </team>
+    <team id="dept-support-team-2" name="Support Team B" location="Sydney">
+      <employee id="emp-197" name="Hank Anderson" title="Lead" age="26" salary="111910" hire_date="2013-09-17"/>
+      <employee id="emp-198" name="Grace Taylor" title="Specialist" age="31" salary="75968" hire_date="2013-03-09"/>
+      <employee id="emp-199" name="Grace Garcia" title="Consultant" age="31" salary="144642" hire_date="2012-03-25"/>
+      <employee id="emp-200" name="Uma Harris" title="Architect" age="58" salary="144598" hire_date="2024-11-19"/>
+      <employee id="emp-201" name="Uma Clark" title="Specialist" age="62" salary="86436" hire_date="2014-08-03"/>
+      <employee id="emp-202" name="Paul White" title="Analyst" age="39" salary="122518" hire_date="2011-06-17"/>
+    </team>
+    <team id="dept-support-team-3" name="Support Team C" location="London">
+      <employee id="emp-203" name="Olivia White" title="Engineer" age="25" salary="93331" hire_date="2019-02-21"/>
+      <employee id="emp-204" name="Carol Clark" title="Consultant" age="54" salary="95394" hire_date="2024-10-18"/>
+      <employee id="emp-205" name="Zane Johnson" title="Architect" age="58" salary="130437" hire_date="2016-06-20"/>
+      <employee id="emp-206" name="Paul Martin" title="Lead" age="25" salary="104050" hire_date="2013-06-23"/>
+      <employee id="emp-207" name="Carol Martin" title="Lead" age="24" salary="77472" hire_date="2024-08-17"/>
+      <employee id="emp-208" name="Quinn Clark" title="Lead" age="45" salary="93870" hire_date="2019-07-14"/>
+    </team>
+  </department>
+</organization>

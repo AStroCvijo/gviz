@@ -1,0 +1,29 @@
+<company id="c1" name="Acme Corp" founded="2010-06-01">
+  <department id="d1" name="Engineering">
+    <team id="t1" name="Backend" location="Berlin">
+      <employee id="e1" name="Alice Smith" title="Lead" age="34" salary="95000" />
+      <employee id="e2" name="Bob Johnson" title="Engineer" age="28" salary="72000">
+        <mentor ref="e1" label="mentor" />
+      </employee>
+      <employee id="e3" name="Carol Williams" title="Engineer" age="31" salary="78000">
+        <mentor ref="e1" label="mentor" />
+        <collaborator ref="e5" label="collaborator" />
+      </employee>
+    </team>
+    <team id="t2" name="Frontend" location="London">
+      <employee id="e4" name="David Brown" title="Lead" age="36" salary="97000" />
+      <employee id="e5" name="Eve Davis" title="Senior Engineer" age="30" salary="88000">
+        <mentor ref="e4" label="mentor" />
+        <collaborator ref="e3" label="collaborator" />
+      </employee>
+    </team>
+  </department>
+  <department id="d2" name="Sales">
+    <team id="t3" name="Enterprise" location="New York">
+      <employee id="e6" name="Frank Garcia" title="Manager" age="42" salary="110000" />
+      <employee id="e7" name="Grace Miller" title="Analyst" age="26" salary="62000">
+        <mentor ref="e6" label="mentor" />
+      </employee>
+    </team>
+  </department>
+</company>

@@ -136,6 +136,11 @@ function setupLoadDataModal() {
       return;
     }
     fileInput.value = filePresetSelect.value;
+    if (filePresetSelect.value.endsWith('.xml')) {
+      sourceSelect.value = 'xml-data-source';
+    } else if (filePresetSelect.value.endsWith('.json')) {
+      sourceSelect.value = 'json-data-source';
+    }
     syncFileInputMode();
   });
 

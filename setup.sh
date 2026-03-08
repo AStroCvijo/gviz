@@ -64,6 +64,9 @@ pip install -e platform/ --quiet
 echo "Installing gviz-json-datasource ..."
 pip install -e json_data_source/ --quiet
 
+echo "Installing gviz-xml-datasource ..."
+pip install -e xml_data_source/ --quiet
+
 echo "Installing gviz-simple_visualizer ..."
 pip install -e simple_visualizer/ --quiet
 
