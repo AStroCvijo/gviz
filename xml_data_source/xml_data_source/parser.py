@@ -5,7 +5,8 @@ import uuid
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from datetime import date
-from typing import Any, Dict, Optional, Set
+from typing import Any, Dict, List, Optional, Set
+from xml.dom import minidom
 
 from api.exceptions import ParseError
 from api.models import AttributeValue
@@ -112,6 +113,91 @@ class XMLParser:
             self._graph.add_edge_loose(edge)
         except ValueError:
             pass
+
+
+class XMLWriter:
+
+    def __init__(self, root_tag: str = "graph") -> None:
+        self._root_tag = root_tag
+
+    def write_string(self, graph: ConcreteGraph) -> str:
+        children = self._build_children_map(graph)
+        root_ids = self._find_roots(graph, children)
+
+        root = ET.Element(self._root_tag, directed=str(graph.is_directed()).lower())
+        visited: Set[str] = set()
+
+        for node_id in root_ids:
+            self._write_node(graph, node_id, root, children, visited)
+
+        for node in graph.get_nodes():
+            if node.get_id() not in visited:
+                self._write_node(graph, node.get_id(), root, children, visited)
+
+        rough = ET.tostring(root, encoding="unicode")
+        return minidom.parseString(rough).toprettyxml(indent="  ")
+
+    def write_file(self, graph: ConcreteGraph, file_path: str) -> None:
+        xml_string = self.write_string(graph)
+        Path(file_path).write_text(xml_string, encoding="utf-8")
+
+    def _build_children_map(self, graph: ConcreteGraph) -> Dict[str, List[ConcreteEdge]]:
+        children: Dict[str, List[ConcreteEdge]] = {}
+        for node in graph.get_nodes():
+            children[node.get_id()] = []
+        for edge in graph.get_edges():
+            src = edge.get_source_id()
+            if src in children:
+                children[src].append(edge)
+        return children
+
+    def _find_roots(self, graph: ConcreteGraph, children: Dict[str, List[ConcreteEdge]]) -> List[str]:
+        has_parent: Set[str] = set()
+        for edge in graph.get_edges():
+            has_parent.add(edge.get_target_id())
+        roots = [n.get_id() for n in graph.get_nodes() if n.get_id() not in has_parent]
+        if not roots:
+            roots = [graph.get_nodes()[0].get_id()] if graph.get_nodes() else []
+        return roots
+
+    def _write_node(
+        self,
+        graph: ConcreteGraph,
+        node_id: str,
+        parent_el: ET.Element,
+        children: Dict[str, List[ConcreteEdge]],
+        visited: Set[str],
+    ) -> None:
+        node = graph.get_node_by_id(node_id)
+        if node is None:
+            return
+
+        if node_id in visited:
+            ET.SubElement(parent_el, "ref", ref=node_id)
+            return
+
+        visited.add(node_id)
+
+        attrs = node.get_attributes()
+        tag = str(attrs.get("tag", "node"))
+        xml_attrs: Dict[str, str] = {"id": node_id}
+
+        for key, value in attrs.items():
+            if key == "tag":
+                continue
+            xml_attrs[key] = _serialize_attr(value)
+
+        el = ET.SubElement(parent_el, tag, attrib=xml_attrs)
+
+        for edge in children.get(node_id, []):
+            target_id = edge.get_target_id()
+            self._write_node(graph, target_id, el, children, visited)
+
+
+def _serialize_attr(value: AttributeValue) -> str:
+    if isinstance(value, date):
+        return value.isoformat()
+    return str(value)
 
 
 _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
