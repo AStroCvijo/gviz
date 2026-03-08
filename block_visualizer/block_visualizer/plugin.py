@@ -97,6 +97,26 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       ctx.fillRect(0, 0, W, H);
     }
   }
+  
+  function computeNodeHeight(d) {
+    const attrs = d.attrs ? Object.entries(d.attrs) : [];
+    return HEADER_HEIGHT + attrs.length * LINE_HEIGHT + PADDING;
+  }
+    
+  function computeNodeWidth(d) {
+    const attrs = d.attrs ? Object.entries(d.attrs) : [];
+    const longest = Math.max(
+      d.id.length,
+      ...attrs.map(([k,v]) => `${k}: ${v}`.length)
+    );
+   
+    return Math.max(MIN_NODE_WIDTH, Math.min(MAX_NODE_WIDTH, longest * CHAR_WIDTH + 20));
+  }
+    
+  function truncateText(str, maxChars = 32) {
+    if (str.length <= maxChars) return str;
+    return str.slice(0, maxChars - 3) + "...";
+  }
 
   function renderMainView(graph) {
     const svg = d3.select('#graph-canvas');
@@ -176,26 +196,6 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       .style('stroke', '#444c56')
       .style('stroke-width', 1.5)
       .style('stroke-opacity', 0.7);
-    
-    function computeNodeHeight(d) {
-      const attrs = d.attrs ? Object.entries(d.attrs) : [];
-      return HEADER_HEIGHT + attrs.length * LINE_HEIGHT + PADDING;
-    }
-    
-    function computeNodeWidth(d) {
-      const attrs = d.attrs ? Object.entries(d.attrs) : [];
-      const longest = Math.max(
-        d.id.length,
-        ...attrs.map(([k,v]) => `${k}: ${v}`.length)
-      );
-    
-      return Math.max(MIN_NODE_WIDTH, Math.min(MAX_NODE_WIDTH, longest * CHAR_WIDTH + 20));
-    }
-    
-    function truncateText(str, maxChars = 32) {
-      if (str.length <= maxChars) return str;
-      return str.slice(0, maxChars - 3) + "...";
-    }
     
     const nodeG = g.append('g').attr('class', 'nodes');
     const nodeSel = nodeG.selectAll('.d3-node')
@@ -509,46 +509,65 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     });
 
     positions.forEach((p, index) => {
+
+      const node = graph.nodes.find(n => n.id === p.id);
+      if (!node) return;
+
       const x = posMap[p.id].x;
       const y = posMap[p.id].y;
       const color = palette[index % palette.length];
-      ctx.beginPath();
-      ctx.arc(x, y, 4, 0, Math.PI * 2);
-      ctx.fillStyle = color + '55';
-      ctx.fill();
+      const width = computeNodeWidth(node) * scale;
+      const height = computeNodeHeight(node) * scale;
+      const header = HEADER_HEIGHT * scale;
+
+      const left = x - width / 2;
+      const top = y - height / 2;
+
+      ctx.fillStyle = '#0d1117';
       ctx.strokeStyle = color;
-      ctx.lineWidth = 1.2;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.rect(left, top, width, height);
+      ctx.fill();
       ctx.stroke();
+
+      ctx.fillStyle = color + '55';
+      ctx.fillRect(left, top, width, header);
+
+      ctx.strokeStyle = '#30363d';
+      ctx.beginPath();
+      ctx.moveTo(left, top + header);
+      ctx.lineTo(left + width, top + header);
+      ctx.stroke();
+
       if (p.id === selectedNodeId) {
-        ctx.beginPath();
-        ctx.arc(x, y, 6, 0, Math.PI * 2);
-        ctx.strokeStyle = '#f0883e';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
+          ctx.strokeStyle = '#f0883e';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(left - 2, top - 2, width + 4, height + 4);
       }
     });
 
-    ctx.strokeStyle = '#58a6ff';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([3, 3]);
+  ctx.strokeStyle = '#58a6ff';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3, 3]);
 
-    const viewport = {
-      x: (-currentZoomTransform.x) / currentZoomTransform.k,
-      y: (-currentZoomTransform.y) / currentZoomTransform.k,
-      width: mainViewportSize.width / currentZoomTransform.k,
-      height: mainViewportSize.height / currentZoomTransform.k,
-    };
+  const viewport = {
+    x: (-currentZoomTransform.x) / currentZoomTransform.k,
+    y: (-currentZoomTransform.y) / currentZoomTransform.k,
+    width: mainViewportSize.width / currentZoomTransform.k,
+    height: mainViewportSize.height / currentZoomTransform.k,
+  };
 
-    const vx = viewport.x * scale + offsetX;
-    const vy = viewport.y * scale + offsetY;
-    const vw = viewport.width * scale;
-    const vh = viewport.height * scale;
+  const vx = viewport.x * scale + offsetX;
+  const vy = viewport.y * scale + offsetY;
+  const vw = viewport.width * scale;
+  const vh = viewport.height * scale;
 
-    ctx.strokeRect(vx, vy, vw, vh);
-    ctx.fillStyle = 'rgba(88, 166, 255, 0.08)';
-    ctx.fillRect(vx, vy, vw, vh);
-    ctx.setLineDash([]);
-  }
+  ctx.strokeRect(vx, vy, vw, vh);
+  ctx.fillStyle = 'rgba(88, 166, 255, 0.08)';
+  ctx.fillRect(vx, vy, vw, vh);
+  ctx.setLineDash([]);
+}
 
   function focusMainViewFromBird(event) {
     if (!birdProjection || !currentSvg || !currentZoom) return;
