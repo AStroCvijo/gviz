@@ -181,7 +181,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
       .force('collision', d3.forceCollide(d => {
           const w = computeNodeWidth(d);
           const h = computeNodeHeight(d);
-          return Math.max(w, h) / 2 + 36;
+          return Math.sqrt(w*w + h*h)/2 + 12;
       }));
 
     const edgeG = g.append('g').attr('class', 'edges');
@@ -270,7 +270,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     
       attrs.forEach(([key, val], i) => {
         g.append('text')
-          .text(`${key}: ${truncateText(val.toString())}`)
+          .text(`${key}: ${truncateText(val.toString(), Math.floor((MAX_NODE_WIDTH - PADDING * 2) / CHAR_WIDTH))}`)
           .attr('x', -width/2 + PADDING)
           .attr('y', -height/2 + HEADER_HEIGHT + PADDING + i * LINE_HEIGHT)
           .attr('dominant-baseline', 'middle')
