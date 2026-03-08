@@ -10,6 +10,7 @@ from django.shortcuts import render
 def _load_visualizer_context(plugin_name: str, source_name: str, file_path: str, directed: str):
     context = {
         "workspace_name": "No Workspace",
+        "visualization_plugins": [],
         "initial_graph_loaded": False,
         "node_count": 0,
         "edge_count": 0,
@@ -24,13 +25,17 @@ def _load_visualizer_context(plugin_name: str, source_name: str, file_path: str,
     if plugin_name and not file_path:
         file_path = "json_data_source/json_data_source/data/demo_mixed_small.json"
 
-    if not plugin_name:
-        return context
-
     app_config = apps.get_app_config("app")
     plugin_manager = getattr(app_config, "plugin_manager", None)
     if plugin_manager is None:
         context["load_error"] = "Plugin manager is not available."
+        return context
+
+    for visualizer in plugin_manager.list_visualizers():
+        context["visualization_plugins"].append(
+            {"name": visualizer.get_name(), "text": visualizer.get_name().replace("-", " ").title()})
+
+    if not plugin_name:
         return context
 
     data_source = plugin_manager.get_data_source(source_name)

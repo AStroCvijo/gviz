@@ -67,8 +67,11 @@ pip install -e json_data_source/ --quiet
 echo "Installing gviz-xml-datasource ..."
 pip install -e xml_data_source/ --quiet
 
-echo "Installing gviz-simple-visualizer ..."
+echo "Installing gviz-simple_visualizer ..."
 pip install -e simple_visualizer/ --quiet
+
+echo "Installing gviz-block_visualizer ..."
+pip install -e block_visualizer/ --quiet
 
 # ---------------------------------------------------------------------------
 # Django setup
