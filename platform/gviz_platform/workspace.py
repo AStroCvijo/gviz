@@ -68,10 +68,10 @@ class WorkspaceManager:
     # CRUD
     def create_workspace(
         self,
-        name: str,
-        plugin_name: str,
-        plugin_params: Dict,
-        graph: Graph,
+        name: str = "New Workspace",
+        plugin_name: str = "",
+        plugin_params: Dict = {},
+        graph: Graph = None,
     ) -> Workspace:
         """Create a new workspace and register it"""
         workspace_id = str(uuid.uuid4())

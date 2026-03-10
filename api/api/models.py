@@ -99,6 +99,13 @@ class Graph(ABC):
                 result.append(edge)
         return result
 
+    def get_edges_by_id(self, edge_id: str) -> Optional[Edge]:
+        """Return edge wiht given identifier or None"""
+        for edge in self.get_edges():
+            if edge.get_id() == edge_id:
+                return edge
+        return None
+
     def node_count(self) -> int:
         """Return the number of nodes in the graph."""
         return len(self.get_nodes())

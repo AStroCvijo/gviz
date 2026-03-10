@@ -146,6 +146,9 @@ class ConcreteGraph(Graph):
                     neighbors.append(neighbor)
         return neighbors
 
+    def get_edge_by_id(self, edge_id: str) -> Optional[ConcreteEdge]:
+        return self._edges.get(edge_id)
+
     # Mutation API
     def add_node(self, node: ConcreteNode) -> None:
         """Add a node to the graph"""

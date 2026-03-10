@@ -10,6 +10,7 @@ const state = {
   graph: null,
   originalGraph: null,
   activePlugin: '',
+  workspace: (new URLSearchParams(window.location.search)).get("workspace"),
 };
 
 window.GVIZ_APP_STATE = state;
@@ -35,15 +36,46 @@ function setupWorkspaceTabs() {
       if (e.target.closest('.ws-close')) return;
       $$('.ws-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
+      openWorkspace(tab.getAttribute("id"))
     });
 
     const closeBtn = tab.querySelector('.ws-close');
     if (closeBtn) {
-      closeBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
+      closeBtn.addEventListener('click', async(e) => {
+        try {
+          const response = await fetch(`/workspace/${tab.getAttribute("id")}`, {
+            method: "DELETE",
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          });
+          const data = await response.json();
+          if (!response.ok || !data.ok) {
+            throw new Error(data.load_error || 'Workspace could not be created.');
+          }
+          if (tab.getAttribute("id") === state.workspace)
+            openWorkspace()
+          applyPluginResponse(data)
+        } catch (error) {
+          showToast(error.message, 'error');
+        };
       });
     }
   });
+
+  $('#ws-tab-add').addEventListener("click", async () => {
+    try {
+      const response = await fetch(`/workspace/`, {
+        method: "POST",
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        throw new Error(data.load_error || 'Workspace could not be created.');
+      }
+      openWorkspace(data.workspace_id)
+    } catch (error) {
+      showToast(error.message, 'error');
+    }
+  })
 }
 
 function setupPluginSelection() {
@@ -52,7 +84,7 @@ function setupPluginSelection() {
 
   if (!pluginSelect || !loadButton) return;
 
-  pluginSelect.addEventListener('change', () => {
+  pluginSelect.addEventListener('change', async () => {
     const plugin = pluginSelect.value;
     if (!plugin) {
       unloadPlugin();
@@ -60,19 +92,25 @@ function setupPluginSelection() {
     }
 
     state.activePlugin = plugin;
-    const workspaceName = $('#workspace-name');
-    if (workspaceName) {
-      workspaceName.textContent = 'No Workspace';
+    try {
+      const params = new URLSearchParams({
+        workspace: state.workspace,
+        plugin: state.activePlugin,
+      });
+      const response = await fetch(`/load-plugin/?${params.toString()}`, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        throw new Error(data.load_error || 'Plugin could not be loaded.');
+      }
+      applyPluginResponse(data);
+      termPrint(`info Selected ${plugin}.`, 'info');
+      showToast('Plugin selected', 'info');
+    } catch (error) {
+      termPrint(`error ${error.message}`, 'error');
+      showToast(error.message, 'error');
     }
-    if (window.GVIZ_ACTIVE_VISUALIZER && typeof window.GVIZ_ACTIVE_VISUALIZER.clear === 'function') {
-      window.GVIZ_ACTIVE_VISUALIZER.clear();
-    }
-    window.GVIZ_PLUGIN_BOOTSTRAP = null;
-    window.GVIZ_ACTIVE_VISUALIZER = null;
-    state.originalGraph = null;
-    showEmptyGraph();
-    termPrint(`info Selected ${plugin}. Click Load Data to continue.`, 'info');
-    showToast('Plugin selected', 'info');
   });
 }
 
@@ -162,13 +200,14 @@ function setupLoadDataModal() {
     pluginSelect.disabled = true;
 
     try {
+      console.log(state)
       const params = new URLSearchParams({
-        plugin: state.activePlugin,
+        workspace: state.workspace,
         source,
         file,
         directed,
       });
-      const response = await fetch(`/load-plugin/?${params.toString()}`, {
+      const response = await fetch(`/load-graph/?${params.toString()}`, {
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
       });
       const data = await response.json();
@@ -282,10 +321,6 @@ function unloadPlugin() {
   if (pluginSelect) {
     pluginSelect.value = '';
   }
-  const workspaceName = $('#workspace-name');
-  if (workspaceName) {
-    workspaceName.textContent = 'No Workspace';
-  }
   if (window.GVIZ_ACTIVE_VISUALIZER && typeof window.GVIZ_ACTIVE_VISUALIZER.clear === 'function') {
     window.GVIZ_ACTIVE_VISUALIZER.clear();
   }
@@ -295,9 +330,25 @@ function unloadPlugin() {
 }
 
 function applyPluginResponse(data) {
-  const workspaceName = $('#workspace-name');
-  if (workspaceName) {
-    workspaceName.textContent = data.workspace_name || 'Workspace';
+  if (data.workspace_id)
+    state.workspace = data.workspace_id
+
+  if (data.workspaces) {
+    const workspace_tabs = $('#workspace-tabs')
+    if (workspace_tabs) {
+      workspace_tabs.innerHTML = ""
+      for (let workspace of data.workspaces) {
+        workspace_tabs.innerHTML += `
+        <div class="ws-tab ${workspace.workspace_id === state.workspace ? "active" : ""}" id="${workspace.workspace_id}">
+          <span class="ws-dot"></span>
+          <span class="workspace-name">${workspace.name}</span>
+          <span class="ws-close">✕</span>
+        </div>
+      `
+      }
+      workspace_tabs.innerHTML += `<div class="ws-tab-add" id="ws-tab-add">+</div>`
+      setupWorkspaceTabs();
+    }
   }
 
   const pluginSelect = $('#plugin-select');
@@ -305,15 +356,17 @@ function applyPluginResponse(data) {
     pluginSelect.value = data.plugin_name || state.activePlugin || '';
   }
 
-  installVisualizerRuntime(data.visualizer_html || '');
-  const bootstrap = window.GVIZ_PLUGIN_BOOTSTRAP;
-  if (!bootstrap || !bootstrap.graph) {
-    throw new Error('Visualizer runtime did not provide graph bootstrap data.');
-  }
+  if (data.visualizer_html) {
+    installVisualizerRuntime(data.visualizer_html || '');
+    const bootstrap = window.GVIZ_PLUGIN_BOOTSTRAP;
+    if (!bootstrap || !bootstrap.graph) {
+      throw new Error('Visualizer runtime did not provide graph bootstrap data.');
+    }
 
-  state.originalGraph = cloneGraph(bootstrap.graph);
-  state.activePlugin = data.plugin_name || bootstrap.visualizerName || '';
-  setGraph(cloneGraph(bootstrap.graph));
+    state.originalGraph = cloneGraph(bootstrap.graph);
+    state.activePlugin = data.plugin_name || bootstrap.visualizerName || '';
+    setGraph(cloneGraph(bootstrap.graph));
+  }
 }
 
 function installVisualizerRuntime(html) {
@@ -444,6 +497,20 @@ function doFilter(expr) {
 
   termPrint(`$ filter '${expr}'`, 'cmd');
   showToast(`Filter not wired yet: ${expr}`, 'info');
+}
+
+function openWorkspace(workspace_id = "") {
+  const url = new URL(window.location.href)
+  if (!workspace_id) {
+    url.search = ""
+    window.location.href = url.href
+  }
+  else {
+    state.workspace = workspace_id
+    url.searchParams.set("workspace", workspace_id)
+    url.search = url.searchParams.toString()
+    window.location.href = url.href
+  }
 }
 
 function setupTerminal() {

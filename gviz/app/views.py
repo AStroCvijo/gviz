@@ -4,12 +4,19 @@ from pathlib import Path
 
 from django.apps import apps
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
+from django.views.decorators.csrf import csrf_exempt
+
+from api import Graph
+from gviz_platform import Workspace
 
 
-def _load_visualizer_context(plugin_name: str, source_name: str, file_path: str, directed: str):
+def _load_visualizer_context(workspace_id: str):
     context = {
         "workspace_name": "No Workspace",
+        "workspace_id": "",
+        "workspaces": [],
+        "workspace_count": 0,
         "visualization_plugins": [],
         "initial_graph_loaded": False,
         "node_count": 0,
@@ -20,12 +27,21 @@ def _load_visualizer_context(plugin_name: str, source_name: str, file_path: str,
         "plugin_name": "",
     }
 
-    if plugin_name and not source_name:
-        source_name = "json-data-source"
-    if plugin_name and not file_path:
-        file_path = "json_data_source/json_data_source/data/demo_mixed_small.json"
-
     app_config = apps.get_app_config("app")
+    workspace_manager = getattr(app_config, "workspace_manager", None)
+    if workspace_manager:
+        if len(workspace_manager.list_workspaces()) == 0:
+            workspace_manager = getattr(app_config, "workspace_manager", None)
+            workspace_manager.create_workspace()
+
+        context["workspaces"] = [{"name": w.name, "workspace_id": w.workspace_id} for w in workspace_manager.list_workspaces()]
+        context["workspace_count"] = len(context["workspaces"])
+
+    workspace = next((w for w in workspace_manager.list_workspaces() if w.workspace_id == workspace_id), workspace_manager.list_workspaces()[0])
+    context["workspace_name"] = workspace.name
+    context["workspace_id"] = workspace.workspace_id
+    plugin_name = workspace.plugin_name
+
     plugin_manager = getattr(app_config, "plugin_manager", None)
     if plugin_manager is None:
         context["load_error"] = "Plugin manager is not available."
@@ -38,11 +54,31 @@ def _load_visualizer_context(plugin_name: str, source_name: str, file_path: str,
     if not plugin_name:
         return context
 
-    data_source = plugin_manager.get_data_source(source_name)
     visualizer = plugin_manager.get_visualizer(plugin_name)
-    if data_source is None or visualizer is None:
+    if visualizer is None:
         context["load_error"] = "Requested plugin could not be found."
         return context
+
+    context.update(
+        plugin_name=plugin_name,
+    )
+    if (workspace.current_graph != None):
+        context.update(
+            initial_graph_loaded=True,
+            node_count=workspace.current_graph.node_count(),
+            edge_count=workspace.current_graph.edge_count(),
+            graph_kind_label="directed" if workspace.current_graph.is_directed() else "undirected",
+            visualizer_html=visualizer.render(workspace.current_graph),
+        )
+    return context
+
+
+def _load_graph_from_source(source_name: str, file_path: str, directed: bool):
+    app_config = apps.get_app_config("app")
+    plugin_manager = getattr(app_config, "plugin_manager", None)
+    data_source = plugin_manager.get_data_source(source_name)
+    if data_source is None:
+        return None, "Requested data source plugin could not be found."
 
     repo_root = Path(__file__).resolve().parents[2]
     resolved_path = Path(file_path)
@@ -50,44 +86,39 @@ def _load_visualizer_context(plugin_name: str, source_name: str, file_path: str,
         resolved_path = repo_root / resolved_path
 
     try:
-        graph = data_source.load(file_path=str(resolved_path), directed=directed)
-        context.update(
-            workspace_name=Path(file_path).stem.replace("_", " ").title(),
-            initial_graph_loaded=True,
-            node_count=graph.node_count(),
-            edge_count=graph.edge_count(),
-            graph_kind_label="directed" if graph.is_directed() else "undirected",
-            visualizer_html=visualizer.render(graph),
-            plugin_name=plugin_name,
-        )
+        return data_source.load(file_path=str(resolved_path), directed=directed), ""
     except Exception as exc:
-        context["load_error"] = str(exc)
-
-    return context
-
+        return None, str(exc)
 
 def index(request):
     """Main graph explorer view"""
-    plugin_name = request.GET.get("plugin", "").strip()
-    source_name = request.GET.get("source", "").strip()
-    file_path = request.GET.get("file", "").strip()
-    directed = request.GET.get("directed", "true")
-    context = _load_visualizer_context(plugin_name, source_name, file_path, directed)
+    workspace_id = request.GET.get("workspace", "").strip()
+    context = _load_visualizer_context(workspace_id)
+
+    if context["workspace_id"] != workspace_id:
+        return redirect(reverse("index") + f"?workspace={context['workspace_id']}")
+
     return render(request, "app/index.html", context)
 
 
 def load_plugin(request):
+    workspace_id = request.GET.get("workspace", "").strip()
     plugin_name = request.GET.get("plugin", "").strip()
-    source_name = request.GET.get("source", "").strip()
-    file_path = request.GET.get("file", "").strip()
-    directed = request.GET.get("directed", "true")
 
-    context = _load_visualizer_context(plugin_name, source_name, file_path, directed)
-    status = 200 if context["initial_graph_loaded"] else 400
+    app_config = apps.get_app_config("app")
+    workspace_manager = getattr(app_config, "workspace_manager", None)
+    workspace = workspace_manager.get_workspace(workspace_id)
+
+    workspace.plugin_name = plugin_name
+
+    context = _load_visualizer_context(workspace_id)
+    status = 200 if context["plugin_name"] == plugin_name == workspace.plugin_name else 400
     return JsonResponse(
         {
-            "ok": context["initial_graph_loaded"],
+            "ok": status == 200,
             "workspace_name": context["workspace_name"],
+            "workspace_id": context["workspace_id"],
+            "workspaces": context["workspaces"],
             "plugin_name": context["plugin_name"],
             "node_count": context["node_count"],
             "edge_count": context["edge_count"],
@@ -97,3 +128,103 @@ def load_plugin(request):
         },
         status=status,
     )
+
+def load_graph(request):
+    workspace_id = request.GET.get("workspace", "").strip()
+    source_name = request.GET.get("source", "").strip()
+    file_path = request.GET.get("file", "").strip()
+    directed = request.GET.get("directed", "true")
+
+    app_config = apps.get_app_config("app")
+    workspace_manager = getattr(app_config, "workspace_manager", None)
+    workspace =  workspace_manager.get_workspace(workspace_id)
+
+    graph, error = _load_graph_from_source(source_name, file_path, directed)
+    workspace.original_graph = graph
+    workspace.current_graph = graph
+    if error == "":
+        workspace.name = Path(file_path).stem.replace("_", " ").title()
+
+    context = _load_visualizer_context(workspace_id)
+    status = 200 if context["initial_graph_loaded"] else 400
+    return JsonResponse(
+        {
+            "ok": context["initial_graph_loaded"],
+            "workspace_name": context["workspace_name"],
+            "workspace_id": context["workspace_id"],
+            "workspaces": context["workspaces"],
+            "plugin_name": context["plugin_name"],
+            "node_count": context["node_count"],
+            "edge_count": context["edge_count"],
+            "graph_kind_label": context["graph_kind_label"],
+            "visualizer_html": context["visualizer_html"],
+            "load_error": context["load_error"] if context["load_error"] != "" else error,
+        },
+        status=status,
+    )
+
+@csrf_exempt
+def create_workspace(request):
+    if request.method != "POST":
+        return JsonResponse({"ok": False, "load_error": "Method not allowed"}, status=405)
+
+    app_config = apps.get_app_config("app")
+    workspace_manager = getattr(app_config, "workspace_manager", None)
+    new_workspace = workspace_manager.create_workspace()
+
+    context = _load_visualizer_context(new_workspace.workspace_id)
+    status = 200 if context["workspace_id"] == new_workspace.workspace_id else 400
+    return JsonResponse(
+        {
+            "ok": status == 200,
+            "workspace_name": context["workspace_name"],
+            "workspace_id": context["workspace_id"],
+            "workspaces": context["workspaces"],
+            "plugin_name": context["plugin_name"],
+            "node_count": context["node_count"],
+            "edge_count": context["edge_count"],
+            "graph_kind_label": context["graph_kind_label"],
+            "visualizer_html": context["visualizer_html"],
+            "load_error": context["load_error"],
+        },
+        status=status,
+    )
+
+@csrf_exempt
+def delete_workspace(request, workspace_id):
+    if request.method != "DELETE":
+        return JsonResponse({"ok": False, "load_error": "Method not allowed"}, status=405)
+
+    app_config = apps.get_app_config("app")
+    workspace_manager = getattr(app_config, "workspace_manager", None)
+    workspace_manager.delete_workspace(workspace_id)
+
+    return JsonResponse(
+        {
+            "ok": True,
+            "workspaces": [{"name": w.name, "workspace_id": w.workspace_id} for w in workspace_manager.list_workspaces()]
+        },
+        status=200,
+    )
+
+@csrf_exempt
+def filter(request, workspace_id):
+    pass
+
+@csrf_exempt
+def update_nodes(request, workspace_id, node_id):
+    if request.method == "POST":
+        pass
+    elif request.method == "DELETE":
+        pass
+    elif request.method == "PUT":
+        pass
+
+@csrf_exempt
+def update_edges(request, workspace_id, edge_id):
+    if request.method == "POST":
+        pass
+    elif request.method == "DELETE":
+        pass
+    elif request.method == "PUT":
+        pass
