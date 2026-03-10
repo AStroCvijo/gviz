@@ -86,7 +86,15 @@
       <div class="toolbar-group" data-plugin-only{% if not initial_graph_loaded %} hidden{% endif %}>
         <span style="color:var(--text-muted);font-size:11px">View:</span>
         <div class="viz-toggle">
-          <button class="viz-toggle-btn active" data-mode="simple">Simple</button>
+          <button class="viz-toggle-btn active" id="view-mode" data-mode="simple">
+            {% if plugin_name == 'simple-visualizer' %}
+              Simple
+            {% elif plugin_name == 'block-visualizer' %}
+              Block
+            {% else %}
+              Custom
+            {% endif %}
+          </button>
         </div>
       </div>
 
@@ -97,7 +105,7 @@
         <div class="search-wrap">
           <span class="search-icon">🔍</span>
           <input type="text" id="search-input" class="search-input"
-                 placeholder="Search nodes…">
+                 placeholder="Search nodes…" value="{{ filter.search }}">
         </div>
         <button class="btn btn-ghost" id="btn-search">Search</button>
       </div>
@@ -299,7 +307,14 @@
 <script>window.GVIZ_LOAD_ERROR = "{{ load_error|escapejs }}";</script>
 {% endif %}
 <!-- gviz UI -->
+{{ filter|json_script:"filter-data" }}
+
 <script src="{% static 'app/js/ui.js' %}"></script>
+<script>
+state.filter = JSON.parse(
+    document.getElementById("filter-data").textContent
+);
+</script>
 
 </body>
 </html>

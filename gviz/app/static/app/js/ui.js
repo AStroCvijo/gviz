@@ -9,6 +9,7 @@ const state = {
   selectedNodeId: null,
   graph: null,
   originalGraph: null,
+  filter: {filters: []},
   activePlugin: '',
   workspace: (new URLSearchParams(window.location.search)).get("workspace"),
 };
@@ -200,7 +201,6 @@ function setupLoadDataModal() {
     pluginSelect.disabled = true;
 
     try {
-      console.log(state)
       const params = new URLSearchParams({
         workspace: state.workspace,
         source,
@@ -215,7 +215,6 @@ function setupLoadDataModal() {
         throw new Error(data.load_error || 'Graph data could not be loaded.');
       }
       applyPluginResponse(data);
-      history.replaceState({}, '', '/');
       closeModal();
       termPrint(`info Loaded data for ${state.activePlugin}`, 'info');
       showToast('Graph loaded', 'success');
@@ -235,14 +234,43 @@ function setupPredefinedLoader() {
 
   if (!predefinedBtn) return;
 
-  predefinedBtn.addEventListener('click', () => {
-    const params = new URLSearchParams({
-      plugin: 'simple-visualizer',
-      source: 'json-data-source',
-      file: 'json_data_source/json_data_source/data/demo_mixed_small.json',
-      directed: 'true',
-    });
-    window.location.href = `/?${params.toString()}`;
+  predefinedBtn.addEventListener('click', async () => {
+    try {
+      let params = new URLSearchParams({
+        workspace: state.workspace,
+        plugin: 'simple-visualizer',
+      });
+      let response = await fetch(`/load-plugin/?${params.toString()}`, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      });
+      let data = await response.json();
+      if (!response.ok || !data.ok) {
+        throw new Error(data.load_error || 'Graph data could not be loaded.');
+      }
+      applyPluginResponse(data);
+      termPrint(`info Selected ${data.plugin_name}.`, 'info');
+      showToast('Plugin selected', 'info');
+
+      params = new URLSearchParams({
+        workspace: state.workspace,
+        source: 'json-data-source',
+        file: 'json_data_source/json_data_source/data/demo_mixed_small.json',
+        directed: 'true',
+      });
+      response = await fetch(`/load-graph/?${params.toString()}`, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      });
+      data = await response.json();
+      if (!response.ok || !data.ok) {
+        throw new Error(data.load_error || 'Graph data could not be loaded.');
+      }
+      applyPluginResponse(data);
+      termPrint(`info Loaded data for ${state.activePlugin}`, 'info');
+      showToast('Graph loaded', 'success');
+    } catch (error) {
+      termPrint(`error ${error.message}`, 'error');
+      showToast(error.message, 'error');
+    }
   });
 }
 
@@ -351,10 +379,16 @@ function applyPluginResponse(data) {
     }
   }
 
+  const viewMode = $('#view-mode')
+  viewMode.innerText = data.plugin_name === "simple-visualizer" ? "Simple" : data.plugin_name === "block-visualizer" ? "Block" : "Custom"
+
   const pluginSelect = $('#plugin-select');
   if (pluginSelect) {
     pluginSelect.value = data.plugin_name || state.activePlugin || '';
   }
+
+  if (data.filter)
+    state.filter = data.filter;
 
   if (data.visualizer_html) {
     installVisualizerRuntime(data.visualizer_html || '');
@@ -441,54 +475,41 @@ function setupSearchFilter() {
 
   filterBtn.addEventListener('click', () => doFilter(filterInput.value.trim()));
   filterInput.addEventListener('keydown', (e) => {
+    console.log(filterInput.value.trim())
     if (e.key === 'Enter') doFilter(filterInput.value.trim());
   });
 
-  resetBtn.addEventListener('click', () => {
+  resetBtn.addEventListener('click', async () => {
     searchInput.value = '';
     filterInput.value = '';
     if (!state.originalGraph) {
       showToast('No graph loaded', 'error');
       return;
     }
-    termPrint('$ reset', 'cmd');
+
+    state.filter = {search: "", filters: []}
+    if (await sendFilterRequest())
+    termPrint('$ filter --reset', 'cmd');
     termPrint('  ✓ Workspace reset to original graph', 'info');
     showToast('Graph reset', 'info');
     setGraph(cloneGraph(state.originalGraph));
   });
 }
 
-function doSearch(query) {
-  if (!query) return;
+async function doSearch(query) {
+  if (!query && query !== "") return;
   if (!state.graph) {
     showToast('No graph loaded', 'error');
     return;
   }
 
   termPrint(`$ search '${query}'`, 'cmd');
-
-  const matchingIds = state.graph.nodes
-    .filter(node =>
-      Object.entries(node.attrs || {}).some(([key, value]) =>
-        key.toLowerCase().includes(query.toLowerCase()) ||
-        String(value).toLowerCase().includes(query.toLowerCase())
-      )
-    )
-    .map(node => node.id);
-
-  const idSet = new Set(matchingIds);
-  const nextGraph = {
-    directed: state.originalGraph.directed,
-    nodes: state.originalGraph.nodes.filter(node => idSet.has(node.id)),
-    edges: state.originalGraph.edges.filter(edge => idSet.has(edge.source) && idSet.has(edge.target)),
-  };
-
-  termPrint(`  ✓ ${nextGraph.nodes.length} node(s) match "${query}"`, 'info');
-  showToast(`Search: ${nextGraph.nodes.length} nodes found`, 'success');
-  setGraph(nextGraph);
+  state.filter.search = query;
+  if (await sendFilterRequest())
+    showToast(`Search: ${state.graph.nodes.length} nodes found`, 'success');
 }
 
-function doFilter(expr) {
+async function doFilter(expr) {
   if (!expr) return;
   if (!state.graph) {
     showToast('No graph loaded', 'error');
@@ -496,7 +517,30 @@ function doFilter(expr) {
   }
 
   termPrint(`$ filter '${expr}'`, 'cmd');
-  showToast(`Filter not wired yet: ${expr}`, 'info');
+  state.filter.filters.push(expr);
+  if (await sendFilterRequest())
+    showToast(`Filter: ${state.graph.nodes.length} nodes found`, 'success');
+  else
+    state.filter.filters.pop();
+}
+
+async function sendFilterRequest() {
+  try {
+    const response = await fetch(`/workspace/${state.workspace}/filter/`, {
+      method: "POST",
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      body: JSON.stringify(state.filter)
+    });
+    const data = await response.json();
+    if (!response.ok || !data.ok) {
+      throw new Error(data.load_error || 'Workspace could not be created.');
+    }
+    applyPluginResponse(data)
+    return true
+  } catch (error) {
+    showToast(error.message, 'error');
+    return false
+  }
 }
 
 function openWorkspace(workspace_id = "") {
