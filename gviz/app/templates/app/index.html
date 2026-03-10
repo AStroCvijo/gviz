@@ -29,12 +29,15 @@
     </div>
 
     <!-- Workspace tabs -->
-    <div class="workspace-tabs">
-      <div class="ws-tab active">
-        <span class="ws-dot"></span>
-        <span id="workspace-name">{{ workspace_name }}</span>
-        <span class="ws-close">✕</span>
-      </div>
+    <div class="workspace-tabs" id="workspace-tabs">
+      {% for workspace in workspaces  %}
+        <div class="ws-tab {% if workspace.workspace_id == workspace_id %}active{% endif %}" id="{{ workspace.workspace_id }}">
+          <span class="ws-dot"></span>
+          <span class="workspace-name">{{ workspace.name }}</span>
+          <span class="ws-close">✕</span>
+        </div>
+      {% endfor  %}
+      <div class="ws-tab-add" id="ws-tab-add">+</div>
     </div>
 
     <!-- Top-right actions -->
@@ -70,7 +73,7 @@
         <select class="plugin-select" id="plugin-select">
           <option value="">Select Plugin</option>
           {% for visualizer in visualization_plugins  %}
-            <option value="{{ visualizer.name }}"{% if initial_graph_loaded %} selected{% endif %}>{{ visualizer.text }}</option>
+            <option value="{{ visualizer.name }}"{% if visualizer.name == plugin_name %} selected{% endif %}>{{ visualizer.text }}</option>
           {% endfor %}
         </select>
         <span class="select-arrow">▾</span>
