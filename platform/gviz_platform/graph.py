@@ -189,6 +189,17 @@ class ConcreteGraph(Graph):
             )
         self._edges[edge.get_id()] = edge
 
+    def add_or_update_edge(self, edge: ConcreteEdge) -> None:
+        if edge.get_source_id() not in self._nodes:
+            raise ValueError(
+                f"Source node '{edge.get_source_id()}' does not exist in the graph"
+            )
+        if edge.get_target_id() not in self._nodes:
+            raise ValueError(
+                f"Target node '{edge.get_target_id()}' does not exist in the graph"
+            )
+        self._edges[edge.get_id()] = edge
+
     def add_edge_loose(self, edge: ConcreteEdge) -> None:
         """Add an edge without checking that source/target nodes exist"""
         if edge.get_id() in self._edges:
@@ -279,6 +290,23 @@ class ConcreteGraph(Graph):
     def __repr__(self) -> str:
         kind = "Directed" if self._directed else "Undirected"
         return f"ConcreteGraph({kind}, nodes={len(self._nodes)}, edges={len(self._edges)})"
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, ConcreteGraph):
+            return NotImplemented
+
+        if self.node_count() != other.node_count() or self.edge_count() != other.edge_count():
+            return False
+
+        for node in self._nodes.keys():
+            if node not in other._nodes:
+                return False
+
+        for edge in self._edges.keys():
+            if edge not in other._edges:
+                return False
+
+        return True
 
 
 # Internal helper

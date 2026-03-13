@@ -18,11 +18,13 @@ class AppConfig(AppConfig):
             from gviz_platform.plugin_manager import PluginManager
             from gviz_platform.workspace import WorkspaceManager
             from gviz_platform.filter_engine import FilterEngine
+            from gviz_platform.cli_handler import CLIHandler
 
             AppConfig.plugin_manager = PluginManager()
             AppConfig.plugin_manager.discover()
             AppConfig.workspace_manager = WorkspaceManager()
             AppConfig.filter_engine = FilterEngine()
+            AppConfig.cli_handler = CLIHandler()
         except ImportError:
             # Platform packages not yet installed — UI works with mock data.
             pass

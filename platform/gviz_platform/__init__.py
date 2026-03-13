@@ -20,6 +20,7 @@ from gviz_platform.graph import ConcreteGraph, ConcreteNode, ConcreteEdge
 from gviz_platform.plugin_manager import PluginManager
 from gviz_platform.workspace import WorkspaceManager, Workspace
 from gviz_platform.filter_engine import FilterEngine
+from gviz_platform.cli_handler import CLIHandler
 
 __all__ = [
     "ConcreteGraph",
@@ -29,4 +30,5 @@ __all__ = [
     "WorkspaceManager",
     "Workspace",
     "FilterEngine",
+    "CLIHandler"
 ]

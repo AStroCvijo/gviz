@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from nis import cat
 from pathlib import Path
 import json
 
@@ -9,8 +8,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from api import Graph, FilterError
-from gviz_platform import Workspace
+from api import FilterError
 
 
 def _load_visualizer_context(workspace_id: str):
@@ -281,3 +279,36 @@ def update_edges(request, workspace_id, edge_id):
         pass
     elif request.method == "PUT":
         pass
+
+@csrf_exempt
+def handle_command(request, workspace_id):
+    app_config = apps.get_app_config("app")
+    workspace_manager = getattr(app_config, "workspace_manager", None)
+    workspace = workspace_manager.get_workspace(workspace_id)
+
+    command_error = ""
+    term_out = ""
+
+    commandStr = request.body.decode("utf-8")
+    cli_handler = getattr(app_config, "cli_handler", None)
+    try:
+        command = cli_handler.parse(commandStr)
+        term_out = command.execute(workspace)
+    except Exception as err:
+        command_error = str(err)
+
+    context = _load_visualizer_context(workspace.workspace_id)
+    status = 200 if command_error == "" else 400
+    return JsonResponse(
+        {
+            "ok": status == 200,
+            "node_count": context["node_count"],
+            "edge_count": context["edge_count"],
+            "graph_kind_label": context["graph_kind_label"],
+            "visualizer_html": context["visualizer_html"] if "command" in locals() and command.rerender else "",
+            "load_error": command_error if command_error != "" else context["load_error"],
+            "filter": context["filter"],
+            "output": term_out,
+        },
+        status=status,
+    )
