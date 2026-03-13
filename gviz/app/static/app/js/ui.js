@@ -401,6 +401,9 @@ function applyPluginResponse(data) {
     state.activePlugin = data.plugin_name || bootstrap.visualizerName || '';
     setGraph(cloneGraph(bootstrap.graph));
   }
+
+  if (data.output)
+    termPrint(data.output, "muted")
 }
 
 function installVisualizerRuntime(html) {
@@ -488,8 +491,8 @@ function setupSearchFilter() {
     }
 
     state.filter = {search: "", filters: []}
-    if (await sendFilterRequest())
     termPrint('$ filter --reset', 'cmd');
+    await sendFilterRequest()
     termPrint('  ✓ Workspace reset to original graph', 'info');
     showToast('Graph reset', 'info');
     setGraph(cloneGraph(state.originalGraph));
@@ -503,10 +506,12 @@ async function doSearch(query) {
     return;
   }
 
-  termPrint(`$ search '${query}'`, 'cmd');
+  termPrint(`$ search ${query}`, 'cmd');
   state.filter.search = query;
-  if (await sendFilterRequest())
+  if (await sendFilterRequest()) {
     showToast(`Search: ${state.graph.nodes.length} nodes found`, 'success');
+    termPrint(`Search: ${state.graph.nodes.length} nodes found`, 'muted')
+  }
 }
 
 async function doFilter(expr) {
@@ -516,10 +521,12 @@ async function doFilter(expr) {
     return;
   }
 
-  termPrint(`$ filter '${expr}'`, 'cmd');
+  termPrint(`$ filter ${expr}`, 'cmd');
   state.filter.filters.push(expr);
-  if (await sendFilterRequest())
+  if (await sendFilterRequest()) {
     showToast(`Filter: ${state.graph.nodes.length} nodes found`, 'success');
+    termPrint(`Filter: ${state.graph.nodes.length} nodes found`, 'muted')
+  }
   else
     state.filter.filters.pop();
 }
@@ -589,46 +596,32 @@ function setupTerminal() {
   terminalPanel.addEventListener('click', () => input.focus());
 }
 
-function handleTermCommand(cmd) {
+async function handleTermCommand(cmd) {
   termPrint(`gviz > ${cmd}`, 'cmd');
   const parts = cmd.trim().split(/\s+/);
   const verb = parts[0].toLowerCase();
-
-  if (verb === 'help') {
-    termPrint('  Commands:', 'muted');
-    termPrint('    search <query>', 'muted');
-    termPrint('    filter <attr> <op> <value>', 'muted');
-    termPrint('    reset', 'muted');
-    termPrint('    clear', 'muted');
-    return;
-  }
 
   if (verb === 'clear') {
     $('#term-output').innerHTML = '';
     return;
   }
 
-  if (verb === 'search') {
-    doSearch(parts.slice(1).join(' ').replace(/['"]/g, ''));
-    return;
-  }
-
-  if (verb === 'filter') {
-    doFilter(parts.slice(1).join(' ').replace(/['"]/g, ''));
-    return;
-  }
-
-  if (verb === 'reset') {
-    if (state.originalGraph) {
-      setGraph(cloneGraph(state.originalGraph));
-      termPrint('  ✓ Graph reset', 'info');
-    } else {
-      termPrint('  ✗ No graph loaded', 'error');
+  try {
+    const response = await fetch(`/workspace/${state.workspace}/cli/`, {
+      method: "POST",
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      body: cmd
+    });
+    const data = await response.json();
+    if (!data.ok) {
+      showToast(data.load_error, 'error');
+      termPrint(data.load_error, "error")
     }
-    return;
+    applyPluginResponse(data)
+  } catch (error) {
+    showToast(error.message, 'error');
+    termPrint(error.message, "error")
   }
-
-  termPrint(`  ✗ Unknown command: '${verb}'. Type 'help'.`, 'error');
 }
 
 function termPrint(text, cls = '') {

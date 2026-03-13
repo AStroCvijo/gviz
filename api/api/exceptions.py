@@ -34,3 +34,10 @@ class WorkspaceError(GvizError):
     def __init__(self, workspace_id: str, message: str) -> None:
         self.workspace_id = workspace_id
         super().__init__(f"Workspace '{workspace_id}': {message}")
+
+class CommandError(GvizError):
+    #Raised by platforms cli handler when syntax of a command is incorrect.
+
+    def __init__(self, command: str, message: str) -> None:
+        self.command = command
+        super().__init__(f"Invalid command '{command}': {message}")

@@ -10,4 +10,5 @@ urlpatterns = [
     path('workspace/<str:workspace_id>/filter/', views.filter, name='delete_workspace'),
     path('workspace/<str:workspace_id>/node/<str:node_id>', views.update_nodes, name='delete_workspace'),
     path('workspace/<str:workspace_id>/edge/<str:edge_id>', views.update_edges, name='delete_workspace'),
+    path('workspace/<str:workspace_id>/cli/', views.handle_command, name='handle_command'),
 ]
