@@ -1,6 +1,17 @@
-# gviz — Graph Visualizer
+# gviz - Graph Visualizer
 
 Web aplikacija za vizualizaciju, istraživanje i manipulaciju grafova (usmerenih/neusmerenih, cikličnih/acikličnih). Izgrađena sa Django backend-om i D3.js vizualizacijom, sa plugin arhitekturom koja omogućava lako dodavanje novih izvora podataka i stilova vizualizacije.
+
+## Tim
+
+**Naziv tima:** Tim 6
+
+| Student | Ime i Prezime |
+|---------|-------|
+| **Student 1** | Jovan Cvijanović |
+| **Student 2** | Bogdan Ljubinković |
+| **Student 3** | Dragan Gavrić |
+| **Student 4** | Miljan Jokić |
 
 ## Funkcionalnosti
 
@@ -22,7 +33,7 @@ Web aplikacija za vizualizaciju, istraživanje i manipulaciju grafova (usmerenih
 
 ```bash
 chmod +x setup.sh
-./setup.sh
+./setup.sh # dos2unix setup.sh && ./setup.sh
 ```
 
 Skripta automatski kreira virtualno okruženje, instalira sve zavisnosti i komponente, pokreće migracije i startuje server na `http://127.0.0.1:8000`.

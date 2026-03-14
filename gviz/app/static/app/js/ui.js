@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupTerminal();
   setupVizToggle();
   setupSearchFilter();
+  setupResizers();
   bootGraph();
 });
 
@@ -437,6 +438,60 @@ function updateGraphStats(graph) {
   graphKind.textContent = graph
     ? (graph.directed ? 'directed' : 'undirected')
     : 'no graph';
+}
+
+function setupResizers() {
+  const root = document.documentElement;
+
+  const treeResizer = $('#resizer-tree');
+  if (treeResizer) {
+    let startX, startW;
+    treeResizer.addEventListener('mousedown', e => {
+      startX = e.clientX;
+      startW = parseInt(getComputedStyle(root).getPropertyValue('--tree-w'));
+      treeResizer.classList.add('dragging');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+      const onMove = e => {
+        const w = Math.max(120, Math.min(520, startW + e.clientX - startX));
+        root.style.setProperty('--tree-w', w + 'px');
+      };
+      const onUp = () => {
+        treeResizer.classList.remove('dragging');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      };
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  }
+
+  const termResizer = $('#resizer-terminal');
+  if (termResizer) {
+    let startY, startH;
+    termResizer.addEventListener('mousedown', e => {
+      startY = e.clientY;
+      startH = parseInt(getComputedStyle(root).getPropertyValue('--terminal-h'));
+      termResizer.classList.add('dragging');
+      document.body.style.cursor = 'row-resize';
+      document.body.style.userSelect = 'none';
+      const onMove = e => {
+        const h = Math.max(36, Math.min(480, startH - (e.clientY - startY)));
+        root.style.setProperty('--terminal-h', h + 'px');
+      };
+      const onUp = () => {
+        termResizer.classList.remove('dragging');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      };
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  }
 }
 
 function setupTreeToggle() {

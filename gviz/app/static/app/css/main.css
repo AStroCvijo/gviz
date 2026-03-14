@@ -418,8 +418,28 @@ input.filter-input { padding-left: 26px; }
 }
 .panel-actions { display: flex; gap: 4px; }
 
+/* ── Resizers ────────────────────────────────────────────── */
+.resizer {
+  position: absolute;
+  z-index: 20;
+  background: transparent;
+  transition: background 0.15s;
+}
+.resizer:hover, .resizer.dragging { background: var(--accent); }
+
+.resizer-tree {
+  top: 0; right: -3px; bottom: 0;
+  width: 6px;
+  cursor: col-resize;
+}
+.resizer-terminal {
+  top: -3px; left: 0; right: 0;
+  height: 6px;
+  cursor: row-resize;
+}
+
 /* ── Tree View ───────────────────────────────────────────── */
-.panel-tree { background: var(--bg-panel); }
+.panel-tree { background: var(--bg-panel); position: relative; }
 .panel-tree .panel-body {
   flex: 1;
   overflow-y: auto;
@@ -695,6 +715,7 @@ input.filter-input { padding-left: 26px; }
   border-top: 1px solid var(--border);
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
+  position: relative;
 }
 
 .terminal-header {

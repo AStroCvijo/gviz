@@ -543,7 +543,7 @@ window.GVIZ_ACTIVE_VISUALIZER = (function () {
     }
 
     function buildNodeEl(node, depth, visited) {
-      if (visited.has(node.id) || renderedNodes.has(node.id)) {
+      if (visited.has(node.id)) {
         return buildReferenceRow(node, depth);
       }
 
