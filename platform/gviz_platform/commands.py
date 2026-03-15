@@ -46,14 +46,14 @@ class FilterCommand(Command):
         filter_engine = FilterEngine()
         while True:
             if i * 3 + (i-1) > len(self.params):
-                raise CommandError(FilterCommand.get_prefix(), "Invalid parameter count for last filter")
+                raise CommandError(self.__class__.get_prefix(), "Invalid parameter count for last filter")
 
             filter_start = (i-1)*3 + (i-1)
             if self.params[filter_start + 1] not in self.supported_operations:
-                raise CommandError(FilterCommand.get_prefix(), f"Invalid operation '{self.params[(i-1)*3 + 1]}'")
+                raise CommandError(self.__class__.get_prefix(), f"Invalid operation '{self.params[(i-1)*3 + 1]}'")
 
             if self.params[filter_start + 2] == "" or self.params[filter_start] == "":
-                raise CommandError(FilterCommand.get_prefix(), f"Invalid operators in filter number {i}")
+                raise CommandError(self.__class__.get_prefix(), f"Invalid operators in filter number {i}")
 
             expression = " ".join(self.params[filter_start: filter_start + 3])
             result = filter_engine.filter(workspace.current_graph, expression)
@@ -63,7 +63,7 @@ class FilterCommand(Command):
                 break
 
             if len(self.params) >= filter_start + 4 and self.params[filter_start + 3] != "&":
-                raise CommandError(FilterCommand.get_prefix(), "Expected '&' delimiter before next filter")
+                raise CommandError(self.__class__.get_prefix(), "Expected '&' delimiter before next filter")
 
             i+=1
 
@@ -115,7 +115,7 @@ class CreateCommand(Command):
 
     def execute(self, workspace: Workspace):
         if len(self.params) < 1:
-            raise CommandError(CreateCommand.get_prefix(), "Invalid parameter count")
+            raise CommandError(self.__class__.get_prefix(), "Invalid parameter count")
 
         graph_before = workspace.current_graph
         filter_engine = FilterEngine()
@@ -141,7 +141,7 @@ class CreateCommand(Command):
                             workspace.current_graph = filter_engine.search(workspace.current_graph, operation["query"])
                     self.rerender = workspace.current_graph != graph_before
                 except ValueError:
-                    raise CommandError(CreateCommand.get_prefix(), "Invalid parameter count")
+                    raise CommandError(self.__class__.get_prefix(), "Invalid parameter count")
 
                 return f"Create: Node with id '{node.get_id()}' has been created"
             case "edge":
@@ -161,17 +161,17 @@ class CreateCommand(Command):
                         attr_dict[attr] = value
 
                 if source_id is None:
-                    raise CommandError(CreateCommand.get_prefix(), "Missing edge source node")
+                    raise CommandError(self.__class__.get_prefix(), "Missing edge source node")
 
                 if target_id is None:
-                    raise CommandError(CreateCommand.get_prefix(), "Missing edge target node")
+                    raise CommandError(self.__class__.get_prefix(), "Missing edge target node")
 
                 directed = "--directed" in self.flags or "-d" in self.flags
                 edge = ConcreteEdge(edge_id, source_id, target_id, directed, attr_dict)
                 try:
                     workspace.original_graph.add_edge(edge)
                 except ValueError as err:
-                    raise CommandError(CreateCommand.get_prefix(), str(err))
+                    raise CommandError(self.__class__.get_prefix(), str(err))
                 try:
                     workspace.current_graph.add_edge(edge)
                     self.rerender = True
@@ -180,7 +180,7 @@ class CreateCommand(Command):
 
                 return f"Create: Edge with id '{edge.get_id()}' has been created"
             case _:
-                raise CommandError(CreateCommand.get_prefix(), "First parameter must be object type")
+                raise CommandError(self.__class__.get_prefix(), "First parameter must be object type")
 
 
     @staticmethod
@@ -200,7 +200,7 @@ class CreateCommand(Command):
         tokens = [t for t in tokens if t]
 
         if len(tokens) != 2:
-            raise CommandError(DeleteCommand.get_prefix(), f"Invalid attribute expression '{attribute}'")
+            raise CommandError(CreateCommand.get_prefix(), f"Invalid attribute expression '{attribute}'")
 
         return tokens[0], tokens[1]
 
@@ -211,7 +211,7 @@ class EditCommand(Command):
 
     def execute(self, workspace: Workspace):
         if len(self.params) < 2:
-            raise CommandError(EditCommand.get_prefix(), "Invalid parameter count")
+            raise CommandError(self.__class__.get_prefix(), "Invalid parameter count")
 
         match self.params[0].lower():
             case "node":
@@ -226,7 +226,7 @@ class EditCommand(Command):
 
                 old_node = workspace.original_graph.get_node_by_id(node_id)
                 if old_node is None:
-                    raise CommandError(EditCommand.get_prefix(), f"Unknown node id '{node_id}'")
+                    raise CommandError(self.__class__.get_prefix(), f"Unknown node id '{node_id}'")
 
                 changed = False
                 for new_attr, new_val in attr_dict.items():
@@ -259,7 +259,7 @@ class EditCommand(Command):
 
                 old_edge = workspace.original_graph.get_edge_by_id(edge_id)
                 if old_edge is None:
-                    raise CommandError(EditCommand.get_prefix(), "Unknown edge id '{node_id}'")
+                    raise CommandError(self.__class__.get_prefix(), "Unknown edge id '{node_id}'")
 
                 changed = False
                 if source_id is None:
@@ -283,7 +283,7 @@ class EditCommand(Command):
                 try:
                     workspace.original_graph.add_or_update_edge(edge)
                 except ValueError as err:
-                    raise CommandError(EditCommand.get_prefix(), str(err))
+                    raise CommandError(self.__class__.get_prefix(), str(err))
                 try:
                     workspace.current_graph.add_or_update_edge(edge)
                     self.rerender = changed
@@ -292,7 +292,7 @@ class EditCommand(Command):
 
                 return "Edit: Edge successfully edited"
             case _:
-                raise CommandError(EditCommand.get_prefix(), "First parameter must be object type")
+                raise CommandError(self.__class__.get_prefix(), "First parameter must be object type")
 
 
     @staticmethod
@@ -312,7 +312,7 @@ class EditCommand(Command):
         tokens = [t for t in tokens if t]
 
         if len(tokens) != 2:
-            raise CommandError(DeleteCommand.get_prefix(), f"Invalid attribute expression '{attribute}'")
+            raise CommandError(EditCommand.get_prefix(), f"Invalid attribute expression '{attribute}'")
 
         return tokens[0], tokens[1]
 
@@ -323,7 +323,7 @@ class DeleteCommand(Command):
 
     def execute(self, workspace: Workspace):
         if len(self.params) < 1 or (self.params[0] != "graph" and len(self.params) < 2):
-            raise CommandError(DeleteCommand.get_prefix(), "Invalid parameter count")
+            raise CommandError(self.__class__.get_prefix(), "Invalid parameter count")
 
         match self.params[0].lower():
             case "node":
@@ -377,7 +377,7 @@ class DeleteCommand(Command):
                 self.rerender = True
                 return "Delete: Graph cleared"
             case _:
-                raise CommandError(DeleteCommand.get_prefix(), "First parameter must be object type")
+                raise CommandError(self.__class__.get_prefix(), "First parameter must be object type")
 
     @staticmethod
     def get_prefix() -> str:
