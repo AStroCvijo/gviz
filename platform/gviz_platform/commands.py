@@ -1,3 +1,4 @@
+import copy
 import io
 from abc import ABC, abstractmethod
 from typing import List
@@ -117,7 +118,7 @@ class CreateCommand(Command):
         if len(self.params) < 1:
             raise CommandError(self.__class__.get_prefix(), "Invalid parameter count")
 
-        graph_before = workspace.current_graph
+        graph_before = copy.deepcopy(workspace.current_graph)
         filter_engine = FilterEngine()
         match self.params[0].lower():
             case "node":
